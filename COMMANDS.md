@@ -303,4 +303,68 @@ git commit --quiet -F <path-to-message-file>
 | `ba23557` | 2 — home page |
 | `02e5e84` | 3 — features, how-it-works, integrations, download |
 | `90a6f55` | 4 — pricing, security, solutions, about, contact |
+| `0b1a3a0` | 5 — docs, blog, comparison pages |
+
+---
+
+### Phase 5 — content engine
+
+```powershell
+npm install @astrojs/rss --no-fund --no-audit
+
+# Confirm the content-layer API before writing 14 content files against it
+node -e "const l=require('astro/loaders'); console.log(Object.keys(l).join(', '))"
+# => file, glob   (Astro 5's content layer, unchanged in 7)
+```
+
+Verifying the generated Markdown mirrors actually carry body text, rather than
+assuming the route compiled correctly:
+
+```powershell
+Get-Content "dist\docs\quickstart.md" -TotalCount 20
+Get-ChildItem "dist\docs\*.md","dist\blog\*.md" | Select-Object Name,@{n='Bytes';e={$_.Length}}
+(Get-Content "dist\rss.xml" -Raw).Substring(0,400)
+```
+✅ 10 mirrors, 2.3–5.1 KB each, full body text present. RSS valid.
+
+⚠️ The mirrors *looked* like mojibake (`â€”` instead of `—`). That is PowerShell 5.1
+reading UTF-8 as ANSI, **not** a file defect. Verified properly before chasing it:
+
+```powershell
+$b = [System.IO.File]::ReadAllBytes("dist\docs\quickstart.md")
+"BOM: " + ($b[0] -eq 0xEF -and $b[1] -eq 0xBB -and $b[2] -eq 0xBF)
+[System.Text.Encoding]::UTF8.GetString($b)
+```
+✅ Clean UTF-8, no BOM. Same check later confirmed `COMMANDS.md` survived its
+`Add-Content -Encoding utf8` append intact.
+
+**Lesson worth keeping:** in this shell, never diagnose an encoding problem from
+`Get-Content` output. Decode the bytes explicitly.
+
+### Route inventory (verification, end of Phase 5)
+
+```powershell
+Get-ChildItem dist -Recurse -Filter index.html |
+  ForEach-Object { '/' + $_.DirectoryName.Replace((Resolve-Path dist).Path,'').TrimStart('\').Replace('\','/') } |
+  Sort-Object
+Get-ChildItem dist -Recurse -Include *.md,*.xml |
+  ForEach-Object { $_.FullName.Replace((Resolve-Path dist).Path,'').Replace('\','/') } | Sort-Object
+Get-ChildItem dist\_astro | Select-Object Name,@{n='KB';e={[math]::Round($_.Length/1KB,1)}}
+```
+✅ **42 routes** — 29 HTML, 10 Markdown mirrors, RSS, 2 sitemaps.
+Shipped weight: **41.7 KB CSS, 2.4 KB JS** (uncompressed). The JS is Astro's
+prefetch helper; every interactive component is `is:inline` or plain vanilla.
+
+---
+
+## Conventions that bit us, worth remembering
+
+| Trap | What happens | Do this instead |
+| --- | --- | --- |
+| Bash heredoc in PowerShell | `git commit -F - <<'EOF'` is a parser error | Write the message to a file, `git commit -F <file>` |
+| `winget install` and PATH | New binaries are invisible to the current shell | Re-read PATH from the registry, or prepend `$env:ProgramFiles\nodejs` |
+| `Get-Content` on UTF-8 | Em dashes render as `â€"` | Decode bytes with `[System.Text.Encoding]::UTF8` |
+| Native stderr | PowerShell 5.1 surfaces it as a terminating error (e.g. `git init` hints) | Check the actual result, not just the error stream |
+| `rdap.org` rate limits | HTTP 429 after ~11 rapid queries | Throttle with `Start-Sleep -Milliseconds 1700` |
+| The Bash tool | No coreutils on PATH — `mkdir`, `curl`, `head`, `wc` all missing | Use the PowerShell tool for everything |
 

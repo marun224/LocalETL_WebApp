@@ -1,14 +1,24 @@
 # Task Tracker
 
-**Project:** Local-First ETL & Analytics marketing site (working brand: **Headrace**)
+**Project:** Local-first ETL & analytics marketing site (working brand: **Headrace**)
 **Last updated:** 2026-09-21
-**Current status:** 🟢 **Phase 5 complete — awaiting confirmation to start Phase 6**
+**Status:** 🟢 **Phases 0–5 complete and committed. Awaiting go-ahead for Phase 6.**
 
 Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · 🚫 blocked · ❓ needs user decision
 
 ---
 
-## Progress summary
+## At a glance
+
+| | |
+| --- | --- |
+| **Phases complete** | 5 of 8 (Phase 8 is deferred by default) |
+| **Routes building** | **42** — 29 HTML + 10 Markdown mirrors + RSS + 2 sitemaps |
+| **Commits** | 5, all on `main` |
+| **Source files** | 19 pages · 23 components · 14 content files · 4 scripts |
+| **Shipped weight** | 41.7 KB CSS, 2.4 KB JS (uncompressed) |
+| **Build health** | `astro check` clean · icon check passing · 0 third-party requests |
+| **Fabricated metrics on site** | **0** |
 
 | Phase | Name | Status | Commit |
 | --- | --- | --- | --- |
@@ -18,101 +28,173 @@ Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · �
 | 2 | Home page | ✅ complete | `ba23557` |
 | 3 | Core product pages | ✅ complete | `02e5e84` |
 | 4 | Commercial & trust pages | ✅ complete | `90a6f55` |
-| 5 | Content engine | ✅ complete | — |
-| 6 | SEO, AI discoverability & performance | ⬜ **awaiting go-ahead** | |
-| 7 | Accessibility, QA & deploy | ⬜ | |
-| 8 | Post-launch | ⏸️ deferred by default | |
-
-**29 routes building.** `astro check` clean. Zero third-party requests verified.
+| 5 | Content engine | ✅ complete | `0b1a3a0` |
+| 6 | SEO, AI discoverability & performance | ⬜ **awaiting go-ahead** | — |
+| 7 | Accessibility, QA & deploy | ⬜ | — |
+| 8 | Post-launch | ⏸️ deferred by default | — |
 
 ---
 
-## ✅ Completed
+## Routes live today (42)
+
+**Marketing (11)**
+`/` · `/features` · `/how-it-works` · `/integrations` · `/pricing` · `/security` ·
+`/download` · `/about` · `/contact` · `/styleguide` *(noindex)* · plus `/solutions` ×3
+
+**Solutions (3)**
+`/solutions/data-engineers` · `/solutions/analysts` · `/solutions/enterprise`
+
+**Comparisons (4)**
+`/compare/fivetran` · `/compare/airbyte` · `/compare/tableau-power-bi` · `/compare/talend`
+
+**Docs (7)**
+`/docs` · `/docs/installation` · `/docs/quickstart` · `/docs/connecting-a-source` ·
+`/docs/building-a-pipeline` · `/docs/querying-your-data` · `/docs/deployment`
+
+**Blog (5)**
+`/blog` · `/blog/what-local-first-etl-means` ·
+`/blog/your-warehouse-bill-is-ad-hoc-queries` ·
+`/blog/read-the-sql-your-pipeline-generates` ·
+`/blog/migrating-off-talend-open-studio`
+
+**Machine-readable (13)**
+10 × `.md` mirrors (6 docs + 4 blog) · `/rss.xml` · `/sitemap-index.xml` · `/sitemap-0.xml`
+
+> Still to come in Phase 6: `/llms.txt`, `/llms-full.txt`, `/robots.txt`, `/404`.
+
+---
+
+## ✅ Completed in detail
 
 ### Research & planning — 2026-09-21
-Teardown of duckle.org and orcasheets.ai; stack and design tokens extracted from
-OrcaSheets' built assets; 94 RDAP domain queries with detection validated in both
-directions; 8 decisions locked with the user (D1–D8); four planning documents authored.
+- Full teardown of **duckle.org** and **orcasheets.ai**
+- OrcaSheets stack + design tokens extracted from their built assets (Vite + React +
+  Radix, Lexend, primary `#566DC6`)
+- **94 RDAP domain queries**, detection validated in both directions before trusting any
+  result
+- 8 decisions locked with the user (D1–D8)
+- 4 planning documents authored
 
-Key findings: 40 single dictionary words checked across `.com`/`.dev`/`.ai` → **zero
-available**. `.io` RDAP unreliable → discarded. Verified available: `headrace.ai`,
-`quernstone.ai`, `tidemill.ai`. OrcaSheets' SPA is invisible to non-JS crawlers
-(confirmed first-hand), which drove decision D1.
+**Findings that changed the plan:**
+- 40 single dictionary words across `.com`/`.dev`/`.ai` → **zero available**. Compounds
+  are the only path.
+- `.io` RDAP is unreliable via rdap.org (`github.io`/`docker.io` falsely reported free) →
+  **all `.io` results discarded**.
+- Verified available: `headrace.ai`, `quernstone.ai`, `tidemill.ai`.
+- OrcaSheets' SPA is invisible to non-JS crawlers — **confirmed first-hand**, and the
+  reason decision D1 chose static-first Astro.
 
-### Phase 0 — Foundation ✅
-Node 24.19.0 LTS installed via winget (none was present) · git repo on `main` ·
-`.gitignore`, `.editorconfig`, `.nvmrc`, Prettier config · LICENSE · CONTRIBUTING.md
+### Phase 0 — Foundation ✅ `7881a3a`
+- Node 24.19.0 LTS installed via winget (none was present on the machine)
+- git repo initialised on `main`, identity configured
+- `.gitignore` · `.editorconfig` · `.nvmrc` · `.prettierrc.json` · `.prettierignore`
+- `LICENSE` (site source only — product licence still undecided) · `CONTRIBUTING.md`
 
-### Phase 1 — Design system ✅
-Astro 7.3.3 + Tailwind 4.3.3 (CSS-first `@theme`) · runtime theming via `@theme inline`
-+ `[data-theme]` · deep teal `#0E7C66` + amber `#E8822B`, distinct from both reference
-sites · product surfaces stay dark in both themes · Geist + Geist Mono self-hosted,
-latin subset only · 12 primitives · `/styleguide` route
+### Phase 1 — Design system ✅ `7881a3a`
+- Astro **7.3.3** + Tailwind **4.3.3** via `@tailwindcss/vite`, MDX, sitemap
+- CSS-first tokens; runtime theming via `@theme inline` + `[data-theme]`
+- Palette deliberately distinct from both references: deep teal `#0E7C66`, amber
+  `#E8822B`
+- **Product surfaces stay dark in both themes** (decision D6)
+- Geist + Geist Mono self-hosted, latin subset only (51 KB total), preloaded
+- 12 primitives: Button · Card · Badge · Section · SectionHeading · Accordion ·
+  CodeBlock · ProductFrame · Icon · Logo · ThemeToggle · Claim
+- `/styleguide` route rendering every token and primitive in both themes
+- `astro-icon` dropped in favour of build-time Iconify inlining — one fewer dependency,
+  one fewer runtime fetch
 
-### Phase 2 — Home page ✅
-13 sections · stable h1 with rotating closing clause · `PipelineCanvas` and
-`ArchitectureDiagram` hand-authored SVG · 16-question FAQ with `FAQPage` JSON-LD ·
-3 install paths incl. AI-agent prompt · **zero fabricated metrics** · `CLAIMS.md`
-created · `SITE.preLaunch` flag drives all honesty disclosures
+### Phase 2 — Home page ✅ `ba23557`
+- 13 sections following one continuous argument: ingest → transform → analyse
+- **Stable h1** with only the closing clause rotating (OrcaSheets rotates the whole
+  headline, which leaves the h1 ambiguous to crawlers)
+- Hand-authored SVG: `PipelineCanvas` (canvas → compiled SQL) and `ArchitectureDiagram`
+  (the trust boundary, drawn explicitly)
+- 16-question FAQ with `FAQPage` JSON-LD
+- 3 install paths including an AI-agent prompt for Claude Code / Cursor / Codex
+- **Zero fabricated metrics** — `CLAIMS.md` created and records why
+- `SITE.preLaunch` flag drives every honesty disclosure from one switch
 
-### Phase 3 — Core product pages ✅
-`/features` (28 capabilities, sticky jump nav) · `/how-it-works` (5-step execution model
-+ "what this is not good at") · `/integrations` (46 connectors, vanilla-JS filter) ·
-`/download` (leads with "nothing to download yet") · `PageHero` component
+### Phase 3 — Core product pages ✅ `02e5e84`
+- `/features` — 28 capabilities across 5 groups, sticky jump nav
+- `/how-it-works` — 5-step execution model, trust boundary, **"what this is not good
+  at"** section naming 4 real limits
+- `/integrations` — 46 connectors in 6 categories, search + category filter in ~40 lines
+  of vanilla JS; states outright that 0 work today
+- `/download` — leads with "there is nothing to download yet" rather than a dead button
+  or an email-harvesting waitlist
+- `PageHero` component with optional pre-launch disclosure
 
-### Phase 4 — Commercial & trust ✅
-`/pricing` (leads with commitments, amounts marked "Not set") · `/security`
-(feature-by-feature transmission table, "what we do not claim") · 3 solutions pages via
-one dynamic route · `/about` · `/contact` (working mailto composer, no backend) ·
-`scripts/check-icons.mjs` wired into build
+### Phase 4 — Commercial & trust ✅ `90a6f55`
+- `/pricing` — leads with **commitments** (never per row / per connector / per seat / no
+  metering) because amounts are undecided; amounts render as "Not set" carrying
+  `data-claim-status="placeholder"`
+- `/security` — feature-by-feature transmission table with 3 rows honestly marked "only
+  if enabled"; **"What we do not claim"** states we hold no certifications
+- `/solutions/*` ×3 via one dynamic route, each with a "when this is the wrong tool"
+  section
+- `/about` · `/contact` (working mailto composer, no backend, collects nothing)
+- `scripts/check-icons.mjs` wired into `npm run build`
 
-### Phase 5 — Content engine ✅
-Content collections with Zod schemas (docs, blog, compare) · `DocsLayout` with sidebar +
-prev/next · hand-written `Prose` styles (code blocks stay on the dark product palette) ·
-**6 docs articles** · **4 blog posts** · **4 comparison pages** · `/rss.xml` ·
-**generated `.md` mirrors** at `/docs/{slug}.md` and `/blog/{slug}.md` — generated from
-the same source the HTML renders from, so they cannot drift · Shiki theme aligned to the
-product palette
-
-The `compare` schema **requires** a `pickThemWhen` array (`.min(1)`) — a comparison page
-cannot be published without stating when the competitor is the better choice.
+### Phase 5 — Content engine ✅ `0b1a3a0`
+- Content collections with Zod schemas: `docs`, `blog`, `compare`
+- `DocsLayout` — sidebar grouped by section, prev/next pagination
+- Hand-written `Prose` styles (not `@tailwindcss/typography`, whose defaults fight the
+  tokens and won't keep code blocks on the dark product palette)
+- **6 docs articles**, **4 blog posts**, **4 comparison pages**
+- `/rss.xml`
+- **Generated `.md` mirrors** — from the same collection entries the HTML renders from,
+  so they cannot drift
+- Shiki set to `github-dark-default` to stop highlighted code clashing with the diagrams
+- The `compare` schema **requires** `pickThemWhen` (`.min(1)`): a comparison page cannot
+  be published without stating when the competitor is the better choice
 
 ---
 
 ## ⬜ Phase 6 — SEO, AI discoverability & performance (next)
+
 | # | Task | Status |
 | --- | --- | --- |
-| 6.1 | Per-page OG images (generated) | ⬜ |
-| 6.2 | Remaining JSON-LD: `BreadcrumbList`, `Product` | ⬜ |
-| 6.3 | `robots.txt` | ⬜ |
-| 6.4 | **Generated `/llms.txt` + `/llms-full.txt`** from content collections | ⬜ |
-| 6.5 | `scripts/check-external.mjs` — fail build on any third-party origin | ⬜ |
-| 6.6 | Perf budgets: JS ≤ 80KB, LCP < 1.5s, CLS < 0.05 | ⬜ |
-| 6.7 | Image pipeline (AVIF/WebP, explicit dimensions) | ⬜ |
+| 6.1 | Generated `/llms.txt` + `/llms-full.txt` from content collections | ⬜ |
+| 6.2 | `robots.txt` | ⬜ |
+| 6.3 | Generated per-page OG images | ⬜ |
+| 6.4 | Remaining JSON-LD: `BreadcrumbList`, `Product` | ⬜ |
+| 6.5 | `scripts/check-external.mjs` — fail the build on any third-party origin | ⬜ |
+| 6.6 | Perf budgets: JS ≤ 80 KB, LCP < 1.5s, CLS < 0.05, TBT < 150ms | ⬜ |
+| 6.7 | Image pipeline (AVIF/WebP, explicit dimensions, lazy below fold) | ⬜ |
 | 6.8 | Lighthouse ≥ 95 ×4 on every route | ⬜ |
 
 ## ⬜ Phase 7 — Accessibility, QA & deploy
-WCAG 2.2 AA audit · keyboard + screen-reader pass · cross-browser · link checker ·
-`/404` · 4 deploy configs (Vercel, Netlify, Cloudflare, GH Pages) + Dockerfile ·
-CSP + security headers · analytics decision ❓Q7 · README · **placeholder sign-off gate**
+
+| # | Task | Status |
+| --- | --- | --- |
+| 7.1 | WCAG 2.2 AA audit (contrast, focus, landmarks, heading order, alt text) | ⬜ |
+| 7.2 | Full keyboard pass + screen-reader pass | ⬜ |
+| 7.3 | Cross-browser: Chrome, Firefox, Edge, Safari incl. iOS | ⬜ |
+| 7.4 | Link checker + `/404` page | ⬜ |
+| 7.5 | Deploy configs ×4 (Vercel, Netlify, Cloudflare, GH Pages) + Dockerfile | ⬜ |
+| 7.6 | CSP + security headers | ⬜ |
+| 7.7 | Analytics decision ❓Q7 | ⬜ |
+| 7.8 | `README.md` | ⬜ |
+| 7.9 | **Pre-launch placeholder sign-off gate** | ⬜ |
 
 ---
 
 ## ⏸️ Deferred
 
-| # | Item | Why | Revisit when |
+| # | Item | Why deferred | Revisit when |
 | --- | --- | --- | --- |
-| D-1 | Real product screenshots | Product doesn't exist; using illustrative SVG | Product ships |
-| D-2 | Real benchmark numbers | Nothing to measure | First working build |
-| D-3 | Customer logos / testimonials / case studies | No customers; fabricating is forbidden | First reference customer |
-| D-4 | Certification claims (SOC 2, ISO 27001) | Not certified | If/when audited |
-| D-5 | i18n | No demand signal | Post-launch traffic |
-| D-6 | Changelog, careers, status pages | No content yet | Post-launch |
-| D-7 | Newsletter, demo booking | Needs a backend and a list | Phase 8 |
-| D-8 | In-browser interactive demo | Needs the engine in WASM | Product maturity |
-| D-9 | A/B testing hero variants | Needs traffic | 1k+ sessions/mo |
-| D-10 | `.io` domain availability check | `.io` serves no public RDAP | Before purchase |
-| D-11 | Docs search | 6 articles don't justify it | ~20 articles |
+| D-1 | Real product screenshots | Product doesn't exist; illustrative SVG used instead | Product ships |
+| D-2 | Real benchmark numbers | Nothing has been run, so nothing has been measured | First working build |
+| D-3 | Customer logos, testimonials, case studies | No customers; fabricating them is forbidden by plan §6 | First reference customer |
+| D-4 | Certification claims (SOC 2, ISO 27001, HIPAA) | Hold none. Site says so explicitly | If/when audited |
+| D-5 | i18n / multi-language | No demand signal; large ongoing cost | Post-launch traffic data |
+| D-6 | Changelog, careers, status pages | No content to put in them | Post-launch |
+| D-7 | Newsletter, demo booking | Needs a backend and a list; footer currently claims no trackers | Phase 8 |
+| D-8 | In-browser interactive demo | Needs the engine compiled to WASM | Product maturity |
+| D-9 | A/B testing hero variants | Needs traffic to mean anything | 1k+ sessions/mo |
+| D-10 | `.io` domain availability check | `.io` registry serves no public RDAP | Before purchase |
+| D-11 | Docs search | 6 articles don't justify the JS | ~20 articles |
+| D-12 | Per-page table of contents | Current articles are short enough | Longer docs |
 
 ---
 
@@ -120,13 +202,13 @@ CSP + security headers · analytics decision ❓Q7 · README · **placeholder si
 
 | # | Question | Needed by | Current fallback |
 | --- | --- | --- | --- |
-| Q1 | Brand name — **Headrace** (in use), Quernstone, Tidemill, or your own | Before launch | Building as Headrace; one-file rename via `src/config/brand.ts` |
-| Q2 | Real pricing amounts for Pro & Team | Before launch | Rendered as "Not set" with `data-claim-status="placeholder"` |
-| Q3 | GitHub org/repo URL | Before launch | `github.com/headrace/headrace` placeholder in `site.js` |
+| Q1 | **Brand name** — Headrace (in use), Quernstone, Tidemill, or your own | Before launch | Built as Headrace; one-file rename via `src/config/brand.ts` |
+| Q2 | Real pricing amounts for Pro & Team | Before launch | Renders "Not set", flagged as placeholder |
+| Q3 | GitHub org/repo URL | Before launch | `github.com/headrace/headrace` in `site.js` |
 | Q4 | Contact email domain | Before launch | `hello@ / sales@ / security@ headrace.ai` |
 | Q5 | Product core licence — MIT / Apache-2.0 / dual / BSL | Before launch | Copy says "open source" without naming one |
-| Q6 | Contact form backend | Phase 7 | **Resolved for v1:** working mailto composer, no backend |
-| Q7 | Analytics — self-hosted or none | Phase 7 | **None** (strongest story, and already claimed in the footer) |
+| Q6 | Contact form backend | — | ✅ **Resolved:** working mailto composer, no backend |
+| Q7 | Analytics — self-hosted or none | Phase 7 | **None** — already claimed in the footer |
 
 ---
 
@@ -134,6 +216,18 @@ CSP + security headers · analytics decision ❓Q7 · README · **placeholder si
 
 | Item | Blocked by |
 | --- | --- |
-| Phase 6 start | Awaiting user confirmation (per standing instruction) |
+| Phase 6 start | Awaiting user confirmation (standing instruction: confirm between phases) |
 | Domain purchase | Trademark clearance + registrar re-check (plan §2) |
-| Replacing placeholders | Q1–Q5 answers |
+| Replacing placeholders | Answers to Q1–Q5 |
+
+---
+
+## Known issues / debt
+
+| Item | Severity | Note |
+| --- | --- | --- |
+| CSS is 41.7 KB uncompressed | low | Well within budget; Phase 6 will confirm gzip size |
+| `execCommand` deprecation hint in `CodeBlock` | none | Intentional fallback when the Clipboard API is unavailable |
+| RSS item links carry a trailing slash | cosmetic | `trailingSlash: 'never'` is set; both forms resolve |
+| No `/404` page yet | medium | Scheduled for Phase 7 |
+| `/styleguide` is `noindex` but publicly reachable | low | Intentional; excluded from sitemap |
