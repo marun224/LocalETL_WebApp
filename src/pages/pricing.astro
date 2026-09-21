@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/ui/Icon.astro';
+import Accordion from '../components/ui/Accordion.astro';
+import { TIERS, COMMITMENTS } from '../data/pricing';
+import { SITE } from '../config/site.js';
+---
+
+<BaseLayout
+  title="Pricing"
+  description="An open-source core that is free commercially, flat team pricing rather than per seat, and no per-row or per-connector billing of any kind."
+>
+  <PageHero
+    eyebrow="Pricing"
+    title="The core is free, and stays free"
+    lede="Paid tiers add collaboration, governance and support. They do not unlock the thing you already downloaded."
+  />
+
+  <!-- Commitments first: they are the real argument -->
+  <Section>
+    <SectionHeading
+      eyebrow="What we will not charge for"
+      title="The pricing model is the product decision"
+      lede="Most data tooling bills on the thing you cannot control — rows moved, sources connected, people who need an answer. Here is what this will never do."
+    />
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      {
+        COMMITMENTS.map((c) => (
+          <div class="flex gap-4 rounded-card border border-line bg-raised p-6">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-wash">
+              <Icon name={c.icon} size={19} class="text-primary" />
+            </span>
+            <div>
+              <h3 class="font-semibold text-ink">{c.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-muted">{c.body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Tiers -->
+  <Section tone="subtle">
+    <SectionHeading eyebrow="Plans" title="Four tiers" align="center" />
+
+    {
+      SITE.preLaunch && (
+        <div class="mx-auto mt-8 flex max-w-2xl items-start gap-3 rounded-card border border-warning/30 bg-warning/10 p-4">
+          <Icon name="info" size={18} class="mt-0.5 shrink-0 text-warning" />
+          <p class="text-sm leading-relaxed text-ink">
+            <strong class="font-medium">The paid amounts are not set yet.</strong> They are shown
+            as unset rather than as a number we would have to walk back later. The shape of the
+            plans — and everything above — is decided.
+          </p>
+        </div>
+      )
+    }
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-4">
+      {
+        TIERS.map((t) => (
+          <div
+            class:list={[
+              'flex flex-col rounded-card border bg-raised p-6',
+              t.highlight ? 'border-primary shadow-lift' : 'border-line',
+            ]}
+          >
+            {t.highlight && (
+              <Badge tone="primary" class="mb-3 w-fit">
+                Most teams
+              </Badge>
+            )}
+
+            <h3 class="text-lg font-semibold text-ink">{t.name}</h3>
+            <p class="mt-1.5 min-h-10 text-sm leading-relaxed text-muted">{t.tagline}</p>
+
+            <div class="mt-5 border-y border-line py-5">
+              {t.price ? (
+                <p class="text-3xl font-semibold tracking-tight text-ink">{t.price}</p>
+              ) : t.priceUnset ? (
+                <p
+                  class="text-3xl font-semibold tracking-tight text-faint"
+                  data-claim-status="placeholder"
+                  data-claim-id={`pricing.${t.id}`}
+                >
+                  Not set
+                </p>
+              ) : (
+                <p class="text-3xl font-semibold tracking-tight text-ink">Custom</p>
+              )}
+              <p class="mt-1 text-sm text-faint">{t.unit}</p>
+            </div>
+
+            <ul class="mt-5 flex-1 space-y-2.5">
+              {t.features.map((f) => (
+                <li class="flex gap-2.5 text-sm text-muted">
+                  <Icon name="check" size={15} class="mt-0.5 shrink-0 text-primary" />
+                  {f}
+                </li>
+              ))}
+              {t.limits?.map((l) => (
+                <li class="flex gap-2.5 text-sm text-faint">
+                  <Icon name="minus" size={15} class="mt-0.5 shrink-0" />
+                  {l}
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              href={t.cta.href}
+              variant={t.highlight ? 'primary' : 'secondary'}
+              class="mt-6 w-full"
+            >
+              {t.cta.label}
+            </Button>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Why free -->
+  <Section>
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading eyebrow="The obvious question" title="How is the free tier sustainable?" />
+        <p class="mt-6 leading-relaxed text-muted">
+          Because it costs us almost nothing to run. The engine executes on your hardware, so
+          there is no compute for us to pay for, no storage to hold, no data transfer to absorb.
+          A free user is not a loss we are subsidising in the hope of conversion.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted">
+          That is also why the free tier is not crippled. The usual reason for restricting a free
+          tier is that usage costs the vendor money. Here it does not, so the restriction would
+          exist purely to force an upgrade — and you would be able to tell.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted">
+          Teams pay for the things that genuinely require us: shared state, access control, audit
+          trails, deployment support, and someone to call.
+        </p>
+      </div>
+
+      <div>
+        <SectionHeading eyebrow="Questions" title="Pricing FAQ" />
+        <div class="mt-6 border-t border-line">
+          <Accordion question="Will the free tier get worse later?" open>
+            The core is open source. If a future version restricted what is free today, the
+            current version keeps working and can be forked. That is not a promise you have to
+            take on trust — it is a property of the licence.
+          </Accordion>
+          <Accordion question="Can I use the free tier at work?">
+            Yes, including commercially, with no seat count and no revenue threshold.
+          </Accordion>
+          <Accordion question="What happens if I stop paying for Team?">
+            You drop to Core. Your pipelines, connections and data are on your own machines, so
+            nothing is held hostage — the team features stop, the work does not.
+          </Accordion>
+          <Accordion question="Is there a discount for non-profits or education?">
+            Yes. Ask, and it will be straightforward.
+          </Accordion>
+          <Accordion question="Do you offer a perpetual licence for air-gapped sites?">
+            That is the intent for Enterprise. Subscription licensing that requires an activation
+            call is a poor fit for a network with no route out.
+          </Accordion>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="subtle">
+    <div class="rounded-frame border border-line bg-raised p-8 text-center shadow-soft sm:p-12">
+      <h2 class="text-title text-ink">Compare against what you pay now</h2>
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-muted">
+        The honest comparisons, including the cases where the incumbent is the better choice.
+      </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <Button href="/compare/fivetran">vs Fivetran</Button>
+        <Button href="/compare/airbyte" variant="secondary">vs Airbyte</Button>
+        <Button href="/compare/tableau-power-bi" variant="secondary">vs Tableau &amp; Power BI</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

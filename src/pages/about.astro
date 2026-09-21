@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import { BRAND } from '../config/brand';
+import { SITE } from '../config/site.js';
+---
+
+<BaseLayout
+  title="About"
+  description={`Why ${BRAND.name} exists, what it is committed to, and what it is not pretending to be.`}
+>
+  <PageHero
+    eyebrow="About"
+    title="Why this exists"
+    lede="Two categories of tool, one gap between them, and a bill that grows for reasons nobody can explain."
+  />
+
+  <Section>
+    <div class="mx-auto max-w-3xl space-y-6 text-lg leading-relaxed text-muted">
+      <p>
+        Data tooling has split into two halves that do not meet. Pipeline tools are good at
+        getting data from one place to another and stop the moment it lands. Analytics tools are
+        good at answering questions and assume the data is already sitting somewhere convenient.
+      </p>
+      <p>
+        The gap between them is where most people actually work — and it is filled with
+        spreadsheets, one-off scripts, and a ticket queue in front of whoever can write the join.
+      </p>
+      <p>
+        At the same time, the default answer to both halves became "send it to our cloud." That
+        made sense when a laptop was weak. A current machine has more cores and faster storage
+        than the servers that ran serious analytics a decade ago, and it is already paid for.
+        Renting compute to process your own data, and being billed per row for the privilege,
+        is now a choice rather than a necessity.
+      </p>
+      <p class="font-medium text-ink">
+        {BRAND.name} is one engine that covers the whole path — ingest, transform, analyse — and
+        runs it on hardware you already own.
+      </p>
+    </div>
+  </Section>
+
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Commitments"
+      title="What this will not do"
+      lede="Easier to hold to when it is written down in public."
+    />
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      {
+        [
+          {
+            icon: 'wifi-off',
+            t: 'Never phone home',
+            d: 'No telemetry, no account requirement, no usage metering. Not as a setting you can switch off — as an absence of the code that would do it.',
+          },
+          {
+            icon: 'file-code-2',
+            t: 'Never hide what it runs',
+            d: 'Every generated query stays readable and editable. A tool that will not show you its output is a tool you cannot review, debug or leave.',
+          },
+          {
+            icon: 'git-branch',
+            t: 'Keep the core open',
+            d: 'The engine is open source. Paid tiers add team features; they do not hold the engine hostage.',
+          },
+          {
+            icon: 'infinity',
+            t: 'Never bill per row or per seat',
+            d: 'Pricing that grows with your data punishes you for succeeding. Pricing per seat decides who in your company is allowed to ask a question.',
+          },
+        ].map((c) => (
+          <div class="flex gap-4 rounded-card border border-line bg-raised p-6">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-wash">
+              <Icon name={c.icon} size={19} class="text-primary" />
+            </span>
+            <div>
+              <h3 class="font-semibold text-ink">{c.t}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-muted">{c.d}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section>
+    <div class="mx-auto max-w-3xl">
+      <SectionHeading eyebrow="Status" title="Where this actually is" />
+      <div class="mt-8 space-y-5 leading-relaxed text-muted">
+        <p>
+          {BRAND.name} is pre-launch. The engine is in development and nothing has shipped. This
+          site describes what is being built, and it is deliberately free of the things
+          pre-launch sites usually reach for: there are no benchmark figures, no customer logos,
+          no testimonials and no compliance badges, because none of those exist yet.
+        </p>
+        <p>
+          That is a marketing decision as much as an ethical one. Anyone evaluating a data tool
+          has been burned by a landing page whose numbers evaporated on contact. Being the site
+          that does not do that is worth more than an invented throughput figure.
+        </p>
+        <p>
+          The first release will appear on the repository. Watching it there costs you nothing
+          and tells us nothing about you.
+        </p>
+      </div>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <Button href={SITE.github} external>
+          <Icon name="simple:github" size={17} />
+          Watch the repository
+        </Button>
+        <Button href="/contact" variant="secondary">Get in touch</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

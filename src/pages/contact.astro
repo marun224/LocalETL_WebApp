@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import { SITE } from '../config/site.js';
+
+const routes = [
+  {
+    icon: 'message-circle',
+    title: 'General & product',
+    body: 'Questions about what it does, when it ships, or whether it fits what you are doing.',
+    email: SITE.email.hello,
+  },
+  {
+    icon: 'building-complex',
+    title: 'Teams & enterprise',
+    body: 'Deployment, licensing, security questionnaires, and connectors you need that are not on the list.',
+    email: SITE.email.sales,
+  },
+  {
+    icon: 'shield-alert',
+    title: 'Security disclosure',
+    body: 'Vulnerability reports. Include reproduction steps; we will acknowledge and keep you updated.',
+    email: SITE.email.security,
+  },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch about the product, enterprise deployment, or to report a security issue."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Talk to a person"
+    lede="No chatbot, no qualification form, no drip sequence. Email goes to someone who can actually answer it."
+  />
+
+  <Section>
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+      <!-- Direct routes -->
+      <div>
+        <h2 class="text-xl font-semibold text-ink">Email directly</h2>
+        <p class="mt-2 text-muted">Usually the fastest route.</p>
+
+        <div class="mt-7 space-y-4">
+          {
+            routes.map((r) => (
+              <div class="rounded-card border border-line bg-raised p-5">
+                <div class="flex items-center gap-2.5">
+                  <Icon name={r.icon} size={18} class="text-primary" />
+                  <h3 class="font-semibold text-ink">{r.title}</h3>
+                </div>
+                <p class="mt-2 text-sm leading-relaxed text-muted">{r.body}</p>
+                <a
+                  href={`mailto:${r.email}`}
+                  class="mt-3 inline-flex items-center gap-1.5 font-mono text-sm text-primary hover:underline"
+                >
+                  {r.email}
+                  <Icon name="arrow-up-right" size={14} />
+                </a>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-7 rounded-card border border-line bg-subtle p-5">
+          <p class="flex items-start gap-2.5 text-sm leading-relaxed text-muted">
+            <Icon name="info" size={17} class="mt-0.5 shrink-0" />
+            <span>
+              There is no tracking on this site and no mailing list behind this page. If you email
+              us, we reply — that is the whole system.
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Composer -->
+      <div>
+        <h2 class="text-xl font-semibold text-ink">Or compose it here</h2>
+        <p class="mt-2 text-muted">
+          This opens your own mail client with the message filled in. Nothing is submitted to a
+          server, because there is no server to submit it to.
+        </p>
+
+        <form id="contact-form" class="mt-7 space-y-5">
+          <div>
+            <label for="topic" class="mb-2 block text-sm font-medium text-ink">Topic</label>
+            <select
+              id="topic"
+              class="h-11 w-full rounded-btn border border-line bg-raised px-3.5 text-[0.9375rem] text-ink focus-visible:border-primary"
+            >
+              <option value={SITE.email.hello}>General &amp; product</option>
+              <option value={SITE.email.sales}>Teams &amp; enterprise</option>
+              <option value={SITE.email.sales}>Request a connector</option>
+              <option value={SITE.email.security}>Security disclosure</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="subject" class="mb-2 block text-sm font-medium text-ink">Subject</label>
+            <input
+              id="subject"
+              type="text"
+              required
+              placeholder="What is this about?"
+              class="h-11 w-full rounded-btn border border-line bg-raised px-3.5 text-[0.9375rem] text-ink placeholder:text-faint focus-visible:border-primary"
+            />
+          </div>
+
+          <div>
+            <label for="body" class="mb-2 block text-sm font-medium text-ink">Message</label>
+            <textarea
+              id="body"
+              rows="8"
+              required
+              placeholder="Tell us what you are trying to do, what you are using now, and where it hurts."
+              class="w-full rounded-btn border border-line bg-raised p-3.5 text-[0.9375rem] leading-relaxed text-ink placeholder:text-faint focus-visible:border-primary"
+            ></textarea>
+          </div>
+
+          <Button type="submit" size="lg" class="w-full sm:w-auto">
+            <Icon name="mail" size={17} />
+            Open in your mail client
+          </Button>
+
+          <p id="form-note" class="text-sm text-faint">
+            Your mail client should open. If it does not, copy the address above and write to us
+            directly.
+          </p>
+        </form>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const to = (document.getElementById('topic') as HTMLSelectElement).value;
+    const subject = (document.getElementById('subject') as HTMLInputElement).value;
+    const body = (document.getElementById('body') as HTMLTextAreaElement).value;
+
+    // A plain mailto: keeps this working with no backend and no third party.
+    // Nothing is collected, because nothing is submitted.
+    window.location.href =
+      `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>
