@@ -159,7 +159,9 @@ Created with the Write tool (not shell commands), since the Bash tool lacks `cat
 
 ## Session 2 — Phase 0 onward
 
-> ⏸️ **Not started.** Awaiting **"start"** from the user.
+> ✅ **Started** on the user's "start". Actual commands run are logged below, after the
+> conventions section. The block immediately following was the *plan*; it is kept for
+> comparison with what was actually needed.
 
 Commands queued for Phase 0, to be logged here with their real output once run:
 
@@ -183,3 +185,122 @@ npm run dev
 - Append chronologically; never rewrite history.
 - Record the command, its purpose, and the **actual outcome** — including failures. The two validation steps above are the reason the domain research is trustworthy; failures are the most valuable entries here.
 - Redact secrets, tokens and keys. None have been used so far.
+
+---
+
+## Session 1 (continued) — Phases 0-5 implementation
+
+### Phase 0 — toolchain
+
+```powershell
+winget install OpenJS.NodeJS.LTS --accept-source-agreements --accept-package-agreements --disable-interactivity
+# Node 24.19.0, npm 11.17.0. winget does NOT refresh the current shell's PATH:
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+# Every later PowerShell call prepends:  $env:Path += ";$env:ProgramFiles\nodejs"
+
+git init; git branch -m main
+git config user.name "Marun Mahadevu"; git config user.email "marun.mahadevu@gmail.com"
+```
+Note: `git init` writes its branch-name hint to stderr, which PowerShell 5.1 surfaces as an
+error. The repo was created correctly.
+
+### Reference scaffold (ground truth for Astro 7)
+
+```powershell
+npm create astro@latest . -- --template minimal --install no --git no --typescript strict --skip-houston --yes
+```
+Run in the scratchpad, not the project, because the project directory was non-empty.
+Confirmed Astro 7 keeps the Astro 5 project shape, so the plan held.
+
+### Dependency verification before pinning
+
+```powershell
+foreach($p in @('astro','@tailwindcss/vite','tailwindcss','@astrojs/mdx','@astrojs/sitemap','astro-icon','@iconify-json/lucide','@fontsource-variable/geist','@fontsource-variable/geist-mono')){
+  npm view $p version }
+npm view "@astrojs/mdx" peerDependencies --json
+```
+Found Astro at **7.3.3**, not the 5.x the plan assumed. `@astrojs/mdx@8.0.1` requires
+`astro ^7.2.6` — compatible. **Dropped `astro-icon`** in favour of inlining Iconify paths
+at build time: one fewer dependency and one fewer runtime fetch.
+
+### Install
+
+```powershell
+npm install --no-fund --no-audit                      # 300 packages
+npm install -D @iconify-json/lucide @iconify-json/simple-icons --no-fund --no-audit
+npm install @astrojs/rss --no-fund --no-audit
+npm install -D playwright --no-fund --no-audit
+npx playwright install chromium
+```
+
+### Fonts — latin subset only
+
+```powershell
+Copy-Item "node_modules\@fontsource-variable\geist\files\geist-latin-wght-normal.woff2" "public\fonts\" -Force
+Copy-Item "node_modules\@fontsource-variable\geist-mono\files\geist-mono-latin-wght-normal.woff2" "public\fonts\" -Force
+```
+28.7 KB + 22.6 KB. The packages ship no per-subset CSS, but the `@font-face` rules carry
+`unicode-range`, so non-latin subsets are never fetched. Copied with stable filenames so
+they can be preloaded (Vite would hash them). Repeatable via `npm run fonts:sync`.
+
+### Build loop (used throughout)
+
+```powershell
+$env:ASTRO_TELEMETRY_DISABLED="1"
+npm run build          # check-icons -> astro check -> astro build
+npm run build:fast     # skip checks
+```
+
+### Visual verification
+
+```powershell
+# Preview runs as a background job; the screenshot script drives Chromium against it.
+$job = Start-Job -ScriptBlock { Set-Location "E:\workspace_09212026\LocalETL_WebApp"; npx astro preview --port 4321 }
+Start-Sleep -Seconds 7
+node scripts/screenshot.mjs / /styleguide /pricing /security
+node scripts/shot-el.mjs / "#architecture figure"     # single element, close up
+Stop-Job $job; Remove-Job $job -Force
+```
+`screenshot.mjs` **exits non-zero on any request to a foreign origin**, so the
+zero-third-party rule is enforced on every capture, not just asserted in the footer.
+
+Defects this caught that a build could not:
+- `extract · transform · load` overflowing the engine box in the architecture SVG
+- pipeline canvas edges invisible at `--c-product-border` against the canvas
+- SVG diagrams shrinking to ~7px labels below 620px → now pan instead
+- product frames nearly dissolving into the dark page surface → lifted `--c-product-bg`
+
+### Icon validation
+
+```powershell
+node scripts/check-icons.mjs      # now part of `npm run build`
+```
+Written after a build failed on `building-2` (lucide has `building-complex`). Icon.astro
+throws on an unknown name, which is right but reports one per build; this reports all of
+them at once. 38 of 40 brand slugs checked existed — Iceberg and Cassandra have no
+simple-icons entry and render as text chips.
+
+### Encoding check
+
+```powershell
+$bytes = [System.IO.File]::ReadAllBytes("dist\docs\quickstart.md")
+[System.Text.Encoding]::UTF8.GetString($bytes)
+```
+The generated `.md` mirrors looked like mojibake under `Get-Content`. That is PowerShell
+5.1 reading UTF-8 as ANSI, not a file defect — verified the bytes are clean UTF-8, no BOM.
+
+### Commits
+
+```powershell
+# PowerShell has no bash heredoc; `git commit -F -` with <<'EOF' is a parser error.
+# Write the message to a file, then:
+git commit --quiet -F <path-to-message-file>
+```
+
+| Commit | Phase |
+| --- | --- |
+| `7881a3a` | 0 + 1 — foundation, toolchain, design system |
+| `ba23557` | 2 — home page |
+| `02e5e84` | 3 — features, how-it-works, integrations, download |
+| `90a6f55` | 4 — pricing, security, solutions, about, contact |
+

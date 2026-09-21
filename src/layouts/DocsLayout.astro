@@ -1,0 +1,120 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import { getCollection } from 'astro:content';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Current article id, for marking the sidebar item active. */
+  current?: string;
+  /** Emits the /docs/{slug}.md mirror link for AI crawlers. */
+  mirror?: string;
+}
+
+const { title, description, current, mirror } = Astro.props;
+
+const docs = await getCollection('docs');
+const SECTION_ORDER = ['Getting started', 'Building pipelines', 'Analysis', 'Operations'];
+
+const sections = SECTION_ORDER.map((name) => ({
+  name,
+  items: docs
+    .filter((d) => d.data.section === name)
+    .sort((a, b) => a.data.order - b.data.order),
+})).filter((s) => s.items.length > 0);
+
+// Flat order, for prev/next.
+const flat = sections.flatMap((s) => s.items);
+const idx = flat.findIndex((d) => d.id === current);
+const prev = idx > 0 ? flat[idx - 1] : null;
+const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null;
+---
+
+<BaseLayout title={title} description={description}>
+  {mirror && <link slot="head" rel="alternate" type="text/markdown" href={mirror} />}
+
+  <div class="container-page grid gap-12 py-12 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-14">
+    <!-- Sidebar -->
+    <aside class="lg:sticky lg:top-24 lg:self-start">
+      <nav aria-label="Documentation">
+        <a
+          href="/docs"
+          class="mb-6 flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+        >
+          <Icon name="book-open" size={16} class="text-primary" />
+          Documentation
+        </a>
+
+        {
+          sections.map((section) => (
+            <div class="mb-6">
+              <p class="mb-2.5 text-xs font-semibold uppercase tracking-wider text-faint">
+                {section.name}
+              </p>
+              <ul class="space-y-0.5 border-l border-line">
+                {section.items.map((item) => (
+                  <li>
+                    <a
+                      href={`/docs/${item.id}`}
+                      class:list={[
+                        '-ml-px block border-l-2 py-1.5 pl-4 text-sm transition-colors',
+                        item.id === current
+                          ? 'border-primary font-medium text-primary'
+                          : 'border-transparent text-muted hover:border-line-strong hover:text-ink',
+                      ]}
+                      aria-current={item.id === current ? 'page' : undefined}
+                    >
+                      {item.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </aside>
+
+    <!-- Article -->
+    <div class="min-w-0">
+      <slot />
+
+      {
+        (prev || next) && (
+          <nav
+            class="mt-16 grid gap-4 border-t border-line pt-8 sm:grid-cols-2"
+            aria-label="Pagination"
+          >
+            {prev ? (
+              <a
+                href={`/docs/${prev.id}`}
+                class="group rounded-card border border-line bg-raised p-4 transition-colors hover:border-line-strong"
+              >
+                <span class="flex items-center gap-1.5 text-xs text-faint">
+                  <Icon name="arrow-left" size={13} />
+                  Previous
+                </span>
+                <span class="mt-1 block font-medium text-ink">{prev.data.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <a
+                href={`/docs/${next.id}`}
+                class="group rounded-card border border-line bg-raised p-4 text-right transition-colors hover:border-line-strong sm:col-start-2"
+              >
+                <span class="flex items-center justify-end gap-1.5 text-xs text-faint">
+                  Next
+                  <Icon name="arrow-right" size={13} />
+                </span>
+                <span class="mt-1 block font-medium text-ink">{next.data.title}</span>
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

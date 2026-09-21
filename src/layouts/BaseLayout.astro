@@ -128,6 +128,9 @@ const baseSchema = {
     </script>
 
     <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} />
+
+    {/* Page-specific head tags, e.g. the /docs/{slug}.md mirror link. */}
+    <slot name="head" />
   </head>
 
   <body class="min-h-screen antialiased">

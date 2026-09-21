@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import Section from '../../components/ui/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Prose from '../../components/ui/Prose.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { getCollection, render } from 'astro:content';
+import { BRAND } from '../../config/brand';
+
+export async function getStaticPaths() {
+  const items = await getCollection('compare');
+  return items.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+
+const all = (await getCollection('compare')).sort((a, b) => a.data.order - b.data.order);
+const others = all.filter((c) => c.id !== item.id);
+---
+
+<BaseLayout title={item.data.title} description={item.data.description}>
+  <PageHero eyebrow="Comparison" title={item.data.title} lede={item.data.description} />
+
+  <!-- The table -->
+  {
+    item.data.table.length > 0 && (
+      <Section>
+        <SectionHeading eyebrow="Side by side" title="The short version" />
+        <div class="mt-8 overflow-x-auto">
+          <table class="w-full min-w-[46rem] border-collapse text-left">
+            <thead>
+              <tr class="border-b-2 border-line">
+                <th class="w-1/4 py-3 pr-6 text-sm font-semibold text-ink" />
+                <th class="w-[37.5%] py-3 pr-6 text-sm font-semibold text-ink">
+                  {item.data.competitor}
+                </th>
+                <th class="w-[37.5%] py-3 text-sm font-semibold text-primary">{BRAND.name}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {item.data.table.map((row) => (
+                <tr class="border-b border-line align-top">
+                  <td class="py-4 pr-6 text-sm font-medium text-ink">{row.dimension}</td>
+                  <td class="py-4 pr-6 text-sm leading-relaxed text-muted">{row.them}</td>
+                  <td class="py-4 text-sm leading-relaxed text-muted">{row.us}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+    )
+  }
+
+  <!-- When to pick them. Deliberately ABOVE the argument for us. -->
+  <Section tone="subtle">
+    <div class="mx-auto max-w-3xl rounded-frame border border-line bg-raised p-8 sm:p-10">
+      <div class="flex gap-4">
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-wash">
+          <Icon name="check" size={20} class="text-primary" />
+        </span>
+        <div>
+          <h2 class="text-xl font-semibold text-ink">
+            When {item.data.competitor} is the right choice
+          </h2>
+          <p class="mt-2 text-sm text-muted">
+            Placed before our own argument, because a comparison that never concedes anything is
+            an advert.
+          </p>
+          <ul class="mt-5 space-y-3">
+            {
+              item.data.pickThemWhen.map((reason) => (
+                <li class="flex gap-3 leading-relaxed text-muted">
+                  <Icon name="arrow-right" size={16} class="mt-1.5 shrink-0 text-faint" />
+                  {reason}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- The long form -->
+  <Section>
+    <Prose class="mx-auto">
+      <Content />
+    </Prose>
+  </Section>
+
+  <!-- Other comparisons -->
+  <Section tone="subtle">
+    <SectionHeading eyebrow="Other comparisons" title="Keep looking" align="center" />
+    <div class="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-3">
+      {
+        others.map((o) => (
+          <a
+            href={`/compare/${o.id}`}
+            class="rounded-btn border border-line bg-raised px-4 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-strong"
+          >
+            {o.data.title}
+          </a>
+        ))
+      }
+    </div>
+    <div class="mt-10 text-center">
+      <Button href="/pricing">See pricing</Button>
+    </div>
+  </Section>
+</BaseLayout>

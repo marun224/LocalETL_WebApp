@@ -1,0 +1,45 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import Prose from '../../components/ui/Prose.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs.map((doc) => ({ params: { id: doc.id }, props: { doc } }));
+}
+
+const { doc } = Astro.props;
+const { Content } = await render(doc);
+
+const updated = doc.data.updated
+  ? doc.data.updated.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  : null;
+---
+
+<DocsLayout
+  title={doc.data.title}
+  description={doc.data.description}
+  current={doc.id}
+  mirror={`/docs/${doc.id}.md`}
+>
+  <article>
+    <p class="text-eyebrow mb-3">{doc.data.section}</p>
+    <h1 class="text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{doc.data.title}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{doc.data.description}</p>
+
+    <div
+      class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line pb-6 text-sm text-faint"
+    >
+      {updated && <span>Updated {updated}</span>}
+      <a href={`/docs/${doc.id}.md`} class="underline hover:text-muted">View as Markdown</a>
+    </div>
+
+    <Prose class="mt-9">
+      <Content />
+    </Prose>
+  </article>
+</DocsLayout>

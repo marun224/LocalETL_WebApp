@@ -1,0 +1,152 @@
+---
+/**
+ * Typographic styles for rendered Markdown.
+ *
+ * Hand-written rather than @tailwindcss/typography: the plugin's defaults
+ * fight the design tokens, and overriding ~40 of them costs more than the
+ * ~70 lines here. This also keeps code blocks on the dark product palette
+ * in both themes, which the plugin will not do.
+ */
+export interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`prose-body ${className}`}>
+  <slot />
+</div>
+
+<style is:global>
+  .prose-body {
+    color: var(--c-muted);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    max-width: 45rem;
+  }
+
+  .prose-body > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose-body h2 {
+    color: var(--c-ink);
+    font-size: 1.625rem;
+    line-height: 1.25;
+    letter-spacing: -0.022em;
+    font-weight: 600;
+    margin-top: 2.5em;
+    margin-bottom: 0.65em;
+    scroll-margin-top: 7rem;
+  }
+
+  .prose-body h3 {
+    color: var(--c-ink);
+    font-size: 1.25rem;
+    line-height: 1.35;
+    font-weight: 600;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    scroll-margin-top: 7rem;
+  }
+
+  .prose-body strong {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+
+  .prose-body a {
+    color: var(--c-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .prose-body a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .prose-body ul,
+  .prose-body ol {
+    padding-left: 1.4em;
+  }
+  .prose-body ul {
+    list-style: disc;
+  }
+  .prose-body ol {
+    list-style: decimal;
+  }
+  .prose-body li + li {
+    margin-top: 0.5em;
+  }
+  .prose-body li::marker {
+    color: var(--c-faint);
+  }
+
+  .prose-body blockquote {
+    border-left: 3px solid var(--c-primary);
+    background: var(--c-subtle);
+    padding: 1rem 1.25rem;
+    border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  }
+  .prose-body blockquote > * + * {
+    margin-top: 0.75em;
+  }
+
+  /* Inline code */
+  .prose-body :not(pre) > code {
+    background: var(--c-subtle);
+    border: 1px solid var(--c-border);
+    border-radius: 5px;
+    padding: 0.12em 0.38em;
+    font-size: 0.875em;
+    color: var(--c-ink);
+  }
+
+  /* Code blocks stay on the dark product palette in both themes. */
+  .prose-body pre {
+    background: var(--c-product-bg) !important;
+    border: 1px solid var(--c-product-border);
+    border-radius: var(--radius-card);
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  .prose-body pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--c-product-fg);
+  }
+
+  .prose-body table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    display: block;
+    overflow-x: auto;
+  }
+  .prose-body th {
+    text-align: left;
+    color: var(--c-ink);
+    font-weight: 600;
+    border-bottom: 2px solid var(--c-border);
+    padding: 0.6rem 0.9rem 0.6rem 0;
+    white-space: nowrap;
+  }
+  .prose-body td {
+    border-bottom: 1px solid var(--c-border);
+    padding: 0.7rem 0.9rem 0.7rem 0;
+    vertical-align: top;
+  }
+
+  .prose-body hr {
+    border: 0;
+    border-top: 1px solid var(--c-border);
+    margin-block: 2.5em;
+  }
+
+  .prose-body img {
+    border-radius: var(--radius-card);
+  }
+</style>

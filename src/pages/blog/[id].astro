@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Prose from '../../components/ui/Prose.astro';
+import Section from '../../components/ui/Section.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { getCollection, render } from 'astro:content';
+import { BRAND } from '../../config/brand';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const all = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+);
+const more = all.filter((p) => p.id !== post.id).slice(0, 2);
+
+const articleSchema = {
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.published.toISOString(),
+  author: { '@type': 'Organization', name: BRAND.name },
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  schema={[articleSchema]}
+>
+  <link slot="head" rel="alternate" type="text/markdown" href={`/blog/${post.id}.md`} />
+
+  <article>
+    <div class="border-b border-line bg-surface">
+      <div class="container-page py-14 sm:py-16">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-ink"
+        >
+          <Icon name="arrow-left" size={14} />
+          All writing
+        </a>
+
+        <h1 class="text-display mt-6 max-w-4xl text-ink">{post.data.title}</h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
+          {post.data.description}
+        </p>
+
+        <div class="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-faint">
+          <time datetime={post.data.published.toISOString()}>{fmt(post.data.published)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{post.data.minutes} min read</span>
+          <span aria-hidden="true">·</span>
+          <a href={`/blog/${post.id}.md`} class="underline hover:text-muted">Markdown</a>
+          <span class="flex gap-2 sm:ml-3">
+            {post.data.tags.map((t) => <Badge>{t}</Badge>)}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <Section>
+      <Prose class="mx-auto">
+        <Content />
+      </Prose>
+    </Section>
+  </article>
+
+  {
+    more.length > 0 && (
+      <Section tone="subtle">
+        <h2 class="text-xl font-semibold text-ink">More writing</h2>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          {more.map((p) => (
+            <a
+              href={`/blog/${p.id}`}
+              class="rounded-card border border-line bg-raised p-5 transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift"
+            >
+              <time class="text-sm text-faint" datetime={p.data.published.toISOString()}>
+                {fmt(p.data.published)}
+              </time>
+              <h3 class="mt-1.5 font-semibold text-ink">{p.data.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{p.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+</BaseLayout>

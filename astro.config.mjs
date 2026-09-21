@@ -18,6 +18,16 @@ export default defineConfig({
     }),
   ],
 
+  markdown: {
+    shikiConfig: {
+      // Pairs with --c-product-bg. Shiki's default `github-dark` renders SQL
+      // keywords in a salmon red that fights the violet/amber used in the
+      // hand-authored diagrams; this keeps code consistent across both.
+      theme: 'github-dark-default',
+      wrap: false,
+    },
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },
