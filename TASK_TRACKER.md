@@ -2,7 +2,12 @@
 
 **Project:** Local-first ETL & analytics marketing site (working brand: **Headrace**)
 **Last updated:** 2026-09-21
-**Status:** 🟢 **All phases complete. v1 is build-complete and ready to launch once Q1–Q5 are answered.**
+**Status:** ⏸️ **PAUSED at a clean boundary.** All 8 phases complete; v1 is
+build-complete and verified. Resume instructions: **[RESUME_HERE.md](RESUME_HERE.md)**
+
+> ⚠️ **Two commits are unpushed.** Local `main` is at `9bc36bc`; `origin/main`
+> is at `59be558`. Phases 7 and 8 exist only locally. No `git push` was run
+> during this work.
 
 Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · 🚫 blocked · ❓ needs user decision
 
