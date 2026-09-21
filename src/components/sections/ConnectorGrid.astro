@@ -1,0 +1,73 @@
+---
+import { CONNECTOR_CATEGORIES, CONNECTOR_COUNTS } from '../../data/connectors';
+import { SITE } from '../../config/site.js';
+import Icon from '../ui/Icon.astro';
+import Badge from '../ui/Badge.astro';
+
+export interface Props {
+  /** Show every category, or just the first few (home page). */
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const categories = limit ? CONNECTOR_CATEGORIES.slice(0, limit) : CONNECTOR_CATEGORIES;
+---
+
+{
+  SITE.preLaunch && (
+    <div class="mb-8 flex items-start gap-3 rounded-card border border-line bg-subtle p-4">
+      <Icon name="info" size={18} class="mt-0.5 shrink-0 text-muted" />
+      <p class="text-sm leading-relaxed text-muted">
+        <strong class="font-medium text-ink">Planned coverage.</strong> {CONNECTOR_COUNTS.total}{' '}
+        connectors across {CONNECTOR_COUNTS.categories} categories are in scope for the first
+        release. None of them is shipping yet, and this page will mark each one as available only
+        when it genuinely is — not before.
+      </p>
+    </div>
+  )
+}
+
+<div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+  {
+    categories.map((cat) => (
+      <div class="rounded-card border border-line bg-raised p-5">
+        <div class="flex items-center gap-2.5">
+          <Icon name={cat.icon} size={18} class="text-primary" />
+          <h3 class="font-semibold text-ink">{cat.label}</h3>
+          <span class="ml-auto font-mono text-xs text-faint">{cat.connectors.length}</span>
+        </div>
+
+        <p class="mt-2 text-sm leading-relaxed text-muted">{cat.blurb}</p>
+
+        <ul class="mt-4 flex flex-wrap gap-1.5">
+          {cat.connectors.map((c) => (
+            <li
+              class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1 text-xs text-muted"
+              title={
+                c.status === 'available'
+                  ? `${c.name} — available`
+                  : `${c.name} — planned, not yet shipping`
+              }
+            >
+              {c.icon && <Icon name={`simple:${c.icon}`} size={12} />}
+              {c.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<div class="mt-7 flex flex-wrap items-center gap-4">
+  <a
+    href="/integrations"
+    class="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
+  >
+    See the full catalogue
+    <Icon name="arrow-right" size={16} />
+  </a>
+  <span class="text-sm text-faint">
+    Something missing? <a href="/contact" class="underline hover:text-muted">Ask for it</a>.
+  </span>
+</div>

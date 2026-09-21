@@ -1,0 +1,53 @@
+---
+import { BRAND } from '../../config/brand';
+import { SITE } from '../../config/site.js';
+import CodeBlock from '../ui/CodeBlock.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+---
+
+<div class="grid gap-5 lg:grid-cols-3">
+  <!-- 1. Desktop -->
+  <div class="flex flex-col rounded-card border border-line bg-raised p-6">
+    <Icon name="monitor-down" size={22} class="text-primary" />
+    <h3 class="mt-4 font-semibold text-ink">Desktop app</h3>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">
+      The canvas, the query editor and the dashboards. Windows, macOS and Linux. No account to
+      create.
+    </p>
+    <Button href="/download" class="mt-5 w-full">Download</Button>
+  </div>
+
+  <!-- 2. CLI -->
+  <div class="flex flex-col rounded-card border border-line bg-raised p-6">
+    <Icon name="terminal" size={22} class="text-primary" />
+    <h3 class="mt-4 font-semibold text-ink">Command line</h3>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">
+      The same engine, headless. Build pipelines as code, run them from cron, systemd or CI.
+    </p>
+    <CodeBlock code={`pip install ${BRAND.slug}`} class="mt-5" />
+  </div>
+
+  <!-- 3. Agent -->
+  <div class="flex flex-col rounded-card border border-primary/30 bg-primary-wash p-6">
+    <Icon name="bot" size={22} class="text-primary" />
+    <h3 class="mt-4 font-semibold text-ink">Let an agent do it</h3>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">
+      Paste this into Claude Code, Cursor or Codex. Nothing to install first — it fetches the
+      engine, builds a real pipeline and runs it.
+    </p>
+    <CodeBlock
+      code={`Run uvx ${BRAND.slug} quickstart to build my first pipeline`}
+      prompt={null}
+      class="mt-5"
+    />
+  </div>
+</div>
+
+<p class="mt-6 text-sm text-faint">
+  {
+    SITE.preLaunch
+      ? 'These are the intended install paths. None of them works yet — the first release has not shipped.'
+      : 'Free and open source. No account, no telemetry.'
+  }
+</p>

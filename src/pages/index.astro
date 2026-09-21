@@ -1,21 +1,373 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Card from '../components/ui/Card.astro';
 import Button from '../components/ui/Button.astro';
 import Badge from '../components/ui/Badge.astro';
+import Icon from '../components/ui/Icon.astro';
+import ProductFrame from '../components/ui/ProductFrame.astro';
+
+import Hero from '../components/sections/Hero.astro';
+import ConnectorGrid from '../components/sections/ConnectorGrid.astro';
+import FaqSection from '../components/sections/FaqSection.astro';
+import InstallPaths from '../components/sections/InstallPaths.astro';
+import ArchitectureDiagram from '../components/diagrams/ArchitectureDiagram.astro';
+import QueryToChart from '../components/diagrams/QueryToChart.astro';
+
+import { HOME_FAQ } from '../data/faq';
 import { BRAND } from '../config/brand';
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  mainEntity: HOME_FAQ.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const softwareSchema = {
+  '@type': 'SoftwareApplication',
+  name: BRAND.name,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Windows, macOS, Linux',
+  description: BRAND.description,
+};
+
+const solutions = [
+  {
+    href: '/solutions/data-engineers',
+    icon: 'git-branch',
+    title: 'Data engineers',
+    body: 'Pipelines that compile to SQL you can read, diff and review. Run them headless from the tooling you already have.',
+    points: ['Readable compiled SQL', 'Headless runner', 'Column-level lineage'],
+  },
+  {
+    href: '/solutions/analysts',
+    icon: 'bar-chart-3',
+    title: 'Analysts',
+    body: 'Join across systems without filing a ticket. Ask in plain English, check the SQL, then pivot and chart the result.',
+    points: ['Cross-system joins', 'Plain-English queries', 'Pivots and dashboards'],
+  },
+  {
+    href: '/solutions/enterprise',
+    icon: 'shield-check',
+    title: 'Enterprise',
+    body: 'Runs inside your perimeter by default, which makes on-premise, VPC and air-gapped deployment ordinary rather than special.',
+    points: ['Air-gapped capable', 'No egress by design', 'Your keys, your network'],
+  },
+];
 ---
 
-<BaseLayout>
-  <Section class="pt-20">
-    <Badge tone="primary">Scaffold</Badge>
-    <h1 class="text-display mt-6 text-ink">{BRAND.tagline}</h1>
-    <p class="mt-6 max-w-2xl text-lg text-muted">
-      Phase 1 scaffold. The real home page is built in Phase 2.
-    </p>
-    <div class="mt-8 flex gap-3">
-      <Button href="/download">Download</Button>
-      <Button href="/styleguide" variant="secondary">Style guide</Button>
+<BaseLayout schema={[softwareSchema, faqSchema]}>
+  <Hero />
+
+  <!-- ============ Act I — Ingest ============ -->
+  <Section id="ingest">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading
+        eyebrow="Act one — ingest"
+        title="Connect what you already have"
+        lede="Databases, warehouses, object stores, files and APIs. Read them where they live, in place, without a staging copy."
+      />
+      <Badge tone="primary">
+        <Icon name="plug" size={13} />
+        One integration pattern
+      </Badge>
+    </div>
+
+    <div class="mt-10">
+      <ConnectorGrid limit={3} />
+    </div>
+  </Section>
+
+  <!-- ============ Act II — Transform ============ -->
+  <Section id="transform" tone="subtle">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading
+          eyebrow="Act two — transform"
+          title="A canvas that compiles to SQL you can read"
+          lede="Drag sources, joins, filters and destinations onto a canvas and wire them together. Then open any node and read exactly what it will run."
+        />
+
+        <ul class="mt-8 space-y-4">
+          {
+            [
+              {
+                t: 'Never a black box',
+                d: 'Every node shows its compiled SQL. If you disagree with it, edit it — the canvas is a convenience, not a cage.',
+              },
+              {
+                t: 'Reviewable like code',
+                d: 'Pipelines are text. They diff in a pull request, and a colleague can read what changed without opening the app.',
+              },
+              {
+                t: 'Bad rows go somewhere',
+                d: 'Validators route failures to a reject output instead of silently dropping them or failing the whole run.',
+              },
+            ].map((f) => (
+              <li class="flex gap-3.5">
+                <Icon name="check" size={18} class="mt-0.5 shrink-0 text-primary" />
+                <div>
+                  <p class="font-medium text-ink">{f.t}</p>
+                  <p class="mt-1 text-sm leading-relaxed text-muted">{f.d}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <Button href="/how-it-works" variant="secondary" class="mt-8">
+          How it works
+          <Icon name="arrow-right" size={16} />
+        </Button>
+      </div>
+
+      <ProductFrame label="join_customers.node">
+        <pre class="overflow-x-auto font-mono text-[0.8rem] leading-[1.8] text-product-fg"><code><span class="text-product-muted"># node: join · main + lookup</span>
+<span class="text-product-violet">SELECT</span> o.*, c.region, c.segment
+<span class="text-product-violet">FROM</span>   orders o
+<span class="text-product-violet">LEFT JOIN</span> customers c
+  <span class="text-product-violet">ON</span> c.customer_id = o.customer_id
+
+<span class="text-product-muted"># unmatched rows → reject port</span>
+<span class="text-product-violet">WHERE</span> c.customer_id <span class="text-product-violet">IS NOT NULL</span></code></pre>
+      </ProductFrame>
+    </div>
+  </Section>
+
+  <!-- ============ Act III — Analyze ============ -->
+  <Section id="analyze">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <ProductFrame label="ask" class="order-last lg:order-first">
+        <QueryToChart />
+      </ProductFrame>
+
+      <div>
+        <SectionHeading
+          eyebrow="Act three — analyse"
+          title="Ask the question. Read the query. Keep the answer."
+          lede="This is where extraction-only tools hand you off to something else. Here the pipeline and the analysis are the same product."
+        />
+
+        <ul class="mt-8 space-y-4">
+          {
+            [
+              {
+                t: 'Plain English, with the receipts',
+                d: 'Ask in words, get SQL back, and see it before it runs. The generated query is the feature, not a hidden step.',
+              },
+              {
+                t: 'Joins across systems',
+                d: 'A Postgres table, a Parquet file and a SaaS API in one query, without loading any of it into a warehouse first.',
+              },
+              {
+                t: 'Pivots, charts, dashboards',
+                d: 'The spreadsheet work analysts actually do, over datasets a spreadsheet cannot open.',
+              },
+            ].map((f) => (
+              <li class="flex gap-3.5">
+                <Icon name="check" size={18} class="mt-0.5 shrink-0 text-primary" />
+                <div>
+                  <p class="font-medium text-ink">{f.t}</p>
+                  <p class="mt-1 text-sm leading-relaxed text-muted">{f.d}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- ============ The trust boundary ============ -->
+  <Section id="architecture" tone="subtle">
+    <SectionHeading
+      eyebrow="Where your data goes"
+      title="Nowhere. That is the whole design."
+      lede="Most tools ask you to believe this. Here is the line, drawn explicitly — what sits inside your perimeter, what sits outside it, and what crosses."
+      align="center"
+    />
+
+    <div class="mx-auto mt-10 max-w-4xl">
+      <ProductFrame
+        label="architecture"
+        caption="The only thing that crosses the boundary is the software download itself."
+      >
+        <ArchitectureDiagram />
+      </ProductFrame>
+    </div>
+
+    <div class="mx-auto mt-10 grid max-w-4xl gap-5 sm:grid-cols-3">
+      {
+        [
+          {
+            icon: 'wifi-off',
+            t: 'No phone-home',
+            d: 'No account, no telemetry, no licence ping. It makes no outbound calls of its own.',
+          },
+          {
+            icon: 'server',
+            t: 'Your compute',
+            d: 'Execution happens in-process on your CPU and your disk. There is no queue to wait in.',
+          },
+          {
+            icon: 'plane',
+            t: 'Works offline',
+            d: 'Air-gapped operation is ordinary, not a special enterprise deployment mode.',
+          },
+        ].map((f) => (
+          <div class="text-center">
+            <div class="mx-auto flex size-11 items-center justify-center rounded-full bg-primary-wash">
+              <Icon name={f.icon} size={20} class="text-primary" />
+            </div>
+            <p class="mt-3.5 font-medium text-ink">{f.t}</p>
+            <p class="mt-1.5 text-sm leading-relaxed text-muted">{f.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- ============ Solutions ============ -->
+  <Section id="solutions">
+    <SectionHeading
+      eyebrow="Who it is for"
+      title="One engine, two very different jobs"
+      lede="Pipeline tools stop at the loaded table. BI tools assume the table is already there. Both audiences end up waiting on the other."
+    />
+
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        solutions.map((s) => (
+          <Card href={s.href} class="flex flex-col">
+            <Icon name={s.icon} size={22} class="text-primary" />
+            <h3 class="mt-4 text-lg font-semibold text-ink">{s.title}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{s.body}</p>
+            <ul class="mt-5 space-y-2 border-t border-line pt-4">
+              {s.points.map((p) => (
+                <li class="flex items-center gap-2 text-sm text-muted">
+                  <Icon name="check" size={14} class="shrink-0 text-primary" />
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- ============ Local AI ============ -->
+  <Section id="local-ai" tone="subtle">
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+      <div>
+        <SectionHeading
+          eyebrow="On-device AI"
+          title="An assistant that does not need the internet"
+          lede="The model runs in-process on your machine. No API key, no vendor account, no prompt leaving the building."
+        />
+        <p class="mt-6 leading-relaxed text-muted">
+          An assistant that reads your schema is an assistant that has seen your data. That is
+          exactly the thing local-first is supposed to prevent, so the default has to be local —
+          otherwise the whole argument collapses at the last step.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted">
+          If you would rather use a hosted model, that stays available as an explicit opt-in, and
+          the security page states precisely what would be transmitted.
+        </p>
+        <Button href="/security" variant="secondary" class="mt-7">
+          Read the data-handling detail
+          <Icon name="arrow-right" size={16} />
+        </Button>
+      </div>
+
+      <ProductFrame label="assistant · local">
+        <div class="space-y-3">
+          <div class="flex justify-end">
+            <p class="max-w-[85%] rounded-card rounded-br-sm bg-product-accent/15 px-3.5 py-2.5 text-sm text-product-fg">
+              Join orders to customers and show me revenue by region for Q3.
+            </p>
+          </div>
+          <div class="flex justify-start">
+            <div class="max-w-[90%] rounded-card rounded-bl-sm bg-product-raised px-3.5 py-2.5">
+              <p class="text-sm text-product-fg">
+                Added 3 nodes to the canvas. Here is the SQL it will run:
+              </p>
+              <pre
+                class="mt-2.5 overflow-x-auto rounded-md bg-product-bg p-2.5 font-mono text-[0.7rem] leading-relaxed text-product-fg"><code><span class="text-product-violet">SELECT</span> c.region, <span class="text-product-violet">SUM</span>(o.amount)
+<span class="text-product-violet">FROM</span> orders o <span class="text-product-violet">JOIN</span> customers c
+  <span class="text-product-violet">USING</span> (customer_id)
+<span class="text-product-violet">GROUP BY</span> 1</code></pre>
+            </div>
+          </div>
+          <p
+            class="flex items-center justify-center gap-1.5 pt-1 font-mono text-[0.6875rem] text-product-muted"
+          >
+            <span class="size-1.5 rounded-full bg-product-accent"></span>
+            running on device · 0 requests sent
+          </p>
+        </div>
+      </ProductFrame>
+    </div>
+  </Section>
+
+  <!-- ============ Pricing teaser ============ -->
+  <Section id="pricing-teaser">
+    <div
+      class="overflow-hidden rounded-frame border border-line bg-raised p-8 shadow-soft sm:p-12"
+    >
+      <div class="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+        <div>
+          <p class="text-eyebrow mb-3">Pricing</p>
+          <h2 class="text-title text-ink">The core is free, and stays free</h2>
+          <p class="mt-4 max-w-xl leading-relaxed text-muted">
+            No per-row billing. No per-connector billing. No per-seat billing on the core engine.
+            Paid tiers add collaboration, governance and support for teams that need them — they
+            do not unlock the thing you already downloaded.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <Button href="/pricing">See pricing</Button>
+            <Button href="/compare/fivetran" variant="secondary">Compare the alternatives</Button>
+          </div>
+        </div>
+
+        <ul class="space-y-3">
+          {
+            [
+              'Open-source core, free commercially',
+              'Team tier priced flat, not per seat',
+              'Enterprise: SSO, on-prem, air-gapped',
+              'No usage metering of any kind',
+            ].map((p) => (
+              <li class="flex items-center gap-3 rounded-card border border-line bg-subtle px-4 py-3">
+                <Icon name="check" size={16} class="shrink-0 text-primary" />
+                <span class="text-sm text-ink">{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- ============ FAQ ============ -->
+  <Section id="faq" tone="subtle">
+    <FaqSection items={HOME_FAQ} />
+  </Section>
+
+  <!-- ============ Get started ============ -->
+  <Section id="get-started">
+    <SectionHeading
+      eyebrow="Get started"
+      title="Three ways in"
+      lede="Pick the one that matches how you like to work."
+      align="center"
+    />
+    <div class="mt-10">
+      <InstallPaths />
     </div>
   </Section>
 </BaseLayout>

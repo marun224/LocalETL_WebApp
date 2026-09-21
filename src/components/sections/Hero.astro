@@ -1,0 +1,134 @@
+---
+import { SITE } from '../../config/site.js';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import ProductFrame from '../ui/ProductFrame.astro';
+import PipelineCanvas from '../diagrams/PipelineCanvas.astro';
+
+/**
+ * The rotating phrase completes a STABLE h1.
+ *
+ * OrcaSheets rotates the whole headline, which targets six intents but leaves
+ * the h1 ambiguous to a crawler. Here the meaningful sentence is fixed and
+ * only the closing clause rotates, so the h1 always reads as one clear claim
+ * while still covering several searches.
+ */
+const ROTATIONS = [
+  'without the cloud bill.',
+  'without uploading anything.',
+  'without a warehouse.',
+  'without per-row billing.',
+  'without a black box.',
+  'without leaving your laptop.',
+];
+
+const trust = [
+  { icon: 'lock', text: 'No account, no telemetry' },
+  { icon: 'git-branch', text: 'Open source core' },
+  { icon: 'monitor', text: 'Windows, macOS, Linux' },
+  { icon: 'file-code-2', text: 'Compiles to readable SQL' },
+];
+---
+
+<section class="relative overflow-hidden border-b border-line bg-surface">
+  {/* Soft radial wash behind the hero. Decorative only. */}
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-[520px] opacity-[0.55] [background:radial-gradient(60%_100%_at_50%_0%,var(--c-primary-wash),transparent_70%)]"
+  >
+  </div>
+
+  <div class="container-page relative pb-16 pt-14 sm:pt-20">
+    {
+      SITE.preLaunch && (
+        <a
+          href="/download"
+          class="mx-auto mb-7 flex w-fit items-center gap-2.5 rounded-full border border-line bg-raised py-1.5 pl-2 pr-4 text-sm shadow-soft transition-colors hover:border-line-strong"
+        >
+          <span class="rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-contrast">
+            Pre-launch
+          </span>
+          <span class="text-muted">In development — follow along</span>
+          <Icon name="arrow-right" size={14} class="text-faint" />
+        </a>
+      )
+    }
+
+    <h1 class="text-display mx-auto max-w-4xl text-center text-ink">
+      From raw source to answered question,{' '}
+      <span
+        id="rotator"
+        class="inline-block bg-gradient-to-br from-primary to-primary bg-clip-text text-transparent"
+        >{ROTATIONS[0]}</span
+      >
+    </h1>
+
+    <p class="mx-auto mt-7 max-w-2xl text-center text-lg leading-relaxed text-muted sm:text-xl">
+      A local-first ETL and analytics engine. Connect your databases, files and APIs, build
+      pipelines that compile to SQL you can read, and ask questions in plain English — all on
+      hardware you already own.
+    </p>
+
+    <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <Button href="/download" size="lg" class="w-full sm:w-auto">
+        <Icon name="download" size={18} />
+        Download
+      </Button>
+      <Button href={SITE.github} variant="secondary" size="lg" external class="w-full sm:w-auto">
+        <Icon name="simple:github" size={18} />
+        View source
+      </Button>
+    </div>
+
+    <ul class="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-7 gap-y-3">
+      {
+        trust.map((t) => (
+          <li class="flex items-center gap-2 text-sm text-muted">
+            <Icon name={t.icon} size={15} class="text-primary" />
+            {t.text}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mx-auto mt-14 max-w-5xl">
+      <ProductFrame
+        label="orders_by_region.pipeline"
+        caption="Illustrative diagram, not a screenshot — the product is still in development."
+      >
+        <PipelineCanvas />
+      </ProductFrame>
+    </div>
+  </div>
+</section>
+
+<script
+  is:inline
+  define:vars={{ ROTATIONS }}
+>
+  (function () {
+    var el = document.getElementById('rotator');
+    if (!el) return;
+
+    // Respect the user's motion preference: no rotation, first phrase stands.
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq.matches) return;
+
+    var i = 0;
+    el.style.transition = 'opacity 260ms ease, transform 260ms ease';
+
+    setInterval(function () {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(-6px)';
+      setTimeout(function () {
+        i = (i + 1) % ROTATIONS.length;
+        el.textContent = ROTATIONS[i];
+        el.style.transform = 'translateY(6px)';
+        requestAnimationFrame(function () {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      }, 260);
+    }, 3200);
+  })();
+</script>

@@ -1,0 +1,278 @@
+---
+/**
+ * The trust boundary, drawn explicitly.
+ *
+ * Both reference sites ask you to BELIEVE the local-first claim. Neither
+ * draws where the line actually is. This diagram's whole job is to show
+ * what is inside your perimeter, what is outside it, and that nothing
+ * crosses — including us.
+ */
+---
+
+{/* Scrolls rather than shrinks on narrow screens — at 340px wide the labels
+    become unreadable. The alt text carries the full meaning regardless. */}
+<div class="-mx-1 overflow-x-auto px-1">
+<svg
+  viewBox="0 0 700 340"
+  class="w-full min-w-[620px]"
+  role="img"
+  aria-label="Architecture diagram. Inside a boundary labelled 'Your infrastructure' sit your sources, the engine, and your results — data moves freely between them. Outside the boundary sits the vendor cloud, connected by nothing: no data, no telemetry, no account. The only thing that ever crosses the line is a download of the software itself."
+>
+  <defs>
+    <marker
+      id="ad-arrow"
+      viewBox="0 0 10 10"
+      refX="9"
+      refY="5"
+      markerWidth="5.5"
+      markerHeight="5.5"
+      orient="auto-start-reverse"
+    >
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--c-product-accent)" />
+    </marker>
+  </defs>
+
+  <!-- ===== Outside: the vendor cloud ===== -->
+  <g opacity="0.75">
+    <rect
+      x="240"
+      y="8"
+      width="220"
+      height="62"
+      rx="10"
+      fill="none"
+      stroke="var(--c-product-border)"
+      stroke-width="1.5"
+      stroke-dasharray="5 4"
+    />
+    <text
+      x="350"
+      y="33"
+      text-anchor="middle"
+      font-family="var(--font-sans)"
+      font-size="13"
+      font-weight="500"
+      fill="var(--c-product-muted)"
+    >
+      Any vendor cloud — including ours
+    </text>
+    <text
+      x="350"
+      y="53"
+      text-anchor="middle"
+      font-family="var(--font-mono)"
+      font-size="11"
+      fill="var(--c-product-muted)"
+    >
+      no data · no telemetry · no account
+    </text>
+  </g>
+
+  <!-- the severed connection -->
+  <g>
+    <path
+      d="M350 70 L350 104"
+      stroke="var(--c-product-border)"
+      stroke-width="1.5"
+      stroke-dasharray="4 4"
+      fill="none"
+    />
+    <g transform="translate(350, 87)">
+      <circle r="11" fill="var(--c-product-bg)" stroke="var(--c-error)" stroke-width="1.6" />
+      <path
+        d="M-4.5 -4.5 L4.5 4.5 M4.5 -4.5 L-4.5 4.5"
+        stroke="var(--c-error)"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+    </g>
+  </g>
+
+  <!-- ===== The boundary ===== -->
+  <rect
+    x="16"
+    y="104"
+    width="668"
+    height="224"
+    rx="14"
+    fill="color-mix(in srgb, var(--c-product-accent) 4%, transparent)"
+    stroke="var(--c-product-accent)"
+    stroke-width="1.8"
+  />
+  <rect x="38" y="95" width="196" height="19" rx="4" fill="var(--c-product-bg)"></rect>
+  <text
+    x="46"
+    y="109"
+    font-family="var(--font-mono)"
+    font-size="11.5"
+    font-weight="500"
+    fill="var(--c-product-accent)"
+  >
+    YOUR INFRASTRUCTURE
+  </text>
+
+  <!-- Sources -->
+  <g>
+    <rect
+      x="44"
+      y="140"
+      width="168"
+      height="152"
+      rx="10"
+      fill="var(--c-product-raised)"
+      stroke="var(--c-product-border)"
+      stroke-width="1.3"
+    />
+    <text
+      x="60"
+      y="165"
+      font-family="var(--font-sans)"
+      font-size="13"
+      font-weight="600"
+      fill="var(--c-product-fg)"
+    >
+      Your sources
+    </text>
+    {
+      ['Postgres · MySQL · Oracle', 'S3 · GCS · Azure Blob', 'Parquet · CSV · Excel', 'Stripe · Salesforce · APIs'].map(
+        (line, idx) => (
+          <text
+            x="60"
+            y={190 + idx * 21}
+            font-family="var(--font-mono)"
+            font-size="10.5"
+            fill="var(--c-product-muted)"
+          >
+            {line}
+          </text>
+        )
+      )
+    }
+  </g>
+
+  <!-- Engine -->
+  <g>
+    <rect
+      x="266"
+      y="140"
+      width="168"
+      height="152"
+      rx="10"
+      fill="color-mix(in srgb, var(--c-product-accent) 10%, var(--c-product-raised))"
+      stroke="var(--c-product-accent)"
+      stroke-width="1.6"
+    />
+    <text
+      x="350"
+      y="176"
+      text-anchor="middle"
+      font-family="var(--font-sans)"
+      font-size="14"
+      font-weight="600"
+      fill="var(--c-product-fg)"
+    >
+      The engine
+    </text>
+    {/* 9.5px: at 10.5 the ETL line overflows the 168px box. */}
+    <text
+      x="350"
+      y="197"
+      text-anchor="middle"
+      font-family="var(--font-mono)"
+      font-size="9.5"
+      fill="var(--c-product-muted)"
+    >
+      extract · transform · load
+    </text>
+    <text
+      x="350"
+      y="215"
+      text-anchor="middle"
+      font-family="var(--font-mono)"
+      font-size="9.5"
+      fill="var(--c-product-muted)"
+    >
+      query · pivot · chart
+    </text>
+    <line
+      x1="292"
+      y1="232"
+      x2="408"
+      y2="232"
+      stroke="var(--c-product-border)"
+      stroke-width="1"
+    />
+    <text
+      x="350"
+      y="252"
+      text-anchor="middle"
+      font-family="var(--font-mono)"
+      font-size="10"
+      fill="var(--c-product-accent)"
+    >
+      runs in-process
+    </text>
+    <text
+      x="350"
+      y="269"
+      text-anchor="middle"
+      font-family="var(--font-mono)"
+      font-size="10"
+      fill="var(--c-product-muted)"
+    >
+      your CPU · your disk
+    </text>
+  </g>
+
+  <!-- Results -->
+  <g>
+    <rect
+      x="488"
+      y="140"
+      width="168"
+      height="152"
+      rx="10"
+      fill="var(--c-product-raised)"
+      stroke="var(--c-product-border)"
+      stroke-width="1.3"
+    />
+    <text
+      x="504"
+      y="165"
+      font-family="var(--font-sans)"
+      font-size="13"
+      font-weight="600"
+      fill="var(--c-product-fg)"
+    >
+      Your results
+    </text>
+    {
+      ['Tables · dashboards', 'Scheduled reports', 'Parquet · CSV exports', 'Loaded back to source'].map(
+        (line, idx) => (
+          <text
+            x="504"
+            y={190 + idx * 21}
+            font-family="var(--font-mono)"
+            font-size="10.5"
+            fill="var(--c-product-muted)"
+          >
+            {line}
+          </text>
+        )
+      )
+    }
+  </g>
+
+  <!-- flow arrows -->
+  <g
+    fill="none"
+    stroke="var(--c-product-accent)"
+    stroke-width="1.8"
+    marker-end="url(#ad-arrow)"
+  >
+    <path d="M212 216 L262 216" />
+    <path d="M434 216 L484 216" />
+  </g>
+</svg>
+</div>
+

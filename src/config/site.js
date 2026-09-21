@@ -13,6 +13,18 @@ export const SITE = {
   locale: 'en',
   lang: 'en-US',
 
+  /**
+   * Pre-launch mode.
+   *
+   * While true, the site says plainly that the product is not released yet
+   * and shows intended capability as *intended*, never as shipped. Flip to
+   * false on launch day and the honesty notices disappear on their own.
+   *
+   * This exists so "we haven't shipped yet" is a single switch rather than
+   * a hunt through 18 pages.
+   */
+  preLaunch: true,
+
   /** TODO: repo does not exist yet. Open question Q3. */
   github: 'https://github.com/headrace/headrace',
 

@@ -1,0 +1,43 @@
+---
+import Accordion from '../ui/Accordion.astro';
+import type { FaqItem } from '../../data/faq';
+
+export interface Props {
+  items: FaqItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="grid gap-10 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-16">
+  <div>
+    <p class="text-eyebrow mb-3">Questions</p>
+    <h2 class="text-title text-ink">Straight answers</h2>
+    <p class="mt-4 leading-relaxed text-muted">
+      Including the uncomfortable one about whether this is usable yet.
+    </p>
+    <a
+      href="/contact"
+      class="mt-5 inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
+    >
+      Ask something else
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M5 12h14M12 5l7 7-7 7"></path>
+      </svg>
+    </a>
+  </div>
+
+  <div class="border-t border-line">
+    {items.map((item, i) => <Accordion question={item.q} open={i === 0}>{item.a}</Accordion>)}
+  </div>
+</div>

@@ -1,0 +1,81 @@
+---
+/**
+ * Act III: plain English → SQL → chart.
+ *
+ * Shows the generated SQL deliberately. The point is not "AI writes your
+ * query" — it is "AI writes your query AND you get to read it before it
+ * runs." That distinction is the whole trust argument.
+ *
+ * Bar values are illustrative sample data, not a claim about anything.
+ */
+const bars = [
+  { label: 'EMEA', value: 100 },
+  { label: 'AMER', value: 82 },
+  { label: 'APAC', value: 57 },
+  { label: 'LATAM', value: 31 },
+];
+const max = 100;
+---
+
+<div class="space-y-3">
+  <!-- The question -->
+  <div class="flex items-start gap-3 rounded-card border border-product-border bg-product-raised p-3.5">
+    <span
+      class="mt-0.5 shrink-0 rounded-md bg-product-accent/15 px-1.5 py-1 font-mono text-[0.625rem] text-product-accent"
+      >ASK</span
+    >
+    <p class="text-sm text-product-fg">
+      Which regions grew revenue most this quarter, and how many orders was that?
+    </p>
+  </div>
+
+  <!-- The SQL it generated -->
+  <div class="rounded-card border border-product-border bg-[color-mix(in_srgb,var(--c-product-bg)_60%,black)] p-3.5">
+    <p class="mb-2 flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-wider text-product-muted">
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m18 16 4-4-4-4M6 8l-4 4 4 4M14.5 4l-5 16"></path>
+      </svg>
+      It wrote this — check it before it runs
+    </p>
+    <pre class="overflow-x-auto font-mono text-[0.78rem] leading-[1.7] text-product-fg"><code><span class="text-product-violet">SELECT</span> region,
+       <span class="text-product-violet">SUM</span>(revenue) <span class="text-product-violet">AS</span> revenue,
+       <span class="text-product-violet">COUNT</span>(*)      <span class="text-product-violet">AS</span> orders
+<span class="text-product-violet">FROM</span>   orders_by_region
+<span class="text-product-violet">WHERE</span>  quarter = <span class="text-product-amber">'2026-Q3'</span>
+<span class="text-product-violet">GROUP BY</span> region <span class="text-product-violet">ORDER BY</span> revenue <span class="text-product-violet">DESC</span>;</code></pre>
+  </div>
+
+  <!-- The result -->
+  <div class="rounded-card border border-product-border bg-product-raised p-4">
+    <p class="mb-3.5 font-mono text-[0.6875rem] uppercase tracking-wider text-product-muted">
+      Result · sample data
+    </p>
+    <div class="space-y-2.5">
+      {
+        bars.map((b) => (
+          <div class="flex items-center gap-3">
+            <span class="w-12 shrink-0 font-mono text-[0.6875rem] text-product-muted">
+              {b.label}
+            </span>
+            <div class="h-5 flex-1 overflow-hidden rounded-[3px] bg-product-bg">
+              <div
+                class="h-full rounded-[3px] bg-product-accent/80"
+                style={`width: ${(b.value / max) * 100}%`}
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
