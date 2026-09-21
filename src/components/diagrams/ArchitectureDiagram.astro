@@ -11,7 +11,12 @@
 
 {/* Scrolls rather than shrinks on narrow screens — at 340px wide the labels
     become unreadable. The alt text carries the full meaning regardless. */}
-<div class="-mx-1 overflow-x-auto px-1">
+<div
+  class="-mx-1 overflow-x-auto px-1"
+  tabindex="0"
+  role="region"
+  aria-label="Architecture diagram, scrollable"
+>
 <svg
   viewBox="0 0 700 340"
   class="w-full min-w-[620px]"

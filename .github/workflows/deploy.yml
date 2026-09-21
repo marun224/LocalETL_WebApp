@@ -1,0 +1,99 @@
+name: Build & deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Everything that can fail the build, on every push and PR.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      # Icon names, types, build, third-party check, header generation.
+      - run: npm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+
+      - name: Check internal links
+        run: npm run check:links
+
+      # Reports outstanding placeholders. Does not fail the build — shipping
+      # with one is a human decision, this just makes it an informed one.
+      - name: Audit claims
+        run: npm run check:claims
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  # Accessibility and performance need a browser, so they run separately.
+  audit:
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+
+      - name: Serve and audit
+        run: |
+          npx astro preview --port 4321 &
+          npx wait-on http://localhost:4321 -t 60000
+          npm run check:a11y
+          npm run check:perf
+
+  # GitHub Pages is one of four supported targets; the others read this same
+  # dist/ output. See README for Vercel, Netlify, Cloudflare and Docker.
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: [verify, audit]
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

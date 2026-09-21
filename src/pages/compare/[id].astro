@@ -29,11 +29,19 @@ const others = all.filter((c) => c.id !== item.id);
     item.data.table.length > 0 && (
       <Section>
         <SectionHeading eyebrow="Side by side" title="The short version" />
-        <div class="mt-8 overflow-x-auto">
+        <div
+          class="mt-8 overflow-x-auto"
+          tabindex="0"
+          role="region"
+          aria-label={`Comparison with ${item.data.competitor}, scrollable table`}
+        >
           <table class="w-full min-w-[46rem] border-collapse text-left">
             <thead>
               <tr class="border-b-2 border-line">
-                <th class="w-1/4 py-3 pr-6 text-sm font-semibold text-ink" />
+                {/* Visually empty corner cell, but a header still needs a name. */}
+                <th class="w-1/4 py-3 pr-6 text-sm font-semibold text-ink">
+                  <span class="sr-only-focusable">Dimension</span>
+                </th>
                 <th class="w-[37.5%] py-3 pr-6 text-sm font-semibold text-ink">
                   {item.data.competitor}
                 </th>

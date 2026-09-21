@@ -368,3 +368,109 @@ prefetch helper; every interactive component is `is:inline` or plain vanilla.
 | `rdap.org` rate limits | HTTP 429 after ~11 rapid queries | Throttle with `Start-Sleep -Milliseconds 1700` |
 | The Bash tool | No coreutils on PATH — `mkdir`, `curl`, `head`, `wc` all missing | Use the PowerShell tool for everything |
 
+
+---
+
+## Phase 6 — SEO, AI discoverability, performance
+
+```powershell
+npm install -D lighthouse --no-fund --no-audit
+
+# Lighthouse needs a Chrome binary; reuse the one Playwright already downloaded
+# rather than installing another.
+$chrome = Get-ChildItem "$env:LOCALAPPDATA\ms-playwright" -Recurse -Filter "chrome.exe" | Select-Object -First 1
+$env:CHROME_PATH = $chrome.FullName
+
+npx lighthouse "http://localhost:4321/" --quiet `
+  --chrome-flags="--headless=new --no-sandbox" `
+  --output=json --output-path=$out `
+  --only-categories=performance,accessibility,best-practices,seo
+```
+✅ **100 / 100 / 100 / 100** on all six routes audited.
+
+⚠️ Lighthouse exits non-zero on Windows *after* writing its report — a
+temp-directory cleanup error, not an audit failure. Read the JSON report
+rather than trusting the exit code.
+
+```powershell
+node scripts/gen-og.mjs          # 30 OG cards via the installed Playwright
+node scripts/check-external.mjs
+node scripts/check-perf.mjs
+```
+Measured: 2.4 kB JS, 41.7 kB CSS, LCP 60–116 ms, CLS 0.0000, 4–5 requests.
+
+❌ **A regex mistake damaged two files.** While stripping now-duplicated
+`description={...}` props, the pattern `[^}]*\}` stopped at the first brace
+*inside* a `${BRAND.name}` template literal, truncating the opening tag in
+`about.astro` and `download.astro`. Caught before the build; repaired by hand.
+
+**Lesson:** never write a regex spanning an attribute value that may contain
+template literals. Phase 7 used a deliberately narrower transformation —
+matching only `<pre` followed by whitespace or `>`, and checking the tag for an
+existing attribute before touching it — and it was clean across 7 files.
+
+---
+
+## Phase 7 — accessibility, QA, deploy
+
+```powershell
+npm install -D @axe-core/playwright axe-core --no-fund --no-audit
+npx playwright install firefox webkit
+```
+
+### Full accessibility audit
+
+```powershell
+npm run preview                  # background job
+node scripts/check-a11y.mjs
+```
+
+First run: **14 violations, 3 distinct rules** across 58 page-loads
+(29 routes × 2 themes) — none of which the Lighthouse spot-check had surfaced:
+
+| Rule | Impact | Count | Fix |
+| --- | --- | --- | --- |
+| `scrollable-region-focusable` | serious | 4 | `tabindex="0"` on 7 `<pre>` and 4 scroll containers |
+| `empty-table-header` | minor | 8 | Named the empty corner `<th>` in comparison tables |
+| `color-contrast` | serious | 2 | `--c-success` retuned |
+
+The contrast fix needed two attempts. `#1f7a50` measured 4.99:1 **against
+white** — but that badge sits on `bg-success/10` over `--c-subtle`, not white,
+which darkens the backdrop and gives only 4.36:1. Recomputed against the real
+rendered backdrop: `#1a6b45`, 5.30:1.
+
+✅ Second run: **0 violations, all interactive elements focusable.**
+
+### CSP, generated and verified
+
+```powershell
+node scripts/gen-headers.mjs     # now part of npm run build
+node scripts/check-csp.mjs
+```
+
+✅ CSP allows **7 inline script hashes and no `'unsafe-inline'`** — only
+possible because nothing third-party loads.
+
+`astro preview` does not apply `dist/_headers`, so `check-csp.mjs` starts its
+own server with the real headers and drives the theme toggle and the connector
+filter behind them. An untested CSP silently kills inline scripts on deploy day.
+
+### Links, claims, browsers
+
+```powershell
+node scripts/check-links.mjs     # 1505 links, 0 broken, 1 external destination
+node scripts/check-claims.mjs    # 3 placeholders, 0 forbidden phrases
+node scripts/check-browsers.mjs  # chromium + firefox + webkit
+```
+
+---
+
+## Additional environment traps (Phases 6–7)
+
+| Trap | What happens | Do this instead |
+| --- | --- | --- |
+| `Out-File -Encoding utf8` on PS 5.1 | Writes a BOM; git puts it in the commit subject line | `[System.IO.File]::WriteAllText($p, $s, (New-Object System.Text.UTF8Encoding $false))` |
+| Inline `node -e "..."` containing JS regex | PowerShell parses `[`, `{` and `)` inside the string and fails | Write the script to a file and run it |
+| Lighthouse on Windows | Exits non-zero after a successful run | Parse the JSON report; ignore the exit code |
+| Contrast maths against white | The token may actually sit on a tinted wash | Compute against the real rendered backdrop |
+| Long here-strings in PowerShell | Safety hooks may match text inside them | Write the content to a file, append with node |

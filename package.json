@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/check-icons.mjs && astro check && astro build && node scripts/check-external.mjs",
+    "build": "node scripts/check-icons.mjs && astro check && astro build && node scripts/check-external.mjs && node scripts/gen-headers.mjs",
     "check:icons": "node scripts/check-icons.mjs",
     "check:external": "node scripts/check-external.mjs",
     "check:perf": "node scripts/check-perf.mjs",
@@ -22,7 +22,12 @@
     "format:check": "prettier --check \"**/*.{astro,ts,js,mjs,json,md,mdx,css}\"",
     "fonts:sync": "node scripts/sync-fonts.mjs",
     "shot": "node scripts/screenshot.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "check:claims": "node scripts/check-claims.mjs",
+    "check:csp": "node scripts/check-csp.mjs",
+    "check:browsers": "node scripts/check-browsers.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",
@@ -36,8 +41,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
     "@iconify-json/lucide": "^1.2.135",
     "@iconify-json/simple-icons": "^1.2.97",
+    "axe-core": "^4.13.0",
     "lighthouse": "^13.5.0",
     "playwright": "^1.63.0",
     "prettier": "^3.5.3",

@@ -126,7 +126,7 @@ const solutions = [
       </div>
 
       <ProductFrame label="join_customers.node">
-        <pre class="overflow-x-auto font-mono text-[0.8rem] leading-[1.8] text-product-fg"><code><span class="text-product-muted"># node: join · main + lookup</span>
+        <pre tabindex="0" class="overflow-x-auto font-mono text-[0.8rem] leading-[1.8] text-product-fg"><code><span class="text-product-muted"># node: join · main + lookup</span>
 <span class="text-product-violet">SELECT</span> o.*, c.region, c.segment
 <span class="text-product-violet">FROM</span>   orders o
 <span class="text-product-violet">LEFT JOIN</span> customers c
@@ -296,7 +296,7 @@ const solutions = [
               <p class="text-sm text-product-fg">
                 Added 3 nodes to the canvas. Here is the SQL it will run:
               </p>
-              <pre
+              <pre tabindex="0"
                 class="mt-2.5 overflow-x-auto rounded-md bg-product-bg p-2.5 font-mono text-[0.7rem] leading-relaxed text-product-fg"><code><span class="text-product-violet">SELECT</span> c.region, <span class="text-product-violet">SUM</span>(o.amount)
 <span class="text-product-violet">FROM</span> orders o <span class="text-product-violet">JOIN</span> customers c
   <span class="text-product-violet">USING</span> (customer_id)

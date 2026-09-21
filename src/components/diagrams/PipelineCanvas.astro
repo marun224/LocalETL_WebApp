@@ -45,7 +45,12 @@ const H = 46;
     </p>
     {/* Scrolls rather than shrinks on narrow screens: scaled to 340px the
         node labels drop to ~7px and stop being readable. */}
-    <div class="-mx-1 overflow-x-auto px-1">
+    <div
+      class="-mx-1 overflow-x-auto px-1"
+      tabindex="0"
+      role="region"
+      aria-label="Pipeline canvas diagram, scrollable"
+    >
     <svg
       viewBox="0 0 480 230"
       class="w-full min-w-[420px]"
@@ -155,7 +160,7 @@ const H = 46;
         read-only
       </span>
     </p>
-    <pre class="overflow-x-auto px-1 font-mono text-[0.78rem] leading-[1.75] text-product-fg"><code><span class="text-product-violet">SELECT</span>
+    <pre tabindex="0" class="overflow-x-auto px-1 font-mono text-[0.78rem] leading-[1.75] text-product-fg"><code><span class="text-product-violet">SELECT</span>
   c.region,
   <span class="text-product-violet">COUNT</span>(<span class="text-product-violet">DISTINCT</span> o.order_id) <span class="text-product-violet">AS</span> orders,
   <span class="text-product-violet">SUM</span>(s.amount) / <span class="text-product-amber">100.0</span>    <span class="text-product-violet">AS</span> revenue

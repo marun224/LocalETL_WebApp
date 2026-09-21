@@ -43,7 +43,12 @@ import { BRAND } from '../config/brand';
       lede="Every capability that could conceivably transmit something, and what it actually does."
     />
 
-    <div class="mt-10 overflow-x-auto">
+    <div
+      class="mt-10 overflow-x-auto"
+      tabindex="0"
+      role="region"
+      aria-label="Data handling by feature, scrollable table"
+    >
       <table class="w-full min-w-[46rem] border-collapse text-left">
         <thead>
           <tr class="border-b-2 border-line">
@@ -69,7 +74,7 @@ import { BRAND } from '../config/brand';
                 <td class="py-4 pr-4 text-sm font-medium text-ink">{feature}</td>
                 <td class="py-4 pr-4">
                   {verdict === 'no' ? (
-                    <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-success/25 bg-success/10 px-2.5 py-1 text-xs font-medium text-success">
+                    <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-success/30 bg-success/10 px-2.5 py-1 text-xs font-medium text-success">
                       <Icon name="check" size={13} />
                       No
                     </span>

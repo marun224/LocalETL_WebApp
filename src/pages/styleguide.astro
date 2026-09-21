@@ -229,7 +229,7 @@ const productSwatches = [
     />
     <div class="mt-8 max-w-3xl">
       <ProductFrame label="pipeline.sql" caption="Illustrative diagram — not a screenshot.">
-        <pre class="overflow-x-auto font-mono text-sm leading-relaxed text-product-fg"><code><span class="text-product-violet">SELECT</span>  o.order_id, c.region, <span class="text-product-violet">SUM</span>(o.amount) <span class="text-product-violet">AS</span> revenue
+        <pre tabindex="0" class="overflow-x-auto font-mono text-sm leading-relaxed text-product-fg"><code><span class="text-product-violet">SELECT</span>  o.order_id, c.region, <span class="text-product-violet">SUM</span>(o.amount) <span class="text-product-violet">AS</span> revenue
 <span class="text-product-violet">FROM</span>    postgres.orders o
 <span class="text-product-violet">JOIN</span>    s3.customers  c <span class="text-product-violet">USING</span> (customer_id)
 <span class="text-product-violet">WHERE</span>   o.created_at &gt;= <span class="text-product-amber">'2026-01-01'</span>

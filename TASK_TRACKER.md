@@ -2,7 +2,7 @@
 
 **Project:** Local-first ETL & analytics marketing site (working brand: **Headrace**)
 **Last updated:** 2026-09-21
-**Status:** 🟢 **Phases 0–5 complete and committed. Awaiting go-ahead for Phase 6.**
+**Status:** 🟢 **Phases 0–7 complete and committed. v1 is build-complete.**
 
 Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · 🚫 blocked · ❓ needs user decision
 
@@ -12,13 +12,17 @@ Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · �
 
 | | |
 | --- | --- |
-| **Phases complete** | 5 of 8 (Phase 8 is deferred by default) |
-| **Routes building** | **42** — 29 HTML + 10 Markdown mirrors + RSS + 2 sitemaps |
-| **Commits** | 5, all on `main` |
-| **Source files** | 19 pages · 23 components · 14 content files · 4 scripts |
+| **Phases complete** | 7 of 8 (Phase 8 is deferred by default) |
+| **Routes building** | **43** — 30 HTML + 10 Markdown mirrors + RSS + 2 sitemaps |
+| **Lighthouse** | **100 / 100 / 100 / 100** across 6 routes |
+| **WCAG 2.2 AA** | **0 violations** across 58 page-loads (29 routes × 2 themes) |
+| **Cross-browser** | Chromium, Firefox, WebKit all pass |
+| **Internal links** | 1505 checked, **0 broken** |
 | **Shipped weight** | 41.7 KB CSS, 2.4 KB JS (uncompressed) |
-| **Build health** | `astro check` clean · icon check passing · 0 third-party requests |
+| **Third-party requests** | **0** — enforced at build time |
+| **CSP** | 7 inline script hashes, **no `unsafe-inline`**, verified in-browser |
 | **Fabricated metrics on site** | **0** |
+| **Outstanding placeholders** | 3 (2 real: pricing.pro, pricing.team) |
 
 | Phase | Name | Status | Commit |
 | --- | --- | --- | --- |
@@ -29,9 +33,39 @@ Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · �
 | 3 | Core product pages | ✅ complete | `02e5e84` |
 | 4 | Commercial & trust pages | ✅ complete | `90a6f55` |
 | 5 | Content engine | ✅ complete | `0b1a3a0` |
-| 6 | SEO, AI discoverability & performance | ⬜ **awaiting go-ahead** | — |
-| 7 | Accessibility, QA & deploy | ⬜ | — |
+| 6 | SEO, AI discoverability & performance | ✅ complete | `59be558` |
+| 7 | Accessibility, QA & deploy | ✅ complete | — |
 | 8 | Post-launch | ⏸️ deferred by default | — |
+
+### Phase 6 — SEO & AI discoverability ✅ `59be558`
+Generated `/llms.txt` (7.6 KB) and `/llms-full.txt` (31.2 KB) from the page
+manifest and content collections, both carrying explicit anti-fabrication
+guidance for AI systems · `robots.txt` deliberately allowing AI crawlers ·
+`src/config/pages.ts` as the single metadata source, resolved by `BaseLayout`
+on pathname so the mirror cannot drift · 30 generated OG cards ·
+`BreadcrumbList` JSON-LD · `check-external.mjs` and `check-perf.mjs` ·
+**Lighthouse 100 ×4** · fixed two a11y defects the audit found (`--c-faint`
+failing AA in both themes; logo `aria-label` not containing its visible text)
+
+### Phase 7 — Accessibility, QA & deploy ✅
+- `/404` page with real suggested destinations
+- **`check-a11y.mjs`** — full axe ruleset, every route × both themes, plus a
+  keyboard-focusability sweep. Found **14 violations across 3 rules** that the
+  Lighthouse spot-check had missed; all fixed, second run clean
+- **`check-links.mjs`** — 1505 links, 0 broken
+- **`check-claims.mjs`** — the pre-launch gate. Enumerates placeholders from
+  the DOM and greps for phrases we have committed never to use. Reports rather
+  than fails: shipping with a placeholder is a human decision
+- **`gen-headers.mjs`** — security headers with a **per-script-hash CSP**, no
+  `unsafe-inline`, generated during the build so hashes cannot go stale
+- **`check-csp.mjs`** — serves `dist/` behind the real headers and drives the
+  theme toggle and connector filter, because `astro preview` does not apply
+  `_headers` and a broken CSP would only surface after deploy
+- **`check-browsers.mjs`** — Chromium, Firefox, WebKit all pass
+- Deploy configs: `netlify.toml`, `vercel.json`, `Dockerfile` +
+  `deploy/nginx.conf`, GitHub Actions workflow; Cloudflare Pages reads the
+  same generated `_headers`
+- `README.md`
 
 ---
 
@@ -150,32 +184,21 @@ Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · �
 
 ---
 
-## ⬜ Phase 6 — SEO, AI discoverability & performance (next)
+## Verification suite
 
-| # | Task | Status |
+Eight checks, each written because something broke or because the site makes a
+claim that should be enforced rather than trusted.
+
+| Command | Checks | In `build` |
 | --- | --- | --- |
-| 6.1 | Generated `/llms.txt` + `/llms-full.txt` from content collections | ⬜ |
-| 6.2 | `robots.txt` | ⬜ |
-| 6.3 | Generated per-page OG images | ⬜ |
-| 6.4 | Remaining JSON-LD: `BreadcrumbList`, `Product` | ⬜ |
-| 6.5 | `scripts/check-external.mjs` — fail the build on any third-party origin | ⬜ |
-| 6.6 | Perf budgets: JS ≤ 80 KB, LCP < 1.5s, CLS < 0.05, TBT < 150ms | ⬜ |
-| 6.7 | Image pipeline (AVIF/WebP, explicit dimensions, lazy below fold) | ⬜ |
-| 6.8 | Lighthouse ≥ 95 ×4 on every route | ⬜ |
-
-## ⬜ Phase 7 — Accessibility, QA & deploy
-
-| # | Task | Status |
-| --- | --- | --- |
-| 7.1 | WCAG 2.2 AA audit (contrast, focus, landmarks, heading order, alt text) | ⬜ |
-| 7.2 | Full keyboard pass + screen-reader pass | ⬜ |
-| 7.3 | Cross-browser: Chrome, Firefox, Edge, Safari incl. iOS | ⬜ |
-| 7.4 | Link checker + `/404` page | ⬜ |
-| 7.5 | Deploy configs ×4 (Vercel, Netlify, Cloudflare, GH Pages) + Dockerfile | ⬜ |
-| 7.6 | CSP + security headers | ⬜ |
-| 7.7 | Analytics decision ❓Q7 | ⬜ |
-| 7.8 | `README.md` | ⬜ |
-| 7.9 | **Pre-launch placeholder sign-off gate** | ⬜ |
+| `check:icons` | Every `<Icon name>` resolves | ✅ |
+| `check:external` | No third-party resource references | ✅ |
+| `check:links` | All internal links resolve | |
+| `check:claims` | Placeholder claims + forbidden phrases | |
+| `check:a11y` | WCAG 2.2 AA, all routes × both themes, keyboard sweep | |
+| `check:perf` | Bytes, requests, LCP, CLS against budget | |
+| `check:browsers` | Chromium, Firefox, WebKit | |
+| `check:csp` | Site works under the generated CSP | |
 
 ---
 

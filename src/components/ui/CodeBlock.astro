@@ -27,7 +27,7 @@ const { code, prompt = '$', label, class: className = '' } = Astro.props;
     )
   }
   <div class="flex items-start gap-3 p-4">
-    <pre class="min-w-0 flex-1 overflow-x-auto font-mono text-sm leading-relaxed text-product-fg"><code>{prompt && <span class="select-none text-product-accent">{prompt} </span>}{code}</code></pre>
+    <pre tabindex="0" class="min-w-0 flex-1 overflow-x-auto font-mono text-sm leading-relaxed text-product-fg"><code>{prompt && <span class="select-none text-product-accent">{prompt} </span>}{code}</code></pre>
 
     <button
       type="button"
