@@ -1,0 +1,47 @@
+{
+  "name": "headrace-site",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Marketing website for Headrace — local-first ETL and analytics.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "build:fast": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write \"**/*.{astro,ts,js,mjs,json,md,mdx,css}\"",
+    "format:check": "prettier --check \"**/*.{astro,ts,js,mjs,json,md,mdx,css}\"",
+    "fonts:sync": "node scripts/sync-fonts.mjs",
+    "shot": "node scripts/screenshot.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.0.1",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@iconify-json/lucide": "^1.2.135",
+    "@iconify-json/simple-icons": "^1.2.97",
+    "playwright": "^1.63.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^1.0.1",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "typescript": "^5.7.0"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "@tailwindcss/oxide": true,
+    "sharp": true
+  }
+}

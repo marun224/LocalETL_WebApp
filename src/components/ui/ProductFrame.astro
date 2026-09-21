@@ -1,0 +1,54 @@
+---
+/**
+ * The dark chrome that every product visual sits inside.
+ *
+ * Stays dark in BOTH themes on purpose (plan D6): light marketing pages keep
+ * business readers comfortable, while the product itself reads as a real tool
+ * to engineers. Uses the --c-product-* tokens, which never flip.
+ *
+ * Contents are hand-authored inline SVG, not screenshots: the product does not
+ * exist yet, and a fake screenshot would be a claim. A diagram is clearly a
+ * diagram. See plan §5.
+ */
+
+export interface Props {
+  /** Shown in the title bar. */
+  label?: string;
+  /** Optional caption below the frame, e.g. an honesty note. */
+  caption?: string;
+  class?: string;
+}
+
+const { label, caption, class: className = '' } = Astro.props;
+---
+
+<figure class={`not-prose ${className}`}>
+  <div
+    class="overflow-hidden rounded-frame border border-product-border bg-product-bg shadow-lift"
+  >
+    <div
+      class="flex items-center gap-2 border-b border-product-border bg-product-raised px-4 py-2.5"
+    >
+      <span class="flex gap-1.5" aria-hidden="true">
+        <span class="size-2.5 rounded-full bg-[#ff5f57]"></span>
+        <span class="size-2.5 rounded-full bg-[#febc2e]"></span>
+        <span class="size-2.5 rounded-full bg-[#28c840]"></span>
+      </span>
+      {
+        label && (
+          <span class="ml-1.5 font-mono text-xs tracking-tight text-product-muted">{label}</span>
+        )
+      }
+    </div>
+
+    <div class="p-4 sm:p-6">
+      <slot />
+    </div>
+  </div>
+
+  {
+    caption && (
+      <figcaption class="mt-3 text-center text-sm text-faint">{caption}</figcaption>
+    )
+  }
+</figure>

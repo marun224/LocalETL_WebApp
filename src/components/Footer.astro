@@ -1,0 +1,67 @@
+---
+import { FOOTER_NAV } from '../config/nav';
+import { BRAND } from '../config/brand';
+import { SITE } from '../config/site.js';
+import Logo from './ui/Logo.astro';
+import Icon from './ui/Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line bg-subtle">
+  <div class="container-page py-14">
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+      <div class="max-w-xs">
+        <Logo />
+        <p class="mt-4 text-sm leading-relaxed text-muted">
+          {BRAND.shortTagline} Ingest, transform and analyse on hardware you already own.
+        </p>
+        <a
+          href={SITE.github}
+          rel="noopener noreferrer"
+          target="_blank"
+          class="mt-5 inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-ink"
+        >
+          <Icon name="simple:github" size={16} />
+          Source on GitHub
+        </a>
+      </div>
+
+      {
+        FOOTER_NAV.map((col) => (
+          <div>
+            <h2 class="text-sm font-semibold text-ink">{col.heading}</h2>
+            <ul class="mt-4 space-y-2.5">
+              {col.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="text-sm text-muted transition-colors hover:text-ink"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div
+      class="mt-12 flex flex-col gap-4 border-t border-line pt-6 text-sm text-faint sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} {BRAND.name}. Open source.</p>
+
+      {/*
+        Said plainly, because it is true and checkable — `npm run check:external`
+        fails the build if any third-party origin appears in the output.
+        A site arguing for data sovereignty should not phone home.
+      */}
+      <p class="flex items-center gap-2">
+        <Icon name="shield-check" size={15} />
+        This site makes no third-party requests. No trackers, no cookies.
+      </p>
+    </div>
+  </div>
+</footer>

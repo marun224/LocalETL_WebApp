@@ -1,0 +1,23 @@
+---
+export interface Props {
+  href?: string;
+  class?: string;
+  /** Adds hover lift. Automatic when `href` is set. */
+  interactive?: boolean;
+}
+
+const { href, class: className = '', interactive } = Astro.props;
+const isInteractive = interactive ?? Boolean(href);
+
+const base = 'block rounded-card border border-line bg-raised p-6';
+const hover = isInteractive
+  ? 'transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 ' +
+    'hover:border-line-strong hover:shadow-lift'
+  : '';
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag class={`${base} ${hover} ${className}`} href={href}>
+  <slot />
+</Tag>

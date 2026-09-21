@@ -1,0 +1,312 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import Card from '../components/ui/Card.astro';
+import Claim from '../components/ui/Claim.astro';
+import CodeBlock from '../components/ui/CodeBlock.astro';
+import Accordion from '../components/ui/Accordion.astro';
+import ProductFrame from '../components/ui/ProductFrame.astro';
+import Icon from '../components/ui/Icon.astro';
+
+const swatches = [
+  { name: 'surface', var: '--c-surface', note: 'Page background' },
+  { name: 'subtle', var: '--c-subtle', note: 'Alternating sections' },
+  { name: 'raised', var: '--c-raised', note: 'Cards' },
+  { name: 'line', var: '--c-border', note: 'Borders' },
+  { name: 'ink', var: '--c-ink', note: 'Body text' },
+  { name: 'muted', var: '--c-muted', note: 'Secondary text' },
+  { name: 'faint', var: '--c-faint', note: 'Tertiary text' },
+  { name: 'primary', var: '--c-primary', note: 'Brand, CTAs, links' },
+  { name: 'accent', var: '--c-accent', note: 'Amber — fills only, see note' },
+  { name: 'success', var: '--c-success', note: 'Status' },
+  { name: 'warning', var: '--c-warning', note: 'Status' },
+  { name: 'error', var: '--c-error', note: 'Status' },
+];
+
+const productSwatches = [
+  { name: 'product-bg', var: '--c-product-bg' },
+  { name: 'product-raised', var: '--c-product-raised' },
+  { name: 'product-fg', var: '--c-product-fg' },
+  { name: 'product-border', var: '--c-product-border' },
+  { name: 'product-accent', var: '--c-product-accent' },
+  { name: 'product-amber', var: '--c-product-amber' },
+  { name: 'product-violet', var: '--c-product-violet' },
+];
+---
+
+<BaseLayout title="Style guide" noindex>
+  <Section class="pt-14">
+    <Badge tone="warning">Internal · not indexed</Badge>
+    <h1 class="text-display mt-5 text-ink">Style guide</h1>
+    <p class="mt-5 max-w-2xl text-lg text-muted">
+      Every token and primitive on one page. Toggle the theme in the header to check both
+      modes — the product frames should stay dark in both.
+    </p>
+  </Section>
+
+  <!-- Colour -->
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Tokens"
+      title="Colour"
+      lede="Semantic names only. Components never use raw hex or arbitrary Tailwind values."
+    />
+    <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      {
+        swatches.map((s) => (
+          <div class="overflow-hidden rounded-card border border-line bg-raised">
+            <div class="h-16 border-b border-line" style={`background: var(${s.var})`} />
+            <div class="p-3">
+              <p class="font-mono text-xs text-ink">{s.name}</p>
+              <p class="mt-1 text-xs text-faint">{s.note}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-8 rounded-card border border-warning/30 bg-warning/10 p-5">
+      <p class="flex items-start gap-2.5 text-sm text-ink">
+        <Icon name="triangle-alert" size={18} class="mt-0.5 shrink-0 text-warning" />
+        <span>
+          <strong class="font-semibold">Contrast rule for amber.</strong> The accent is
+          2.74:1 against white — it <em>fails</em> WCAG AA as text on light backgrounds. Use it
+          as a fill, border or wash only. When amber is the background, put ink on it (6.77:1).
+          Never amber text on white.
+        </span>
+      </p>
+    </div>
+
+    <h3 class="mt-12 text-lg font-semibold text-ink">Product surfaces</h3>
+    <p class="mt-2 max-w-2xl text-muted">
+      These never flip with the theme. Light marketing pages keep business readers
+      comfortable; the product still reads as a real tool to engineers.
+    </p>
+    <div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
+      {
+        productSwatches.map((s) => (
+          <div class="overflow-hidden rounded-card border border-line">
+            <div class="h-14" style={`background: var(${s.var})`} />
+            <div class="bg-raised p-2.5">
+              <p class="font-mono text-[0.6875rem] text-ink">{s.name}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Type -->
+  <Section>
+    <SectionHeading eyebrow="Tokens" title="Typography" lede="Geist and Geist Mono, self-hosted." />
+    <div class="mt-8 space-y-6 border-t border-line pt-8">
+      <div>
+        <p class="font-mono text-xs text-faint">text-display · clamp(2.25 → 4.25rem)</p>
+        <p class="text-display mt-2 text-ink">Pipelines you can read</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-faint">text-title · clamp(1.75 → 2.75rem)</p>
+        <p class="text-title mt-2 text-ink">One engine, end to end</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-faint">text-eyebrow</p>
+        <p class="text-eyebrow mt-2">How it works</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-faint">body · 1rem / relaxed</p>
+        <p class="mt-2 max-w-prose leading-relaxed text-muted">
+          Every node compiles to SQL you can open and read. There is no proprietary
+          execution format and no black box between your question and your data.
+        </p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-faint">mono · tabular figures</p>
+        <p class="mt-2 font-mono tabular-nums text-ink">1,466,723 rows · 236 columns · 65.4s</p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Buttons -->
+  <Section tone="subtle">
+    <SectionHeading eyebrow="Primitives" title="Buttons" />
+    <div class="mt-8 space-y-6">
+      <div class="flex flex-wrap items-center gap-3">
+        <Button variant="primary" size="lg">Primary large</Button>
+        <Button variant="primary">Primary</Button>
+        <Button variant="primary" size="sm">Primary small</Button>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="primary" disabled>Disabled</Button>
+      </div>
+      <div class="rounded-card bg-product-bg p-5">
+        <Button variant="onDark">On dark (inside product frames)</Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Badges + cards -->
+  <Section>
+    <SectionHeading eyebrow="Primitives" title="Badges & cards" />
+    <div class="mt-8 flex flex-wrap gap-2.5">
+      <Badge>Neutral</Badge>
+      <Badge tone="primary">Primary</Badge>
+      <Badge tone="accent">Accent</Badge>
+      <Badge tone="success">Available</Badge>
+      <Badge tone="warning">Planned</Badge>
+    </div>
+
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      <Card>
+        <Icon name="database" size={22} class="text-primary" />
+        <h3 class="mt-4 font-semibold text-ink">Static card</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">No hover state.</p>
+      </Card>
+      <Card href="/features">
+        <Icon name="workflow" size={22} class="text-primary" />
+        <h3 class="mt-4 font-semibold text-ink">Interactive card</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">Lifts on hover; whole card is a link.</p>
+      </Card>
+      <Card href="/pricing">
+        <Icon name="bar-chart-3" size={22} class="text-primary" />
+        <h3 class="mt-4 font-semibold text-ink">Another</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">Grid alignment check.</p>
+      </Card>
+    </div>
+  </Section>
+
+  <!-- Claim -->
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Honesty"
+      title="The Claim component"
+      lede="The product does not exist yet. Every number on this site is wrapped so it can be audited mechanically before launch."
+    />
+    <div class="mt-8 space-y-4">
+      <p class="text-lg text-ink">
+        Real: <Claim status="real" id="demo.real"><strong>MIT-licensed site source</strong></Claim>
+      </p>
+      <p class="text-lg text-ink">
+        Placeholder: <Claim status="placeholder" id="demo.placeholder"
+          ><strong>96 million rows in 39.9s</strong></Claim
+        >
+      </p>
+      <p class="text-lg text-ink">
+        Aspirational: <Claim status="aspirational" id="demo.aspirational"
+          ><strong>200+ connectors</strong></Claim
+        >
+      </p>
+      <p class="text-sm text-muted">
+        In dev, non-real claims get a dotted amber underline. In any build they emit
+        <code class="rounded bg-subtle px-1.5 py-0.5 text-xs">data-claim-status</code>, so the
+        Phase 7 audit enumerates them from the DOM rather than by reading pages.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Code -->
+  <Section>
+    <SectionHeading eyebrow="Primitives" title="Code blocks" />
+    <div class="mt-8 grid gap-5 lg:grid-cols-2">
+      <CodeBlock code="pip install headrace" label="Python" />
+      <CodeBlock
+        code="headrace run pipeline.yaml --watch"
+        label="CLI"
+      />
+    </div>
+  </Section>
+
+  <!-- Product frame -->
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Primitives"
+      title="Product frame"
+      lede="Stays dark in both themes. Holds hand-authored SVG, never fake screenshots."
+    />
+    <div class="mt-8 max-w-3xl">
+      <ProductFrame label="pipeline.sql" caption="Illustrative diagram — not a screenshot.">
+        <pre class="overflow-x-auto font-mono text-sm leading-relaxed text-product-fg"><code><span class="text-product-violet">SELECT</span>  o.order_id, c.region, <span class="text-product-violet">SUM</span>(o.amount) <span class="text-product-violet">AS</span> revenue
+<span class="text-product-violet">FROM</span>    postgres.orders o
+<span class="text-product-violet">JOIN</span>    s3.customers  c <span class="text-product-violet">USING</span> (customer_id)
+<span class="text-product-violet">WHERE</span>   o.created_at &gt;= <span class="text-product-amber">'2026-01-01'</span>
+<span class="text-product-violet">GROUP BY</span> 1, 2</code></pre>
+      </ProductFrame>
+    </div>
+  </Section>
+
+  <!-- Accordion -->
+  <Section>
+    <SectionHeading eyebrow="Primitives" title="Accordion" lede="Native <details>. No JavaScript." />
+    <div class="mt-8 max-w-3xl">
+      <Accordion question="Does this work without JavaScript?" open>
+        Yes. It is a native <code class="rounded bg-subtle px-1.5 py-0.5 text-xs">&lt;details&gt;</code>
+        element, so it is keyboard-accessible and screen-reader-correct for free, and the answer
+        text is in the HTML for crawlers.
+      </Accordion>
+      <Accordion question="Why not an islands-based accordion?">
+        It would cost bytes and index worse for no benefit.
+      </Accordion>
+      <Accordion question="Is the chevron animated?">
+        It rotates on open, and the rotation is suppressed under
+        <code class="rounded bg-subtle px-1.5 py-0.5 text-xs">prefers-reduced-motion</code>.
+      </Accordion>
+    </div>
+  </Section>
+
+  <!-- Icons -->
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Primitives"
+      title="Icons"
+      lede="Inlined from Iconify at build time. No icon font, no sprite fetch."
+    />
+    <div class="mt-8 flex flex-wrap gap-5 text-ink">
+      {
+        [
+          'database',
+          'table-2',
+          'file-text',
+          'cloud',
+          'workflow',
+          'zap',
+          'shield-check',
+          'terminal',
+          'search',
+          'git-branch',
+          'server',
+          'lock',
+        ].map((n) => (
+          <div class="flex w-20 flex-col items-center gap-2">
+            <Icon name={n} size={22} />
+            <span class="text-center font-mono text-[0.625rem] text-faint">{n}</span>
+          </div>
+        ))
+      }
+    </div>
+    <div class="mt-8 flex flex-wrap gap-5 text-ink">
+      {
+        [
+          'simple:postgresql',
+          'simple:mysql',
+          'simple:snowflake',
+          'simple:databricks',
+          'simple:duckdb',
+          'simple:amazons3',
+          'simple:googlecloud',
+          'simple:apachekafka',
+        ].map((n) => (
+          <div class="flex w-24 flex-col items-center gap-2">
+            <Icon name={n} size={22} />
+            <span class="text-center font-mono text-[0.625rem] text-faint">
+              {n.replace('simple:', '')}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,19 @@
+---
+export interface Props {
+  id?: string;
+  /** `subtle` alternates the background to create section rhythm. */
+  tone?: 'surface' | 'subtle';
+  class?: string;
+  /** Renders as <section> by default; pass "div" to avoid nesting landmarks. */
+  as?: 'section' | 'div';
+}
+
+const { id, tone = 'surface', class: className = '', as: Tag = 'section' } = Astro.props;
+const toneCls = tone === 'subtle' ? 'bg-subtle' : 'bg-surface';
+---
+
+<Tag id={id} class={`section-y ${toneCls} ${className}`}>
+  <div class="container-page">
+    <slot />
+  </div>
+</Tag>

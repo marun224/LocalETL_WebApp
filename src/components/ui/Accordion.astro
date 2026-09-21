@@ -1,0 +1,44 @@
+---
+/**
+ * FAQ accordion built on <details>/<summary>.
+ *
+ * No JavaScript: it works with JS disabled, is keyboard-accessible and
+ * screen-reader-correct for free, and the answer text is always present in
+ * the HTML so crawlers index it. An islands-based accordion would cost
+ * bytes and index worse.
+ */
+
+export interface Props {
+  question: string;
+  /** Open the first item so the pattern is obvious at a glance. */
+  open?: boolean;
+}
+
+const { question, open = false } = Astro.props;
+---
+
+<details
+  class="group border-b border-line py-1 [&[open]_.chevron]:rotate-180"
+  open={open}
+>
+  <summary
+    class="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-left font-medium text-ink marker:content-none hover:text-primary [&::-webkit-details-marker]:hidden"
+  >
+    <span>{question}</span>
+    <svg
+      class="chevron size-5 shrink-0 text-faint transition-transform duration-200"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </summary>
+  <div class="pb-5 pr-10 leading-relaxed text-muted">
+    <slot />
+  </div>
+</details>

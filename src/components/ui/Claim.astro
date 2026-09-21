@@ -1,0 +1,44 @@
+---
+/**
+ * THE HONESTY COMPONENT.
+ *
+ * The product does not exist yet, so the site must not assert facts that
+ * are not true (IMPLEMENTATION_PLAN.md §6). Every number or factual claim
+ * goes through here.
+ *
+ *   status="placeholder"  — invented for layout. MUST be replaced before launch.
+ *   status="aspirational" — a design goal, rendered as intent, not measurement.
+ *   status="real"         — measured or verifiable. Safe to ship.
+ *
+ * Placeholders emit `data-claim-status="placeholder"` into the DOM so the
+ * pre-launch audit (Phase 7) can enumerate every one of them mechanically
+ * rather than by reading pages. In dev they also get a visible dotted
+ * underline so nobody forgets they are there.
+ *
+ * Every placeholder must also have a row in CLAIMS.md.
+ */
+
+export interface Props {
+  status: 'real' | 'placeholder' | 'aspirational';
+  /** Short id matching the row in CLAIMS.md, e.g. "home.throughput". */
+  id: string;
+  class?: string;
+}
+
+const { status, id, class: className = '' } = Astro.props;
+const isDev = import.meta.env.DEV;
+
+const devHint =
+  isDev && status !== 'real'
+    ? 'underline decoration-dotted decoration-2 underline-offset-4 decoration-warning'
+    : '';
+---
+
+<span
+  data-claim-status={status}
+  data-claim-id={id}
+  title={isDev && status !== 'real' ? `${status} claim: ${id} (see CLAIMS.md)` : undefined}
+  class={`${devHint} ${className}`}
+>
+  <slot />
+</span>

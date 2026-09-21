@@ -1,0 +1,176 @@
+---
+import { MAIN_NAV } from '../config/nav';
+import { SITE } from '../config/site.js';
+import Logo from './ui/Logo.astro';
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import ThemeToggle from './ui/ThemeToggle.astro';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-line bg-surface/85 backdrop-blur-md supports-[backdrop-filter]:bg-surface/70"
+>
+  <div class="container-page flex h-16 items-center justify-between gap-6">
+    <a href="/" class="rounded-btn" aria-label="Home">
+      <Logo />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+      {
+        MAIN_NAV.map((group) =>
+          group.items ? (
+            <div class="group relative">
+              <button
+                type="button"
+                class="inline-flex items-center gap-1 rounded-btn px-3 py-2 text-[0.9375rem] text-muted transition-colors hover:text-ink group-hover:text-ink"
+                aria-expanded="false"
+              >
+                {group.label}
+                <Icon name="chevron-down" size={15} class="transition-transform group-hover:rotate-180" />
+              </button>
+
+              {/*
+                CSS-only dropdown: hover on pointer devices, focus-within for
+                keyboard. No JS, and the links are always in the DOM for crawlers.
+              */}
+              <div class="invisible absolute left-0 top-full w-72 translate-y-1 pt-2 opacity-0 transition-[opacity,transform] duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                <ul class="rounded-card border border-line bg-raised p-2 shadow-lift">
+                  {group.items.map((item) => (
+                    <li>
+                      <a
+                        href={item.href}
+                        class:list={[
+                          'block rounded-btn px-3 py-2.5 transition-colors hover:bg-subtle',
+                          isActive(item.href) && 'bg-subtle',
+                        ]}
+                      >
+                        <span class="block text-[0.9375rem] font-medium text-ink">
+                          {item.label}
+                        </span>
+                        {item.description && (
+                          <span class="mt-0.5 block text-sm text-muted">{item.description}</span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={group.href}
+              class:list={[
+                'rounded-btn px-3 py-2 text-[0.9375rem] transition-colors hover:text-ink',
+                isActive(group.href!) ? 'text-ink' : 'text-muted',
+              ]}
+            >
+              {group.label}
+            </a>
+          )
+        )
+      }
+    </nav>
+
+    <div class="flex items-center gap-1.5">
+      <ThemeToggle />
+
+      <a
+        href={SITE.github}
+        rel="noopener noreferrer"
+        target="_blank"
+        class="hidden size-9 items-center justify-center rounded-btn text-muted transition-colors hover:bg-subtle hover:text-ink sm:inline-flex"
+        aria-label="Source on GitHub"
+      >
+        <Icon name="simple:github" size={18} />
+      </a>
+
+      <Button href="/download" size="sm" class="hidden sm:inline-flex">Download</Button>
+
+      <!-- Mobile menu trigger -->
+      <button
+        type="button"
+        id="nav-toggle"
+        class="inline-flex size-9 items-center justify-center rounded-btn text-ink hover:bg-subtle lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+      >
+        <Icon name="menu" size={20} class="[[data-nav-open]_&]:hidden" />
+        <Icon name="x" size={20} class="hidden [[data-nav-open]_&]:block" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav -->
+  <div
+    id="mobile-nav"
+    hidden
+    class="border-t border-line bg-surface lg:hidden"
+  >
+    <nav class="container-page max-h-[calc(100dvh-4rem)] overflow-y-auto py-4" aria-label="Mobile">
+      {
+        MAIN_NAV.map((group) => (
+          <div class="border-b border-line py-3 last:border-0">
+            {group.items ? (
+              <>
+                <p class="px-1 pb-2 text-xs font-semibold uppercase tracking-wider text-faint">
+                  {group.label}
+                </p>
+                <ul>
+                  {group.items.map((item) => (
+                    <li>
+                      <a href={item.href} class="block rounded-btn px-1 py-2.5 text-ink">
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <a href={group.href} class="block px-1 py-1 font-medium text-ink">
+                {group.label}
+              </a>
+            )}
+          </div>
+        ))
+      }
+      <div class="flex flex-col gap-2 pt-4">
+        <Button href="/download" size="md">Download</Button>
+        <Button href={SITE.github} variant="secondary" size="md" external>Source on GitHub</Button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById('nav-toggle');
+    var panel = document.getElementById('mobile-nav');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', function () {
+      var open = panel.hasAttribute('hidden');
+      if (open) {
+        panel.removeAttribute('hidden');
+        document.documentElement.setAttribute('data-nav-open', '');
+      } else {
+        panel.setAttribute('hidden', '');
+        document.documentElement.removeAttribute('data-nav-open');
+      }
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+
+    // Close on Escape, and return focus to the trigger.
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hasAttribute('hidden')) {
+        btn.click();
+        btn.focus();
+      }
+    });
+  })();
+</script>

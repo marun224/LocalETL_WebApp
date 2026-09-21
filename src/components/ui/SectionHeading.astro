@@ -1,0 +1,27 @@
+---
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  align?: 'left' | 'center';
+  as?: 'h2' | 'h3';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  align = 'left',
+  as: Tag = 'h2',
+  class: className = '',
+} = Astro.props;
+
+const alignCls = align === 'center' ? 'mx-auto text-center' : '';
+---
+
+<div class={`max-w-2xl ${alignCls} ${className}`}>
+  {eyebrow && <p class="text-eyebrow mb-3">{eyebrow}</p>}
+  <Tag class="text-title text-ink">{title}</Tag>
+  {lede && <p class="mt-4 text-lg leading-relaxed text-muted">{lede}</p>}
+</div>

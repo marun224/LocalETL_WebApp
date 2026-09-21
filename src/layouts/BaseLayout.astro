@@ -1,0 +1,146 @@
+---
+import '../styles/global.css';
+import { BRAND } from '../config/brand';
+import { SITE } from '../config/site.js';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  /** Path-only canonical override, e.g. "/pricing". Defaults to the current URL. */
+  canonical?: string;
+  /** Set true on pages that should not be indexed (e.g. /styleguide). */
+  noindex?: boolean;
+  /** Extra JSON-LD objects to emit in <head>. */
+  schema?: Record<string, unknown>[];
+  /** Hide the global header/footer chrome (used by the 404 page). */
+  bare?: boolean;
+}
+
+const {
+  title,
+  description = BRAND.description,
+  canonical,
+  noindex = false,
+  schema = [],
+  bare = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${BRAND.name}` : `${BRAND.name} — ${BRAND.shortTagline}`;
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, SITE.url).href.replace(/\/$/, '') || SITE.url;
+const ogImage = new URL('/og/default.png', SITE.url).href;
+
+const baseSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      name: BRAND.name,
+      url: SITE.url,
+      description: BRAND.description,
+    },
+    {
+      '@type': 'WebSite',
+      name: BRAND.name,
+      url: SITE.url,
+      publisher: { '@type': 'Organization', name: BRAND.name },
+    },
+    ...schema,
+  ],
+};
+---
+
+<!doctype html>
+<html lang={SITE.locale} data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    {/*
+      No <meta name="keywords">. Ignored by search engines since 2009 and a
+      mild spam signal. OrcaSheets ships ~50 terms there; we deliberately don't.
+    */}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={BRAND.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0e7c66" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${BRAND.name} blog`} href="/rss.xml" />
+
+    {/* LLM-readable mirrors of the whole site. Generated at build time. */}
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site summary" />
+    <link
+      rel="alternate"
+      type="text/plain"
+      href="/llms-full.txt"
+      title="LLM-readable extended site copy"
+    />
+
+    {/* Self-hosted, same-origin. Zero third-party requests — see CONTRIBUTING.md. */}
+    <link
+      rel="preload"
+      href="/fonts/geist-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    {/*
+      Theme must be resolved BEFORE first paint or the page flashes.
+      This is the one inline script on the site; it is intentionally tiny
+      and runs synchronously in <head>.
+    */}
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          /* localStorage blocked (private mode, blocked cookies): keep the
+             server-rendered light default rather than failing the page. */
+        }
+      })();
+    </script>
+
+    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)} />
+  </head>
+
+  <body class="min-h-screen antialiased">
+    <a href="#main" class="sr-only-focusable z-100 left-4 top-4 rounded-btn bg-primary px-4 py-2 text-primary-contrast">
+      Skip to content
+    </a>
+
+    {!bare && <Header />}
+
+    <main id="main">
+      <slot />
+    </main>
+
+    {!bare && <Footer />}
+  </body>
+</html>

@@ -1,0 +1,77 @@
+---
+/**
+ * Copyable command block. Sits on the dark product palette in both themes so
+ * commands read as terminal output wherever they appear.
+ */
+import Icon from './Icon.astro';
+
+export interface Props {
+  code: string;
+  /** Shown as a prompt prefix, e.g. "$". Pass null for plain code. */
+  prompt?: string | null;
+  label?: string;
+  class?: string;
+}
+
+const { code, prompt = '$', label, class: className = '' } = Astro.props;
+---
+
+<div
+  class={`overflow-hidden rounded-card border border-product-border bg-product-bg ${className}`}
+>
+  {
+    label && (
+      <div class="border-b border-product-border px-4 py-2 font-mono text-xs text-product-muted">
+        {label}
+      </div>
+    )
+  }
+  <div class="flex items-start gap-3 p-4">
+    <pre class="min-w-0 flex-1 overflow-x-auto font-mono text-sm leading-relaxed text-product-fg"><code>{prompt && <span class="select-none text-product-accent">{prompt} </span>}{code}</code></pre>
+
+    <button
+      type="button"
+      class="copy-btn shrink-0 rounded-btn border border-product-border px-2 py-1.5 text-product-muted transition-colors hover:border-product-accent hover:text-product-fg"
+      data-code={code}
+      aria-label="Copy to clipboard"
+    >
+      <Icon name="copy" size={15} class="copy-idle" />
+      <Icon name="check" size={15} class="copy-done hidden text-product-accent" />
+    </button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const code = btn.dataset.code ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch {
+        // Clipboard API unavailable (insecure context / denied permission):
+        // fall back to a hidden textarea so the button still does something.
+        const ta = document.createElement('textarea');
+        ta.value = code;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+        } catch {
+          return;
+        } finally {
+          ta.remove();
+        }
+      }
+      btn.querySelector('.copy-idle')?.classList.add('hidden');
+      btn.querySelector('.copy-done')?.classList.remove('hidden');
+      btn.setAttribute('aria-label', 'Copied');
+      setTimeout(() => {
+        btn.querySelector('.copy-idle')?.classList.remove('hidden');
+        btn.querySelector('.copy-done')?.classList.add('hidden');
+        btn.setAttribute('aria-label', 'Copy to clipboard');
+      }, 1800);
+    });
+  });
+</script>

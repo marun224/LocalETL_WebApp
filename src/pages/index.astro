@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Badge from '../components/ui/Badge.astro';
+import { BRAND } from '../config/brand';
+---
+
+<BaseLayout>
+  <Section class="pt-20">
+    <Badge tone="primary">Scaffold</Badge>
+    <h1 class="text-display mt-6 text-ink">{BRAND.tagline}</h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">
+      Phase 1 scaffold. The real home page is built in Phase 2.
+    </p>
+    <div class="mt-8 flex gap-3">
+      <Button href="/download">Download</Button>
+      <Button href="/styleguide" variant="secondary">Style guide</Button>
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+export interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'onDark';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  type?: 'button' | 'submit';
+  external?: boolean;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className = '',
+  type = 'button',
+  external = false,
+  ...rest
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-btn font-medium whitespace-nowrap ' +
+  'transition-[background-color,border-color,color,box-shadow] duration-150 ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ' +
+  'disabled:pointer-events-none disabled:opacity-50';
+
+const variants: Record<string, string> = {
+  primary: 'bg-primary text-primary-contrast hover:bg-primary-hover shadow-soft',
+  secondary: 'border border-line-strong bg-surface text-ink hover:bg-subtle',
+  ghost: 'text-ink hover:bg-subtle',
+  // For use inside <ProductFrame>, which stays dark in both themes.
+  onDark:
+    'border border-product-border bg-product-raised text-product-fg hover:border-product-accent',
+};
+
+const sizes: Record<string, string> = {
+  sm: 'h-9 px-3.5 text-sm',
+  md: 'h-11 px-5 text-[0.9375rem]',
+  lg: 'h-12 px-6 text-base',
+};
+
+const cls = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class={cls}
+  href={href}
+  type={href ? undefined : type}
+  rel={external ? 'noopener noreferrer' : undefined}
+  target={external ? '_blank' : undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
