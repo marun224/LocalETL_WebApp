@@ -58,7 +58,10 @@
   /* Text */
   --c-ink: #0b1220;
   --c-muted: #5a6472;
-  --c-faint: #8a94a3;
+  /* Was #8a94a3 — 3.06:1 on white, 2.87:1 on --c-subtle, both failing WCAG AA
+     for the caption and small-label text this token is used for.
+     #667083 gives 4.99:1 on white and 4.68:1 on subtle. */
+  --c-faint: #667083;
 
   /* Brand */
   --c-primary: #0e7c66;
@@ -89,7 +92,9 @@
 
   --c-ink: #e8edf2;
   --c-muted: #94a1b2;
-  --c-faint: #6b7889;
+  /* Was #6b7889 — 4.23:1 on the dark surface and 3.89:1 on dark subtle, both
+     failing AA. #7c8a9c gives 5.48:1 and 5.03:1. */
+  --c-faint: #7c8a9c;
 
   --c-primary: #2dd4a7;
   --c-primary-hover: #4fe0ba;

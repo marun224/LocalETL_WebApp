@@ -47,8 +47,25 @@ once it exists. They are not performance claims.
 ### About this website — `REAL`
 | Claim | Where | Verified by |
 | --- | --- | --- |
-| Makes zero third-party requests | Footer | `scripts/screenshot.mjs` fails the run if any foreign origin is requested. Confirmed 2026-09-21. |
+| Makes zero third-party requests | Footer | **Enforced at build time.** `scripts/check-external.mjs` runs as part of `npm run build` and fails it on any third-party resource reference in the built HTML or CSS. `scripts/screenshot.mjs` independently fails if a foreign origin is requested at runtime. Last confirmed 2026-09-21: 30 files scanned, 0 references. |
 | No trackers, no cookies | Footer | No analytics installed; no cookie is set |
+
+The footer claim is the product's own thesis demonstrated on its own site, so it
+is enforced rather than trusted — one `<link>` to Google Fonts added in six
+months would otherwise quietly make the site a liar.
+
+### Measured — `REAL`
+Figures about **this website**, not the product. Reproduce with
+`npm run check:perf` and Lighthouse.
+
+| Metric | Value | Measured |
+| --- | --- | --- |
+| Lighthouse (perf / a11y / best practices / SEO) | **100 / 100 / 100 / 100** | 2026-09-21, 6 routes |
+| JavaScript shipped | 2.4 kB | Astro's prefetch helper only |
+| CSS shipped | 41.7 kB | |
+| Largest Contentful Paint | 60–116 ms | local preview |
+| Cumulative Layout Shift | 0.0000 | |
+| Requests per page | 4–5 | |
 
 ### Pre-launch disclosures — `REAL`
 | Claim | Where |

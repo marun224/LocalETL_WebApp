@@ -16,7 +16,8 @@ const { solution } = Astro.props;
 const others = SOLUTIONS.filter((s) => s.slug !== solution.slug);
 ---
 
-<BaseLayout title={solution.audience} description={solution.lede}>
+{/* Title and description come from src/config/pages.ts, matched on pathname. */}
+<BaseLayout>
   <PageHero eyebrow={solution.audience} title={solution.title} lede={solution.lede} disclose />
 
   <!-- The problem -->

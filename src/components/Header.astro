@@ -14,7 +14,9 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
   class="sticky top-0 z-50 border-b border-line bg-surface/85 backdrop-blur-md supports-[backdrop-filter]:bg-surface/70"
 >
   <div class="container-page flex h-16 items-center justify-between gap-6">
-    <a href="/" class="rounded-btn" aria-label="Home">
+    {/* The accessible name must CONTAIN the visible text ("Headrace"), or
+        voice-control users cannot activate it by what they see. */}
+    <a href="/" class="rounded-btn" aria-label="Headrace home">
       <Logo />
     </a>
 
