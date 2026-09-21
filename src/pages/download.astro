@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import CodeBlock from '../components/ui/CodeBlock.astro';
+import InstallPaths from '../components/sections/InstallPaths.astro';
+import { BRAND } from '../config/brand';
+import { SITE } from '../config/site.js';
+
+const platforms = [
+  { id: 'mac', icon: 'simple:apple', label: 'macOS', detail: 'Apple silicon & Intel · 12+' },
+  { id: 'win', icon: 'monitor', label: 'Windows', detail: 'x64 & ARM64 · Windows 10+' },
+  { id: 'linux', icon: 'simple:linux', label: 'Linux', detail: 'deb, rpm, AppImage · x64 & ARM64' },
+];
+---
+
+<BaseLayout
+  title="Download"
+  description={`Download ${BRAND.name} for macOS, Windows and Linux, or install the headless runner from the command line. No account required.`}
+>
+  <PageHero
+    eyebrow="Download"
+    title="Get it running locally"
+    lede="Desktop app, command-line runner, or let a coding agent set it up for you. No account, no licence key, no activation call."
+  />
+
+  {
+    SITE.preLaunch && (
+      <Section>
+        <div class="rounded-frame border border-warning/40 bg-warning/10 p-8 sm:p-10">
+          <div class="flex flex-col items-start gap-5 sm:flex-row">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-warning/20">
+              <Icon name="clock" size={22} class="text-warning" />
+            </span>
+            <div>
+              <h2 class="text-xl font-semibold text-ink">There is nothing to download yet</h2>
+              <p class="mt-3 max-w-2xl leading-relaxed text-muted">
+                {BRAND.name} has not shipped its first release. The buttons below describe what
+                will be published, and they do not work today. We would rather say that plainly
+                than hand you a download link that 404s or a form that harvests your email in
+                exchange for nothing.
+              </p>
+              <p class="mt-3 max-w-2xl leading-relaxed text-muted">
+                The first release will appear on the repository. Watching it there is the most
+                reliable way to hear about it, and it does not require giving us anything.
+              </p>
+              <div class="mt-6 flex flex-wrap gap-3">
+                <Button href={SITE.github} external>
+                  <Icon name="simple:github" size={17} />
+                  Watch the repository
+                </Button>
+                <Button href="/contact" variant="secondary">Tell us what you need</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+    )
+  }
+
+  <!-- Platforms -->
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Desktop"
+      title="Planned platform coverage"
+      lede="The same engine on every platform, so a pipeline built on a laptop runs unchanged on a server."
+    />
+
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        platforms.map((p) => (
+          <div class="flex flex-col rounded-card border border-line bg-raised p-6">
+            <Icon name={p.icon} size={26} class="text-ink" />
+            <h3 class="mt-4 text-lg font-semibold text-ink">{p.label}</h3>
+            <p class="mt-1.5 flex-1 text-sm text-muted">{p.detail}</p>
+            <Button
+              variant="secondary"
+              class="mt-5 w-full"
+              disabled={SITE.preLaunch}
+              aria-disabled={SITE.preLaunch ? 'true' : undefined}
+            >
+              {SITE.preLaunch ? 'Not yet released' : `Download for ${p.label}`}
+            </Button>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="mt-6 flex items-start gap-2.5 text-sm text-faint">
+      <Icon name="shield-check" size={16} class="mt-0.5 shrink-0" />
+      Every release will publish SHA-256 checksums and signed builds. Verifying a download should
+      not require trusting the page that served it.
+    </p>
+  </Section>
+
+  <!-- Install paths -->
+  <Section>
+    <SectionHeading eyebrow="Other ways in" title="Command line and agents" />
+    <div class="mt-10">
+      <InstallPaths />
+    </div>
+  </Section>
+
+  <!-- Requirements -->
+  <Section tone="subtle">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading eyebrow="Requirements" title="What it needs from your machine" />
+        <dl class="mt-8 space-y-5">
+          {
+            [
+              ['Memory', 'Works against data on disk rather than loading it all into RAM, so memory is a comfort rather than a ceiling. More helps; it is not the limit.'],
+              ['Disk', 'Space for the application plus room for any intermediate results you choose to materialise.'],
+              ['CPU', 'Uses every core you have. More cores means more parallel branches, which is usually where the wall-clock time goes.'],
+              ['Network', 'Only to reach the sources you configure. The application itself makes no outbound calls.'],
+            ].map(([t, d]) => (
+              <div class="border-l-2 border-line pl-5">
+                <dt class="font-medium text-ink">{t}</dt>
+                <dd class="mt-1.5 text-sm leading-relaxed text-muted">{d}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <div>
+        <SectionHeading eyebrow="Servers & CI" title="Headless deployment" />
+        <p class="mt-6 leading-relaxed text-muted">
+          The runner is the same engine without the interface. Build a pipeline on your laptop,
+          commit it, and run it wherever you already run things.
+        </p>
+        <div class="mt-6 space-y-3">
+          <CodeBlock code={`${BRAND.slug} run pipeline.yaml`} label="Run once" />
+          <CodeBlock code={`${BRAND.slug} serve --schedule cron`} label="Run on a schedule" />
+          <CodeBlock code={`docker run --rm -v $PWD:/work ${BRAND.slug}/runner`} label="Container" />
+        </div>
+        <p class="mt-5 text-sm text-faint">
+          No agent to register, no control plane to reach. If the process can see your data, it
+          can run your pipeline.
+        </p>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

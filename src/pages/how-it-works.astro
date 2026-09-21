@@ -1,0 +1,188 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import ProductFrame from '../components/ui/ProductFrame.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import ArchitectureDiagram from '../components/diagrams/ArchitectureDiagram.astro';
+import PipelineCanvas from '../components/diagrams/PipelineCanvas.astro';
+
+const steps = [
+  {
+    n: '01',
+    title: 'You point it at a source',
+    body: 'Connection details are stored on your machine or read from your own secrets manager. The connection is opened from your network, to your database. Nothing is registered anywhere, because there is nowhere to register it.',
+  },
+  {
+    n: '02',
+    title: 'It reads the schema, not the data',
+    body: 'Building a pipeline needs table and column names, not rows. Schema is read on demand and held locally, so designing a pipeline against a billion-row table costs the same as designing one against an empty table.',
+  },
+  {
+    n: '03',
+    title: 'The canvas compiles to SQL',
+    body: 'Each node you place becomes a fragment of a query. The whole pipeline compiles into SQL you can open, read, copy, and run somewhere else if you want to. There is no proprietary execution format.',
+  },
+  {
+    n: '04',
+    title: 'The engine executes in-process',
+    body: 'A columnar, vectorised engine runs the compiled SQL inside the application itself. There is no server to deploy, no cluster to size and no queue to wait in. Independent branches fan out across your cores.',
+  },
+  {
+    n: '05',
+    title: 'Results land where you say',
+    body: 'Into a table, a file, a dashboard, or back into a source system. The data has been on your hardware for the entire journey, because there was never a step that moved it off.',
+  },
+];
+---
+
+<BaseLayout
+  title="How it works"
+  description="The execution model of a local-first ETL and analytics engine: where data sits, what compiles to SQL, what runs in-process, and what never crosses your network boundary."
+>
+  <PageHero
+    eyebrow="Architecture"
+    title="Where your data goes, step by step"
+    lede="Local-first is easy to claim and hard to verify. This page is the part that makes it checkable."
+    disclose
+  />
+
+  <!-- The boundary -->
+  <Section>
+    <SectionHeading
+      eyebrow="The trust boundary"
+      title="One diagram, honestly drawn"
+      lede="Everything inside the line runs on machines you control. The line is crossed exactly once — when you download the software."
+    />
+    <div class="mt-10">
+      <ProductFrame label="architecture">
+        <ArchitectureDiagram />
+      </ProductFrame>
+    </div>
+  </Section>
+
+  <!-- Steps -->
+  <Section tone="subtle">
+    <SectionHeading eyebrow="Execution model" title="What happens when you build and run a pipeline" />
+    <ol class="mt-12 space-y-0">
+      {
+        steps.map((s, i) => (
+          <li class="relative grid gap-4 border-l-2 border-line pb-10 pl-8 last:border-transparent last:pb-0 sm:grid-cols-[auto_1fr] sm:gap-8">
+            <span
+              class="absolute -left-[13px] top-0 flex size-6 items-center justify-center rounded-full border-2 border-primary bg-surface font-mono text-[0.625rem] font-semibold text-primary"
+              aria-hidden="true"
+            >
+              {i + 1}
+            </span>
+            <div class="sm:w-56">
+              <span class="font-mono text-xs text-faint">{s.n}</span>
+              <h3 class="mt-1 text-lg font-semibold text-ink">{s.title}</h3>
+            </div>
+            <p class="max-w-2xl leading-relaxed text-muted">{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <!-- Canvas → SQL -->
+  <Section>
+    <SectionHeading
+      eyebrow="Never a black box"
+      title="The compiled SQL is the contract"
+      lede="If the tool will not show you what it runs, you cannot review it, cannot debug it, and cannot leave. All three follow from the same decision."
+    />
+    <div class="mt-10">
+      <ProductFrame
+        label="orders_by_region.pipeline"
+        caption="Illustrative diagram, not a screenshot."
+      >
+        <PipelineCanvas />
+      </ProductFrame>
+    </div>
+
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      {
+        [
+          {
+            icon: 'eye',
+            t: 'Reviewable',
+            d: 'A colleague can read the pipeline in a diff without opening the application.',
+          },
+          {
+            icon: 'bug',
+            t: 'Debuggable',
+            d: 'A failure reports the SQL it ran and the engine error, so the fix is usually obvious.',
+          },
+          {
+            icon: 'door-open',
+            t: 'Escapable',
+            d: 'The SQL runs elsewhere. If you outgrow this tool, your work comes with you.',
+          },
+        ].map((f) => (
+          <div class="rounded-card border border-line bg-raised p-5">
+            <Icon name={f.icon} size={20} class="text-primary" />
+            <h3 class="mt-3.5 font-semibold text-ink">{f.t}</h3>
+            <p class="mt-1.5 text-sm leading-relaxed text-muted">{f.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- What it is not -->
+  <Section tone="subtle">
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading eyebrow="Honest limits" title="What this is not good at" />
+        <p class="mt-6 leading-relaxed text-muted">
+          A page that claims a tool is right for everything is a page telling you it has not been
+          used for anything. These are the cases where something else is the better answer.
+        </p>
+      </div>
+      <ul class="space-y-5">
+        {
+          [
+            [
+              'Sub-second serving for an application',
+              'This is an analytical engine. If your app needs a 10ms lookup on every page load, that is a job for your operational database.',
+            ],
+            [
+              'Streaming with strict latency budgets',
+              'Streams are consumed in batches. If you need per-event processing measured in milliseconds, use a stream processor.',
+            ],
+            [
+              'A thousand-seat published BI estate',
+              'Large enterprise BI deployments carry years of workbooks, row-level security models and embedded reporting. Treat this as complementary there, not a drop-in replacement.',
+            ],
+            [
+              'Petabyte-scale distributed compute',
+              'One machine is a real limit, even a fast one. Past a certain size the warehouse is the right tool and the honest move is to push the aggregate up to it.',
+            ],
+          ].map(([t, d]) => (
+            <li class="border-l-2 border-line pl-5">
+              <p class="font-medium text-ink">{t}</p>
+              <p class="mt-1.5 text-sm leading-relaxed text-muted">{d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="rounded-frame border border-line bg-raised p-8 text-center shadow-soft sm:p-12">
+      <h2 class="text-title text-ink">Read the data-handling detail</h2>
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-muted">
+        The security page states exactly what every optional feature would transmit, and what
+        deployment looks like inside a locked-down network.
+      </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <Button href="/security">Security &amp; data handling</Button>
+        <Button href="/features" variant="secondary">Full feature list</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

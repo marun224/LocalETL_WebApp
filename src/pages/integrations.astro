@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import Badge from '../components/ui/Badge.astro';
+import { CONNECTOR_CATEGORIES, CONNECTOR_COUNTS } from '../data/connectors';
+import { SITE } from '../config/site.js';
+
+const ioLabel: Record<string, string> = {
+  source: 'Read',
+  sink: 'Write',
+  both: 'Read + write',
+};
+---
+
+<BaseLayout
+  title="Integrations"
+  description="Databases, warehouses, object stores, files, streaming brokers and SaaS APIs — connect to them directly, with no data copied to a vendor cloud."
+>
+  <PageHero
+    eyebrow="Integrations"
+    title="Connect to what you already have"
+    lede="Read and write over native protocols, from your network. Credentials stay on your side, and no data is copied to anyone else's cloud on the way."
+  />
+
+  <Section>
+    {
+      SITE.preLaunch && (
+        <div class="mb-8 flex items-start gap-3 rounded-card border border-warning/30 bg-warning/10 p-5">
+          <Icon name="triangle-alert" size={19} class="mt-0.5 shrink-0 text-warning" />
+          <div>
+            <p class="font-medium text-ink">Every connector below is planned, not shipped.</p>
+            <p class="mt-1.5 text-sm leading-relaxed text-muted">
+              {CONNECTOR_COUNTS.total} connectors across {CONNECTOR_COUNTS.categories} categories
+              are in scope for the first release. Right now {CONNECTOR_COUNTS.available} of them
+              work. A connector gets marked available on this page when it genuinely is — a
+              coming-soon list dressed up as a catalogue is how you lose an evaluation in week
+              two.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Filter bar -->
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div class="relative flex-1">
+        <Icon
+          name="search"
+          size={17}
+          class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-faint"
+        />
+        <input
+          type="search"
+          id="connector-search"
+          placeholder="Search connectors…"
+          aria-label="Search connectors"
+          class="h-11 w-full rounded-btn border border-line bg-raised pl-10 pr-4 text-[0.9375rem] text-ink placeholder:text-faint focus-visible:border-primary"
+        />
+      </div>
+      <div class="flex flex-wrap gap-1.5" role="group" aria-label="Filter by category">
+        <button
+          type="button"
+          data-cat="all"
+          class="cat-btn h-9 rounded-full border border-primary bg-primary px-3.5 text-sm font-medium text-primary-contrast"
+        >
+          All
+        </button>
+        {
+          CONNECTOR_CATEGORIES.map((c) => (
+            <button
+              type="button"
+              data-cat={c.id}
+              class="cat-btn h-9 rounded-full border border-line bg-raised px-3.5 text-sm text-muted transition-colors hover:border-line-strong hover:text-ink"
+            >
+              {c.label}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <p id="result-count" class="mb-5 text-sm text-faint" aria-live="polite"></p>
+
+    <!-- Catalogue -->
+    <div class="space-y-10">
+      {
+        CONNECTOR_CATEGORIES.map((cat) => (
+          <div class="cat-group" data-cat={cat.id}>
+            <div class="flex items-baseline gap-3 border-b border-line pb-3">
+              <Icon name={cat.icon} size={18} class="translate-y-0.5 text-primary" />
+              <h2 class="text-lg font-semibold text-ink">{cat.label}</h2>
+              <p class="text-sm text-muted">{cat.blurb}</p>
+            </div>
+
+            <ul class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {cat.connectors.map((c) => (
+                <li
+                  class="connector-item flex items-center gap-3 rounded-card border border-line bg-raised px-4 py-3"
+                  data-name={c.name.toLowerCase()}
+                >
+                  <span class="flex size-8 shrink-0 items-center justify-center rounded-md bg-subtle text-ink">
+                    {c.icon ? (
+                      <Icon name={`simple:${c.icon}`} size={16} />
+                    ) : (
+                      <Icon name="database" size={15} class="text-faint" />
+                    )}
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-[0.9375rem] font-medium text-ink">
+                      {c.name}
+                    </span>
+                    <span class="block text-xs text-faint">{ioLabel[c.io]}</span>
+                  </span>
+                  {c.status === 'available' ? (
+                    <Badge tone="success">Available</Badge>
+                  ) : (
+                    <Badge>Planned</Badge>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <p id="empty-state" hidden class="py-12 text-center text-muted">
+      Nothing matches that. <a href="/contact" class="text-primary underline">Ask for it</a> and it
+      goes on the list.
+    </p>
+  </Section>
+
+  <Section tone="subtle">
+    <div class="rounded-frame border border-line bg-raised p-8 shadow-soft sm:p-12">
+      <div class="grid items-center gap-8 lg:grid-cols-[1.3fr_1fr]">
+        <div>
+          <h2 class="text-title text-ink">Not on the list?</h2>
+          <p class="mt-4 max-w-xl leading-relaxed text-muted">
+            Anything reachable over JDBC, ODBC, REST or GraphQL can usually be handled with a
+            generic connector. For everything else, tell us what you need — early requests carry
+            real weight in what gets built first.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3 lg:justify-end">
+          <Button href="/contact">Request a connector</Button>
+          <Button href={SITE.github} variant="secondary" external>
+            <Icon name="simple:github" size={17} />
+            Contribute one
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<script>
+  const search = document.getElementById('connector-search') as HTMLInputElement | null;
+  const countEl = document.getElementById('result-count');
+  const emptyEl = document.getElementById('empty-state');
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('.cat-group'));
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.cat-btn'));
+
+  let activeCat = 'all';
+
+  const ON = ['border-primary', 'bg-primary', 'text-primary-contrast', 'font-medium'];
+  const OFF = ['border-line', 'bg-raised', 'text-muted'];
+
+  function apply() {
+    const q = (search?.value ?? '').trim().toLowerCase();
+    let visible = 0;
+
+    for (const group of groups) {
+      const catMatch = activeCat === 'all' || group.dataset.cat === activeCat;
+      let shown = 0;
+
+      for (const item of group.querySelectorAll<HTMLElement>('.connector-item')) {
+        const hit = catMatch && (q === '' || (item.dataset.name ?? '').includes(q));
+        item.hidden = !hit;
+        if (hit) shown++;
+      }
+
+      group.hidden = shown === 0;
+      visible += shown;
+    }
+
+    if (countEl) {
+      countEl.textContent =
+        q === '' && activeCat === 'all'
+          ? `${visible} connectors`
+          : `${visible} ${visible === 1 ? 'match' : 'matches'}`;
+    }
+    if (emptyEl) emptyEl.hidden = visible > 0;
+  }
+
+  for (const btn of buttons) {
+    btn.addEventListener('click', () => {
+      activeCat = btn.dataset.cat ?? 'all';
+      for (const b of buttons) {
+        const on = b === btn;
+        b.classList.remove(...(on ? OFF : ON));
+        b.classList.add(...(on ? ON : OFF));
+        b.setAttribute('aria-pressed', String(on));
+      }
+      apply();
+    });
+  }
+
+  search?.addEventListener('input', apply);
+  apply();
+</script>

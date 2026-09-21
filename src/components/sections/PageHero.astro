@@ -1,0 +1,40 @@
+---
+import Icon from '../ui/Icon.astro';
+import { SITE } from '../../config/site.js';
+
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  /** Show the pre-launch disclosure strip under the lede. */
+  disclose?: boolean;
+}
+
+const { eyebrow, title, lede, disclose = false } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-line bg-surface">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-80 opacity-40 [background:radial-gradient(55%_100%_at_50%_0%,var(--c-primary-wash),transparent_70%)]"
+  >
+  </div>
+
+  <div class="container-page relative py-16 sm:py-20">
+    {eyebrow && <p class="text-eyebrow mb-4">{eyebrow}</p>}
+    <h1 class="text-display max-w-4xl text-ink">{title}</h1>
+    {lede && <p class="mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">{lede}</p>}
+
+    {
+      disclose && SITE.preLaunch && (
+        <p class="mt-8 flex max-w-2xl items-start gap-2.5 rounded-card border border-line bg-subtle p-4 text-sm leading-relaxed text-muted">
+          <Icon name="info" size={17} class="mt-0.5 shrink-0" />
+          <span>
+            This page describes what is being built. Nothing here has shipped yet, and no number
+            on this site was invented to fill a gap.
+          </span>
+        </p>
+      )
+    }
+  </div>
+</section>

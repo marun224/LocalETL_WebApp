@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+
+const groups = [
+  {
+    id: 'ingest',
+    icon: 'download',
+    label: 'Ingest',
+    lede: 'Read data where it already is, in the format it is already in.',
+    features: [
+      ['Direct source connections', 'Databases, warehouses, object stores and APIs over their native protocols. No staging copy, no intermediate upload.'],
+      ['Read in place', 'Glob an S3 prefix and query the Parquet where it sits. Partitioned layouts are read as partitions, not as a thousand files.'],
+      ['Incremental loads', 'Save a watermark on each run and read only rows past it next time, so a nightly sync does not re-read history.'],
+      ['Change data capture', 'Track inserts, updates and deletes at the source and propagate them, rather than rebuilding a table every night.'],
+      ['Credentials stay yours', 'Connection details live on your machine or in your own secrets manager. Connections originate from your network.'],
+      ['Schema drift handling', 'A new column upstream is surfaced as a decision, not an unexplained failure at 3am.'],
+    ],
+  },
+  {
+    id: 'transform',
+    icon: 'workflow',
+    label: 'Transform',
+    lede: 'A visual canvas whose output you can always read.',
+    features: [
+      ['Compiles to readable SQL', 'Open any node and see exactly what will run. Not a proprietary plan, not generated Java — SQL you could have written.'],
+      ['Editable at any node', 'Disagree with the generated query? Replace it. The canvas is a convenience, not a cage you cannot leave.'],
+      ['Joins across systems', 'A Postgres table, a Parquet file and a SaaS API in a single query, without loading any of them into a warehouse first.'],
+      ['Validators with reject routing', 'Bad rows go to a reject output where you can inspect them, instead of being silently dropped or failing the run.'],
+      ['Column-level lineage', 'Trace any output column back through every node to the source columns it came from.'],
+      ['Version control friendly', 'Pipelines are text. They diff in a pull request and review like code, because they are code.'],
+      ['Python and SQL escape hatches', 'When the canvas is the wrong tool, drop into a script node and keep going.'],
+    ],
+  },
+  {
+    id: 'analyze',
+    icon: 'bar-chart-3',
+    label: 'Analyse',
+    lede: 'Where extraction-only tools hand you off to something else.',
+    features: [
+      ['Plain-English questions', 'Ask in words, get SQL back, read it before it runs. The generated query is the feature, not a hidden step.'],
+      ['SQL editor', 'For when you already know what you want and typing it is faster than describing it.'],
+      ['Pivots and aggregations', 'The spreadsheet work analysts actually do, over datasets a spreadsheet cannot open.'],
+      ['Charts and dashboards', 'Build a view once, share it with the team, refresh it on a schedule.'],
+      ['Exports that fit downstream', 'Parquet, CSV, Excel, or written straight back into a table in your warehouse.'],
+    ],
+  },
+  {
+    id: 'operate',
+    icon: 'settings-2',
+    label: 'Run & operate',
+    lede: 'What happens after the pipeline is built and you stop watching it.',
+    features: [
+      ['Scheduled and headless runs', 'Cron, interval or file-watch, and a headless runner that fits into systemd, CI or whatever you already operate.'],
+      ['Run history with row counts', 'Every run records per-node status, rows in and out, and timings. "What actually happened" has an answer.'],
+      ['Failures report the real error', 'A failed stage shows the compiled SQL it was running and the engine’s own message, not an opaque internal code.'],
+      ['Per-node previews', 'See the data as it looked at each step, which is usually where the bug is.'],
+      ['Parallel execution', 'Independent branches fan out across your cores without being told to.'],
+    ],
+  },
+  {
+    id: 'govern',
+    icon: 'shield-check',
+    label: 'Control & governance',
+    lede: 'The reasons an enterprise security review says yes.',
+    features: [
+      ['No egress by design', 'No account, no telemetry, no licence ping. The software makes no outbound calls of its own.'],
+      ['Air-gapped operation', 'Ordinary, not a special deployment mode, because there is nothing it needs to reach.'],
+      ['On-device AI', 'The assistant runs in-process. Prompts and schemas do not leave the machine unless you explicitly choose a hosted model.'],
+      ['Your keys, your network', 'Credentials are never brokered through a third party, because there is no third party in the path.'],
+      ['Team governance', 'Shared connections, role-based access and audit trails on the paid tiers, for teams that need them.'],
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Features"
+  description="Ingest, transform, analyse and operate — the full capability set of a local-first ETL and analytics engine that runs on hardware you already own."
+>
+  <PageHero
+    eyebrow="Features"
+    title="Everything it does, end to end"
+    lede="Most tools own one part of this list and hand you off for the rest. The point of putting them in one engine is that the handoff is where the time goes."
+    disclose
+  />
+
+  <!-- Jump nav -->
+  <div class="sticky top-16 z-40 border-b border-line bg-surface/90 backdrop-blur-md">
+    <div class="container-page flex gap-1 overflow-x-auto py-3">
+      {
+        groups.map((g) => (
+          <a
+            href={`#${g.id}`}
+            class="inline-flex shrink-0 items-center gap-2 rounded-btn px-3 py-2 text-sm text-muted transition-colors hover:bg-subtle hover:text-ink"
+          >
+            <Icon name={g.icon} size={15} class="text-primary" />
+            {g.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  {
+    groups.map((g, i) => (
+      <Section id={g.id} tone={i % 2 === 1 ? 'subtle' : 'surface'}>
+        <SectionHeading eyebrow={g.label} title={g.lede} />
+        <div class="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+          {g.features.map(([title, body]) => (
+            <div>
+              <div class="flex items-center gap-2.5">
+                <Icon name="check" size={16} class="shrink-0 text-primary" />
+                <h3 class="font-medium text-ink">{title}</h3>
+              </div>
+              <p class="mt-2 pl-[26px] text-sm leading-relaxed text-muted">{body}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+    ))
+  }
+
+  <Section>
+    <div class="rounded-frame border border-line bg-raised p-8 text-center shadow-soft sm:p-12">
+      <h2 class="text-title text-ink">See how it fits together</h2>
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-muted">
+        A feature list is a list. The architecture page shows where each of these actually runs,
+        and what never leaves your machine.
+      </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <Button href="/how-it-works">How it works</Button>
+        <Button href="/integrations" variant="secondary">Browse connectors</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
