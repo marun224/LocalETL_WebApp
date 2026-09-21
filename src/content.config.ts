@@ -54,4 +54,22 @@ const compare = defineCollection({
   }),
 });
 
-export const collections = { docs, blog, compare };
+/**
+ * Releases. Deliberately empty until something actually ships.
+ *
+ * Scaffolded now so the first release is a Markdown file rather than a
+ * feature, and so /changelog can say "nothing yet" honestly rather than
+ * not existing.
+ */
+const changelog = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/changelog' }),
+  schema: z.object({
+    version: z.string(),
+    released: z.coerce.date(),
+    /** Headline summary shown in the index. */
+    summary: z.string(),
+    kind: z.enum(['major', 'minor', 'patch']).default('minor'),
+  }),
+});
+
+export const collections = { docs, blog, compare, changelog };

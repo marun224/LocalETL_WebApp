@@ -27,7 +27,8 @@
     "check:links": "node scripts/check-links.mjs",
     "check:claims": "node scripts/check-claims.mjs",
     "check:csp": "node scripts/check-csp.mjs",
-    "check:browsers": "node scripts/check-browsers.mjs"
+    "check:browsers": "node scripts/check-browsers.mjs",
+    "rebrand": "node scripts/rebrand.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",

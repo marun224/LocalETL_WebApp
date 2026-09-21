@@ -1,0 +1,21 @@
+Releases go here, one Markdown file per version.
+
+Empty on purpose: nothing has shipped. /changelog reads this collection and
+says so rather than showing an invented history.
+
+Format:
+
+    ---
+    version: 0.1.0
+    released: 2026-11-04
+    summary: First public release.
+    kind: minor
+    ---
+
+    ## Added
+    - ...
+
+    ## Fixed
+    - ...
+
+Delete this file once the first release lands.

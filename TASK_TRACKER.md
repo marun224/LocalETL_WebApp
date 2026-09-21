@@ -2,7 +2,7 @@
 
 **Project:** Local-first ETL & analytics marketing site (working brand: **Headrace**)
 **Last updated:** 2026-09-21
-**Status:** 🟢 **Phases 0–7 complete and committed. v1 is build-complete.**
+**Status:** 🟢 **All phases complete. v1 is build-complete and ready to launch once Q1–Q5 are answered.**
 
 Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · 🚫 blocked · ❓ needs user decision
 
@@ -12,8 +12,8 @@ Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · �
 
 | | |
 | --- | --- |
-| **Phases complete** | 7 of 8 (Phase 8 is deferred by default) |
-| **Routes building** | **43** — 30 HTML + 10 Markdown mirrors + RSS + 2 sitemaps |
+| **Phases complete** | 8 of 8 (Phase 8 partial — rest blocked on a product that exists) |
+| **Routes building** | **45** — 32 HTML + 10 Markdown mirrors + RSS + 2 sitemaps |
 | **Lighthouse** | **100 / 100 / 100 / 100** across 6 routes |
 | **WCAG 2.2 AA** | **0 violations** across 58 page-loads (29 routes × 2 themes) |
 | **Cross-browser** | Chromium, Firefox, WebKit all pass |
@@ -34,8 +34,36 @@ Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · �
 | 4 | Commercial & trust pages | ✅ complete | `90a6f55` |
 | 5 | Content engine | ✅ complete | `0b1a3a0` |
 | 6 | SEO, AI discoverability & performance | ✅ complete | `59be558` |
-| 7 | Accessibility, QA & deploy | ✅ complete | — |
-| 8 | Post-launch | ⏸️ deferred by default | — |
+| 7 | Accessibility, QA & deploy | ✅ complete | `027b227` |
+| 8 | Post-launch | ✅ **buildable subset done**; rest blocked | — |
+
+### Phase 8 — Post-launch ✅ (partial by necessity)
+
+Most of the Phase 8 parking list is **blocked on things that do not exist**.
+Building placeholder versions would break the honesty rule the site is built
+on, so they stayed unbuilt. Delivered the subset that is genuinely buildable
+today:
+
+| Delivered | Why it was worth doing now |
+| --- | --- |
+| **`/roadmap`** | The page a pre-launch product most obviously needs. Three stages, **no dates** — order is a commitment, timing is not. Includes a "what will not be built" section (no hosted cloud, no usage pricing, no telemetry, no cluster mode, no proprietary format), which is the part a competitor's roadmap never has. |
+| **`/changelog`** | A real content collection, currently empty and saying so. Exists rather than 404s, and the first release is a Markdown file instead of a feature. |
+| **`scripts/rebrand.mjs`** | Turns open question Q1 from a 40-file refactor into one command. Dry-run verified: 75 occurrences across 22 files, correctly ordered (domain before slug) and correctly skipping the planning documents, which are a historical record. |
+| Roadmap in `/llms-full.txt` | "What does it do and when" is exactly what an AI gets asked about a pre-launch product. |
+
+**Left unbuilt, and why** — each needs something that does not exist yet:
+
+| Item | Blocked on |
+| --- | --- |
+| Real product screenshots | A working product |
+| Real benchmarks | Something to measure |
+| Case studies, testimonials, logos | Customers |
+| In-browser interactive demo | The engine compiled to WASM |
+| A/B testing hero variants | Traffic **and** analytics we have committed not to have — this one is permanently off unless that commitment changes |
+| Newsletter / demo booking | A backend, and it conflicts with the footer's no-tracker claim |
+| Status page | Something to monitor |
+| Careers page | A company to hire into |
+| i18n | A demand signal; large ongoing cost for none |
 
 ### Phase 6 — SEO & AI discoverability ✅ `59be558`
 Generated `/llms.txt` (7.6 KB) and `/llms-full.txt` (31.2 KB) from the page
@@ -225,7 +253,7 @@ claim that should be enforced rather than trusted.
 
 | # | Question | Needed by | Current fallback |
 | --- | --- | --- | --- |
-| Q1 | **Brand name** — Headrace (in use), Quernstone, Tidemill, or your own | Before launch | Built as Headrace; one-file rename via `src/config/brand.ts` |
+| Q1 | **Brand name** — Headrace (in use), Quernstone, Tidemill, or your own | Before launch | Built as Headrace. **`npm run rebrand -- --name X --domain x.ai`** does the whole change; dry-run it first |
 | Q2 | Real pricing amounts for Pro & Team | Before launch | Renders "Not set", flagged as placeholder |
 | Q3 | GitHub org/repo URL | Before launch | `github.com/headrace/headrace` in `site.js` |
 | Q4 | Contact email domain | Before launch | `hello@ / sales@ / security@ headrace.ai` |

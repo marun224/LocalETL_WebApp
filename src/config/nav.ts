@@ -19,6 +19,7 @@ export const MAIN_NAV: NavGroup[] = [
       { label: 'How it works', href: '/how-it-works', description: 'The architecture, in detail' },
       { label: 'Integrations', href: '/integrations', description: 'Sources it connects to' },
       { label: 'Security', href: '/security', description: 'Where your data goes — and doesn’t' },
+      { label: 'Roadmap', href: '/roadmap', description: 'What is being built, in what order' },
     ],
   },
   {
@@ -76,7 +77,8 @@ export const FOOTER_NAV: { heading: string; items: NavItem[] }[] = [
     items: [
       { label: 'Documentation', href: '/docs' },
       { label: 'Blog', href: '/blog' },
-      { label: 'Security', href: '/security' },
+      { label: 'Roadmap', href: '/roadmap' },
+      { label: 'Changelog', href: '/changelog' },
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
     ],

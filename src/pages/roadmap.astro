@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import Section from '../components/ui/Section.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import Badge from '../components/ui/Badge.astro';
+import { STAGES, BY_STAGE, NOT_PLANNED, ROADMAP } from '../data/roadmap';
+import { SITE } from '../config/site.js';
+import { BRAND } from '../config/brand';
+
+const stageTone: Record<string, 'primary' | 'accent' | 'neutral'> = {
+  building: 'primary',
+  next: 'accent',
+  later: 'neutral',
+};
+---
+
+<BaseLayout>
+  <PageHero
+    eyebrow="Roadmap"
+    title="What is being built, in what order"
+    lede="No dates. Order is a commitment we can keep; timing is not, and a missed date costs more than the roadmap was worth."
+  />
+
+  <!-- Honest status -->
+  <Section>
+    <div class="rounded-frame border border-warning/40 bg-warning/10 p-8 sm:p-10">
+      <div class="flex flex-col items-start gap-5 sm:flex-row">
+        <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-warning/20">
+          <Icon name="hammer" size={22} class="text-warning" />
+        </span>
+        <div>
+          <h2 class="text-xl font-semibold text-ink">Nothing has shipped</h2>
+          <p class="mt-3 max-w-2xl leading-relaxed text-muted">
+            There are no releases, no downloads and no version numbers. {BRAND.name} is in
+            development, and everything below is intent rather than delivery. The list is
+            published because a pre-launch project that will not say what it is doing is
+            asking for trust it has not earned.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <Button href={SITE.github} external>
+              <Icon name="simple:github" size={17} />
+              Watch the repository
+            </Button>
+            <Button href="/changelog" variant="secondary">Changelog</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Stages -->
+  {
+    STAGES.map((stage, i) => {
+      const items = BY_STAGE(stage.id);
+      return (
+        <Section tone={i % 2 === 0 ? 'subtle' : 'surface'}>
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading eyebrow={stage.label} title={stage.blurb} />
+            <Badge tone={stageTone[stage.id]}>
+              {items.length} item{items.length === 1 ? '' : 's'}
+            </Badge>
+          </div>
+
+          <ol class="mt-10 space-y-0">
+            {items.map((item, idx) => (
+              <li class="relative grid gap-3 border-l-2 border-line pb-8 pl-8 last:border-transparent last:pb-0 sm:grid-cols-[18rem_1fr] sm:gap-8">
+                <span
+                  class:list={[
+                    'absolute -left-[9px] top-1.5 size-4 rounded-full border-2 bg-surface',
+                    stage.id === 'building' ? 'border-primary' : 'border-line-strong',
+                  ]}
+                  aria-hidden="true"
+                />
+                <h3 class="font-semibold text-ink">{item.title}</h3>
+                <p class="max-w-2xl leading-relaxed text-muted">{item.body}</p>
+              </li>
+            ))}
+          </ol>
+        </Section>
+      );
+    })
+  }
+
+  <!-- Not planned -->
+  <Section tone="subtle">
+    <SectionHeading
+      eyebrow="Deliberately absent"
+      title="What will not be built"
+      lede="More useful to someone evaluating this than another list of intentions — and it is the section a roadmap usually leaves out."
+    />
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      {
+        NOT_PLANNED.map((n) => (
+          <div class="flex gap-4 rounded-card border border-line bg-raised p-6">
+            <Icon name="x" size={18} class="mt-0.5 shrink-0 text-error" />
+            <div>
+              <h3 class="font-semibold text-ink">{n.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-muted">{n.body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Influence it -->
+  <Section>
+    <div class="rounded-frame border border-line bg-raised p-8 text-center shadow-soft sm:p-12">
+      <h2 class="text-title text-ink">This ordering is not fixed</h2>
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-muted">
+        {ROADMAP.length} items, ordered by what we think matters. If you need something sooner,
+        or think one of these is wrong, say so — early input carries far more weight than it
+        will later.
+      </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <Button href="/contact">Tell us what you need</Button>
+        <Button href="/integrations" variant="secondary">Request a connector</Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

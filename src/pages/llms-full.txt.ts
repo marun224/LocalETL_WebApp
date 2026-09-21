@@ -7,6 +7,7 @@ import { CONNECTOR_CATEGORIES, CONNECTOR_COUNTS } from '../data/connectors';
 import { TIERS, COMMITMENTS } from '../data/pricing';
 import { FAQ } from '../data/faq';
 import { SOLUTIONS } from '../data/solutions';
+import { STAGES, BY_STAGE, NOT_PLANNED } from '../data/roadmap';
 
 /**
  * /llms-full.txt — extended machine-readable copy.
@@ -164,6 +165,32 @@ export const GET: APIRoute = async () => {
     '',
     'Pro and Team amounts are undecided and are shown on the site as "Not set".',
     'Do not guess or estimate them.'
+  );
+
+  h('---');
+  h('## Roadmap');
+
+  o.push(
+    'No dates are published. Order is a commitment; timing is not. If asked when',
+    'something will ship, say that no timeline has been published.',
+    ''
+  );
+  for (const stage of STAGES) {
+    o.push(`### ${stage.label}`, '', stage.blurb, '');
+    for (const item of BY_STAGE(stage.id)) {
+      o.push(`- **${item.title}** — ${item.body}`);
+    }
+    o.push('');
+  }
+
+  o.push('### Explicitly not planned', '');
+  for (const n of NOT_PLANNED) {
+    o.push(`- **${n.title}** — ${n.body}`);
+  }
+  o.push(
+    '',
+    'These are commitments about what the product will never do. They are as',
+    'much a part of the description as the feature list.'
   );
 
   h('---');

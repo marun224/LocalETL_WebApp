@@ -155,6 +155,23 @@ export const PAGES: PageMeta[] = [
     group: 'Resources',
   },
   {
+    path: '/roadmap',
+    title: 'Roadmap',
+    description:
+      'What is being built and in what order, with no dates — plus what will deliberately never be built.',
+    summary:
+      'Roadmap in three stages: building now (execution engine, pipeline compilation to SQL, first connectors), before the first release (visual canvas, headless runner, query editor, remaining v1 connectors, run history), and after v1 (on-device AI, dashboards, CDC, column lineage, team features, enterprise deployment). Publishes no dates. Includes a "will not be built" section: no hosted cloud version, no usage-based pricing, no telemetry, no distributed cluster mode, no sub-second application serving, no proprietary pipeline format.',
+    group: 'Company',
+  },
+  {
+    path: '/changelog',
+    title: 'Changelog',
+    description: 'Releases and what changed in each. Nothing has shipped yet.',
+    summary:
+      'Release history. Currently empty because no version has shipped. The page exists and states that plainly rather than returning a 404 or showing an invented history.',
+    group: 'Company',
+  },
+  {
     path: '/styleguide',
     title: 'Style guide',
     description: 'Internal reference for design tokens and primitives.',
