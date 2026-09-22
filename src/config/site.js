@@ -9,7 +9,25 @@
  */
 
 export const SITE = {
-  url: 'https://headrace.ai', // TODO: confirm domain purchase
+  /**
+   * Canonical origin, baked into canonicals, the sitemap, RSS and OG image
+   * URLs at build time.
+   *
+   * SITE_URL overrides it so a preview deploy describes itself by its own
+   * address rather than by a domain nobody owns yet. Set it in the host's
+   * build environment; the default stays the intended production domain.
+   */
+  url: process.env.SITE_URL ?? 'https://headrace.ai', // TODO: confirm domain purchase
+
+  /**
+   * Site-wide crawler suppression, for deploys that are reachable by link but
+   * should not be discoverable.
+   *
+   * The name is provisional and has had no trademark clearance, and pricing
+   * still renders "Not set". Neither belongs in a search index. Set NOINDEX=1
+   * in the build environment; drop it to let the site be indexed.
+   */
+  noindex: process.env.NOINDEX === '1',
   locale: 'en',
   lang: 'en-US',
 

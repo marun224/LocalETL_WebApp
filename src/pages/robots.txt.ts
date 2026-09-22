@@ -12,20 +12,29 @@ import { SITE } from '../config/site.js';
  */
 export const GET: APIRoute = () =>
   new Response(
-    [
-      'User-agent: *',
-      'Allow: /',
-      'Disallow: /styleguide',
-      '',
-      '# Machine-readable summaries of this site.',
-      '# Prefer these over scraping rendered HTML.',
-      `# ${SITE.url}/llms.txt`,
-      `# ${SITE.url}/llms-full.txt`,
-      '# Every docs article: /docs/{slug}.md',
-      '# Every blog post:    /blog/{slug}.md',
-      '',
-      `Sitemap: ${SITE.url}/sitemap-index.xml`,
-      '',
-    ].join('\n'),
+    (SITE.noindex
+      ? [
+          '# This deployment is a preview and is deliberately not indexable.',
+          '# See SITE.noindex in src/config/site.js.',
+          'User-agent: *',
+          'Disallow: /',
+          '',
+        ]
+      : [
+          'User-agent: *',
+          'Allow: /',
+          'Disallow: /styleguide',
+          '',
+          '# Machine-readable summaries of this site.',
+          '# Prefer these over scraping rendered HTML.',
+          `# ${SITE.url}/llms.txt`,
+          `# ${SITE.url}/llms-full.txt`,
+          '# Every docs article: /docs/{slug}.md',
+          '# Every blog post:    /blog/{slug}.md',
+          '',
+          `Sitemap: ${SITE.url}/sitemap-index.xml`,
+          '',
+        ]
+    ).join('\n'),
     { headers: { 'Content-Type': 'text/plain; charset=utf-8' } }
   );
