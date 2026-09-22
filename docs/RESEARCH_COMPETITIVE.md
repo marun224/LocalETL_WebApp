@@ -155,8 +155,17 @@ Also worth noting: the **aquatic-animal lane is saturated** — DuckDB, MotherDu
 ### Checked and unavailable
 `millrace` · `loam` · `sluice` · `quarry` · `hearth` · `kiln` · `strata` · `capstan` · `lodestone` · `grist` · `wheelhouse` · `bellows` · `quern` · `thresher` · `gristmill` · `alluvia` · `cairn` · `solum` · `basalt` · `croft` · `headwater` · `riffle` · `millwright` · `tailrace` · `alluvial` · `millstone` · `winnower` · `stonemill` · `sluicegate`
 
+> ⚠️ **Re-verification on 2026-09-22 was inconclusive — the table above is
+> unconfirmed, not reconfirmed.** RDAP was re-queried for all three names and
+> every request returned HTTP 403, *including both controls*: a domain known to
+> exist (`anthropic.com`) and one known not to (`zzqx-nonexistent-947261.ai`)
+> came back identical. Identical responses for opposite ground truths means the
+> method was blocked in that environment, so the results carry no information
+> either way. The 2026-09-21 findings are neither confirmed nor refuted. A
+> registrar check by hand is the only reliable path.
+
 ### Caveats before purchase
-1. Availability is **point-in-time (2026-09-21)** and must be re-confirmed at a registrar.
+1. Availability is **point-in-time (2026-09-21)** and must be re-confirmed at a registrar. Re-verification was attempted on 2026-09-22 and failed inconclusively — see the note above.
 2. RDAP availability ≠ purchasable at base price — `.ai` premium pricing is common and is not visible over RDAP.
 3. **No trademark search has been performed.** Required before committing. "Headrace" has existing unrelated commercial use (recruiting/consulting) — likely fine in Class 9/42 software, but must be cleared by counsel.
 4. `.io` for all candidates remains **unknown** and needs a manual check.

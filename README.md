@@ -65,7 +65,7 @@ npm run check:a11y && npm run check:perf && npm run check:browsers
 
 | | |
 | --- | --- |
-| Routes | 42 — 30 HTML, 10 Markdown mirrors, RSS, sitemaps |
+| Routes | 45 — 32 HTML, 10 Markdown mirrors, RSS, 2 sitemaps (plus `llms.txt`, `llms-full.txt`, `robots.txt`) |
 | Lighthouse | 100 / 100 / 100 / 100 |
 | Shipped JS | 2.4 kB (Astro's prefetch helper only) |
 | Shipped CSS | 41.7 kB |

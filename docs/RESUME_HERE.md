@@ -8,24 +8,16 @@ Nothing is half-finished — work stopped at a clean boundary.
 
 ## ⚠️ Read this first
 
-**Two commits are not pushed.**
+**Everything is pushed.** Local `main` and `origin/main` are in sync on
+`https://github.com/marun224/LocalETL_WebApp.git`.
 
-| | |
-| --- | --- |
-| Local `main` | `9bc36bc` — Phase 8 |
-| `origin/main` | `59be558` — Phase 6 |
-| Unpushed | `027b227` (Phase 7), `9bc36bc` (Phase 8) |
-
-The remote is `https://github.com/marun224/LocalETL_WebApp.git`. It was not
-configured during this work and no `git push` was ever run here — pushing is an
-outward-facing action and was left for you to authorise.
+An earlier version of this section warned that two commits were unpushed. That
+was accurate when written and is now stale — they went up. Verify any time
+with:
 
 ```bash
-git log --oneline origin/main..main    # see exactly what would go up
-git push origin main                    # when you want it pushed
+git log --oneline origin/main..main    # empty output = nothing to push
 ```
-
-The working tree is **clean**. Nothing is uncommitted.
 
 ---
 
@@ -62,7 +54,7 @@ Installed: Node 24.19.0, npm 11.17.0, git 2.55.0. `node_modules`, `dist`,
 | --- | --- |
 | Phases | **8 of 8 complete** (Phase 8 partial — see below) |
 | Commits | 9, on `main` |
-| Routes | **45** — 31 HTML + 10 Markdown mirrors + RSS + 2 sitemaps |
+| Routes | **45** — 32 HTML + 10 Markdown mirrors + RSS + 2 sitemaps (plus `llms.txt`, `llms-full.txt`, `robots.txt`) |
 | Lighthouse | **100 / 100 / 100 / 100** |
 | WCAG 2.2 AA | **0 violations** across 58 page-loads |
 | Cross-browser | Chromium, Firefox, WebKit ✅ |

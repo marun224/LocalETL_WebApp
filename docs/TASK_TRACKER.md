@@ -5,9 +5,9 @@
 **Status:** ⏸️ **PAUSED at a clean boundary.** All 8 phases complete; v1 is
 build-complete and verified. Resume instructions: **[RESUME_HERE.md](RESUME_HERE.md)**
 
-> ⚠️ **Two commits are unpushed.** Local `main` is at `9bc36bc`; `origin/main`
-> is at `59be558`. Phases 7 and 8 exist only locally. No `git push` was run
-> during this work.
+> ✅ **Everything is pushed.** Local `main` and `origin/main` are in sync.
+> (An earlier note here warned of two unpushed commits; that was true when
+> written and is no longer.)
 
 Legend: ✅ done · 🔄 in progress · ⬜ not started · ⏸️ deferred · 🚫 blocked · ❓ needs user decision
 
@@ -258,7 +258,7 @@ claim that should be enforced rather than trusted.
 
 | # | Question | Needed by | Current fallback |
 | --- | --- | --- | --- |
-| Q1 | **Brand name** — Headrace (in use), Quernstone, Tidemill, or your own | Before launch | Built as Headrace. **`npm run rebrand -- --name X --domain x.ai`** does the whole change; dry-run it first |
+| Q1 | **Brand name** | Before launch | 🔄 **Direction settled 2026-09-22: staying Headrace.** Switching would move the same unresolved risk onto a weaker name — no candidate has a bought domain or trademark clearance. **Still blocked on:** registrar check + clearance by counsel. Until both land the name stays provisional and the site's hedging stays. To change it anyway: `npm run rebrand -- --name X --domain x.ai --dry` |
 | Q2 | Real pricing amounts for Pro & Team | Before launch | Renders "Not set", flagged as placeholder |
 | Q3 | GitHub org/repo URL | Before launch | `github.com/headrace/headrace` in `site.js` |
 | Q4 | Contact email domain | Before launch | `hello@ / sales@ / security@ headrace.ai` |
