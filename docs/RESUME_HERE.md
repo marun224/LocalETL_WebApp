@@ -172,7 +172,7 @@ Full detail in [COMMANDS.md](COMMANDS.md).
 
 | File | What it is |
 | --- | --- |
-| [README.md](README.md) | How to run, verify, deploy and rebrand |
+| [README.md](../README.md) | How to run, verify, deploy and rebrand |
 | [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | The 8-phase plan and the 8 locked decisions |
 | [RESEARCH_COMPETITIVE.md](RESEARCH_COMPETITIVE.md) | Duckle + OrcaSheets teardown, naming/domain research |
 | [TASK_TRACKER.md](TASK_TRACKER.md) | Per-phase detail, deferred items, open questions |

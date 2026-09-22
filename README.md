@@ -86,7 +86,7 @@ Architectural claims are fine — they describe the design, not a measurement.
 
 Unverified figures go through `<Claim status="placeholder" id="...">`, which
 emits `data-claim-status` into the DOM so `npm run check:claims` can enumerate
-them mechanically. Every one needs a row in [CLAIMS.md](CLAIMS.md).
+them mechanically. Every one needs a row in [CLAIMS.md](docs/CLAIMS.md).
 
 `SITE.preLaunch` in `src/config/site.js` drives every "not shipped yet"
 disclosure on the site. Launch day is one boolean, not a hunt through 18 pages.
@@ -170,7 +170,7 @@ Nothing else in `src/` hardcodes the name.
 
 ## Open decisions
 
-Tracked in [TASK_TRACKER.md](TASK_TRACKER.md). The ones with placeholders in
+Tracked in [TASK_TRACKER.md](docs/TASK_TRACKER.md). The ones with placeholders in
 production copy:
 
 | | Question | Current state |
@@ -187,12 +187,12 @@ production copy:
 
 | File | Contents |
 | --- | --- |
-| [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | The 9-phase plan and locked decisions |
-| [RESEARCH_COMPETITIVE.md](RESEARCH_COMPETITIVE.md) | Teardown of Duckle and OrcaSheets; naming research |
-| [TASK_TRACKER.md](TASK_TRACKER.md) | What is done, deferred and blocked |
-| [CLAIMS.md](CLAIMS.md) | Every factual claim on the site and its status |
-| [COMMANDS.md](COMMANDS.md) | Command log, including the environment traps |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Conventions |
+| [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | The 9-phase plan and locked decisions |
+| [RESEARCH_COMPETITIVE.md](docs/RESEARCH_COMPETITIVE.md) | Teardown of Duckle and OrcaSheets; naming research |
+| [TASK_TRACKER.md](docs/TASK_TRACKER.md) | What is done, deferred and blocked |
+| [CLAIMS.md](docs/CLAIMS.md) | Every factual claim on the site and its status |
+| [COMMANDS.md](docs/COMMANDS.md) | Command log, including the environment traps |
+| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | Conventions |
 
 ---
 

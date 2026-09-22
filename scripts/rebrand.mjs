@@ -69,11 +69,22 @@ console.log(`  ${OLD_DOMAIN}  →  ${DOMAIN}\n`);
 
 // --- which files to touch -------------------------------------------------
 const ROOTS = ['src', 'scripts', 'deploy', '.github'];
-const ROOT_FILES = ['README.md', 'CONTRIBUTING.md', 'package.json', 'netlify.toml', 'Dockerfile'];
+
+// Individually listed because their directories are not walked. Paths are
+// repo-relative, so a file that moves must be updated here too.
+const LOOSE_FILES = [
+  'README.md',
+  'docs/CONTRIBUTING.md',
+  'package.json',
+  'netlify.toml',
+  'Dockerfile',
+];
 const EXT = /\.(astro|ts|tsx|js|mjs|json|md|mdx|css|yml|yaml|toml|conf)$/;
 
 // Planning documents are a historical record of decisions made under the old
 // name. Rewriting them would falsify the record, so they are left alone.
+// They live in docs/, which is not walked — this set is belt and braces, and
+// also guards them should they ever be added to LOOSE_FILES.
 const SKIP = new Set([
   'IMPLEMENTATION_PLAN.md',
   'RESEARCH_COMPETITIVE.md',
@@ -102,12 +113,16 @@ async function walk(dir) {
 }
 
 const files = [...(await Promise.all(ROOTS.map(walk))).flat()];
-for (const f of ROOT_FILES) {
+for (const f of LOOSE_FILES) {
+  if (SKIP.has(f)) continue;
   try {
     await stat(f);
-    if (!SKIP.has(f)) files.push(f);
+    files.push(f);
   } catch {
-    /* not present */
+    // A listed file that is not there means the list has drifted from the
+    // repo — most likely the file moved. That happened to CONTRIBUTING.md when
+    // the docs moved, and the silent skip here hid it, so say so loudly.
+    console.warn(`  ! listed file not found, so NOT rewritten: ${f}`);
   }
 }
 
