@@ -7,7 +7,7 @@
  * the hero rotator) are allowed by SHA-256 hash instead.
  *
  * Writes:
- *   dist/_headers    — Netlify and Cloudflare Pages
+ *   <served dir>/_headers — Netlify, Cloudflare Pages and Cloudflare Workers
  *   vercel.json      — Vercel (rewritten in place, committed)
  *   deploy/headers.conf — nginx, included by the Dockerfile image
  *
@@ -18,6 +18,32 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 const DIST = path.join(process.cwd(), 'dist');
+
+/**
+ * The directory Astro actually emitted, which is not always `dist`.
+ *
+ * A server adapter splits the build into `dist/client` and `dist/server`, and
+ * the host serves `dist/client`. A first Cloudflare deploy hit exactly this:
+ * `wrangler deploy` ran `astro add cloudflare` on the build machine, the
+ * adapter moved the output, and `_headers` was written one directory above
+ * what was being served — so the site went live with no CSP, no HSTS and no
+ * frame protection at all, while the build still printed a tick.
+ *
+ * Detect it rather than assume it. `_headers` is inert if it lands in the
+ * wrong place, and inert in a way nothing in the build would catch.
+ */
+async function servedDir() {
+  try {
+    const { stat } = await import('node:fs/promises');
+    const client = path.join(DIST, 'client');
+    if ((await stat(path.join(client, 'index.html'))).isFile()) return client;
+  } catch {
+    /* no adapter split — the plain dist/ layout */
+  }
+  return DIST;
+}
+
+const SERVED = await servedDir();
 
 async function walk(dir) {
   const out = [];
@@ -31,7 +57,7 @@ async function walk(dir) {
 
 // --- Collect inline script hashes ----------------------------------------
 const hashes = new Set();
-for (const file of await walk(DIST)) {
+for (const file of await walk(SERVED)) {
   const src = await readFile(file, 'utf8');
   for (const m of src.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)) {
     const body = m[1];
@@ -89,7 +115,7 @@ const netlify = [
   '  Cache-Control: public, max-age=604800',
   '',
 ].join('\n');
-await writeFile(path.join(DIST, '_headers'), netlify);
+await writeFile(path.join(SERVED, '_headers'), netlify);
 
 // --- Vercel ---------------------------------------------------------------
 const vercel = {
@@ -113,10 +139,7 @@ const vercel = {
     },
   ],
 };
-await writeFile(
-  path.join(process.cwd(), 'vercel.json'),
-  JSON.stringify(vercel, null, 2) + '\n'
-);
+await writeFile(path.join(process.cwd(), 'vercel.json'), JSON.stringify(vercel, null, 2) + '\n');
 
 // --- nginx ---------------------------------------------------------------
 await mkdir(path.join(process.cwd(), 'deploy'), { recursive: true });
