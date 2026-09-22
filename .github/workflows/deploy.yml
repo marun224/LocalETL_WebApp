@@ -71,8 +71,21 @@ jobs:
 
   # GitHub Pages is one of four supported targets; the others read this same
   # dist/ output. See README for Vercel, Netlify, Cloudflare and Docker.
+  #
+  # Opt-in. This project deploys via Cloudflare Pages, which builds from the
+  # repo itself, so this job would fail on a repo with Pages disabled and put
+  # a red X on every green build. To use Pages instead, enable it under
+  # Settings -> Pages (Source: GitHub Actions) and set the repository variable
+  # ENABLE_GITHUB_PAGES to 'true'.
+  #
+  # Note before doing so: Pages serves a project repo from a SUBPATH
+  # (/LocalETL_WebApp), and this site is not base-path aware -- its internal
+  # links are written root-absolute. It needs an `astro.config.mjs` base and a
+  # link refactor before it would work there.
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: >-
+      github.ref == 'refs/heads/main' && github.event_name == 'push' &&
+      vars.ENABLE_GITHUB_PAGES == 'true'
     runs-on: ubuntu-latest
     needs: [verify, audit]
     permissions:
