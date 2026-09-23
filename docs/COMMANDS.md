@@ -543,3 +543,28 @@ awk '/^Answer:$/{...}' docs/QUESTIONS_site_product_sync.md
 # What a push runs (verify + audit; GitHub Pages deploy is opt-in)
 grep -nE "^on:|push|ENABLE_GITHUB_PAGES|if:" .github/workflows/deploy.yml
 ```
+
+## 2026-09-23 — Sync S1: connector catalogue
+
+```bash
+# Edits scripted with python str.replace, each asserting its anchor occurs once:
+#   src/data/connectors.ts, components/sections/ConnectorGrid.astro, pages/integrations.astro,
+#   pages/llms.txt.ts, pages/llms-full.txt.ts, config/pages.ts
+grep -c "status: 'working'" src/data/connectors.ts        # 13
+grep -c "status: 'planned'" src/data/connectors.ts        # 36
+export ASTRO_TELEMETRY_DISABLED=1
+npm run build                                            # 32 pages; external + headers checks pass
+npm run -s check                                         # 0 errors, 0 warnings
+npx astro preview --port 4321                            # detaches; `astro preview stop` ends it
+export MSYS_NO_PATHCONV=1                                # else Git Bash turns /integrations into a Windows path
+THEMES=light,dark node scripts/screenshot.mjs /integrations
+node scripts/shot-el.mjs / "#ingest"                     # the home page's connector grid
+npm run -s check:links                                   # all internal links resolve
+npm run -s check:a11y                                    # 62 page-loads, 0 violations
+```
+
+| Failure | Cause | Fix |
+| --- | --- | --- |
+| `screenshot.mjs /integrations` navigated to `http://localhost:4321C:/Users/...` | Git Bash (MSYS) path conversion rewrote the argument | `MSYS_NO_PATHCONV=1` |
+| `shot-el.mjs / "#connectors"` crashed | No such id; the grid is in `#ingest` | Use `#ingest` |
+| "are marked✓" | JSX dropped the space before the icon | `{' '}` |

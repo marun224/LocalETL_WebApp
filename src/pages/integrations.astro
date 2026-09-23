@@ -28,13 +28,18 @@ const ioLabel: Record<string, string> = {
         <div class="mb-8 flex items-start gap-3 rounded-card border border-warning/30 bg-warning/10 p-5">
           <Icon name="triangle-alert" size={19} class="mt-0.5 shrink-0 text-warning" />
           <div>
-            <p class="font-medium text-ink">Every connector below is planned, not shipped.</p>
+            <p class="font-medium text-ink">
+              {CONNECTOR_COUNTS.working} working, {CONNECTOR_COUNTS.planned} planned, none released
+              yet.
+            </p>
             <p class="mt-1.5 text-sm leading-relaxed text-muted">
               {CONNECTOR_COUNTS.total} connectors across {CONNECTOR_COUNTS.categories} categories
-              are in scope for the first release. Right now {CONNECTOR_COUNTS.available} of them
-              work. A connector gets marked available on this page when it genuinely is — a
-              coming-soon list dressed up as a catalogue is how you lose an evaluation in week
-              two.
+              are in scope for the first release. <strong class="font-medium text-ink">Working</strong>{' '}
+              means built in the engine and tested against real data or a real server, but not yet
+              downloadable, because nothing is until the first release.{' '}
+              <strong class="font-medium text-ink">Planned</strong> means not built. A connector
+              moves up only when a test says it works. A coming-soon list dressed up as a catalogue
+              is how you lose an evaluation in week two.
             </p>
           </div>
         </div>
@@ -113,6 +118,10 @@ const ioLabel: Record<string, string> = {
                   </span>
                   {c.status === 'available' ? (
                     <Badge tone="success">Available</Badge>
+                  ) : c.status === 'working' ? (
+                    <Badge tone="success">
+                      Working<span class="sr-only">, not yet released</span>
+                    </Badge>
                   ) : (
                     <Badge>Planned</Badge>
                   )}
@@ -136,8 +145,9 @@ const ioLabel: Record<string, string> = {
         <div>
           <h2 class="text-title text-ink">Not on the list?</h2>
           <p class="mt-4 max-w-xl leading-relaxed text-muted">
-            Anything reachable over JDBC, ODBC, REST or GraphQL can usually be handled with a
-            generic connector. For everything else, tell us what you need — early requests carry
+            Anything with a REST API can be read, and written to, with the generic REST
+            connector: pagination, auth and retries are configured, not coded. GraphQL, JDBC and
+            ODBC are planned. For everything else, tell us what you need — early requests carry
             real weight in what gets built first.
           </p>
         </div>

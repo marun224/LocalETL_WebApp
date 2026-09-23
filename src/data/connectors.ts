@@ -1,17 +1,23 @@
 /**
  * Connector catalogue.
  *
- * `status` is the honesty mechanism. While the product is pre-launch,
- * everything is 'planned' — nothing here claims to work today. As
- * connectors ship, flip them to 'available' and the counts, badges and
- * copy update themselves. Do not add a connector as 'available' until it
- * genuinely is.
+ * `status` is the honesty mechanism, and it has three values:
+ *
+ * - 'planned'   — not built. The default.
+ * - 'working'   — built in the engine and checked by a named engine test
+ *                 (see docs/CLAIMS.md for which), but not released: nobody
+ *                 can download the product yet. Mark an entry 'working' only
+ *                 with that test behind it; a component existing is not
+ *                 enough (three of Phase 4's did not work until checked).
+ * - 'available' — released and downloadable. Nothing is, before launch.
+ *
+ * Counts, badges and copy update themselves from these values.
  *
  * Duckle's line is worth remembering: "These work today, not a
  * coming-soon list." We can only earn that sentence by being strict here.
  */
 
-export type ConnectorStatus = 'available' | 'planned';
+export type ConnectorStatus = 'available' | 'working' | 'planned';
 
 export interface Connector {
   name: string;
@@ -37,12 +43,12 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
     blurb: 'Operational stores, read directly over their native protocol.',
     icon: 'database',
     connectors: [
-      { name: 'PostgreSQL', icon: 'postgresql', status: 'planned', io: 'both' },
-      { name: 'MySQL', icon: 'mysql', status: 'planned', io: 'both' },
+      { name: 'PostgreSQL', icon: 'postgresql', status: 'working', io: 'both' },
+      { name: 'MySQL', icon: 'mysql', status: 'working', io: 'both' },
       { name: 'MariaDB', icon: 'mariadb', status: 'planned', io: 'both' },
       { name: 'SQL Server', icon: 'microsoftsqlserver', status: 'planned', io: 'both' },
       { name: 'Oracle', icon: 'oracle', status: 'planned', io: 'source' },
-      { name: 'SQLite', icon: 'sqlite', status: 'planned', io: 'both' },
+      { name: 'SQLite', icon: 'sqlite', status: 'working', io: 'both' },
       { name: 'MongoDB', icon: 'mongodb', status: 'planned', io: 'source' },
       { name: 'Redis', icon: 'redis', status: 'planned', io: 'both' },
       { name: 'Cassandra', status: 'planned', io: 'source' },
@@ -62,8 +68,8 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
       { name: 'Databricks', icon: 'databricks', status: 'planned', io: 'both' },
       { name: 'Redshift', icon: 'amazonredshift', status: 'planned', io: 'both' },
       { name: 'DuckDB', icon: 'duckdb', status: 'planned', io: 'both' },
-      { name: 'Iceberg', status: 'planned', io: 'both' },
-      { name: 'Delta Lake', icon: 'delta', status: 'planned', io: 'both' },
+      { name: 'Iceberg', status: 'working', io: 'source' },
+      { name: 'Delta Lake', icon: 'delta', status: 'working', io: 'source' },
     ],
   },
   {
@@ -72,10 +78,12 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
     blurb: 'The formats analysts actually receive, read without conversion.',
     icon: 'file-text',
     connectors: [
-      { name: 'Parquet', icon: 'apacheparquet', status: 'planned', io: 'both' },
-      { name: 'CSV / TSV', status: 'planned', io: 'both' },
-      { name: 'Excel', icon: 'microsoftexcel', status: 'planned', io: 'both' },
-      { name: 'JSON / JSONL', status: 'planned', io: 'both' },
+      { name: 'Parquet', icon: 'apacheparquet', status: 'working', io: 'both' },
+      { name: 'CSV', status: 'working', io: 'both' },
+      { name: 'TSV', status: 'planned', io: 'both' },
+      { name: 'Excel', icon: 'microsoftexcel', status: 'working', io: 'both' },
+      { name: 'JSON / JSONL', status: 'working', io: 'both' },
+      { name: 'XML', status: 'working', io: 'both' },
       { name: 'Arrow', status: 'planned', io: 'both' },
       { name: 'Avro', status: 'planned', io: 'source' },
       { name: 'Google Sheets', icon: 'googlesheets', status: 'planned', io: 'both' },
@@ -90,8 +98,8 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
       { name: 'Amazon S3', icon: 'amazons3', status: 'planned', io: 'both' },
       { name: 'Google Cloud Storage', icon: 'googlecloud', status: 'planned', io: 'both' },
       { name: 'Azure Blob', icon: 'microsoftazure', status: 'planned', io: 'both' },
-      { name: 'MinIO / S3-compatible', status: 'planned', io: 'both' },
-      { name: 'Local filesystem', status: 'planned', io: 'both' },
+      { name: 'MinIO / S3-compatible', status: 'working', io: 'both' },
+      { name: 'Local filesystem', status: 'working', io: 'both' },
     ],
   },
   {
@@ -122,7 +130,8 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
       { name: 'Notion', icon: 'notion', status: 'planned', io: 'source' },
       { name: 'Airtable', icon: 'airtable', status: 'planned', io: 'both' },
       { name: 'Zendesk', icon: 'zendesk', status: 'planned', io: 'source' },
-      { name: 'REST / GraphQL', status: 'planned', io: 'both' },
+      { name: 'REST APIs', status: 'working', io: 'both' },
+      { name: 'GraphQL', status: 'planned', io: 'both' },
     ],
   },
 ];
@@ -132,6 +141,7 @@ export const ALL_CONNECTORS: Connector[] = CONNECTOR_CATEGORIES.flatMap((c) => c
 export const CONNECTOR_COUNTS = {
   total: ALL_CONNECTORS.length,
   available: ALL_CONNECTORS.filter((c) => c.status === 'available').length,
+  working: ALL_CONNECTORS.filter((c) => c.status === 'working').length,
   planned: ALL_CONNECTORS.filter((c) => c.status === 'planned').length,
   categories: CONNECTOR_CATEGORIES.length,
 };

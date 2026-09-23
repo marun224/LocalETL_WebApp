@@ -109,14 +109,23 @@ export const GET: APIRoute = async () => {
   h('## Connectors');
 
   o.push(
-    `${CONNECTOR_COUNTS.total} planned across ${CONNECTOR_COUNTS.categories} categories.`,
-    `${CONNECTOR_COUNTS.available} currently available (the product is pre-launch).`,
+    `${CONNECTOR_COUNTS.total} in scope across ${CONNECTOR_COUNTS.categories} categories.`,
+    `${CONNECTOR_COUNTS.working} working: built in the engine and tested against real data, but not`,
+    `released. ${CONNECTOR_COUNTS.planned} planned: not built. ${CONNECTOR_COUNTS.available} available`,
+    '(the product is pre-launch and cannot be downloaded yet). Entries below without a mark are',
+    'planned.',
     ''
   );
   for (const cat of CONNECTOR_CATEGORIES) {
     o.push(
       `**${cat.label}** — ${cat.blurb}`,
-      cat.connectors.map((c) => c.name).join(', '),
+      cat.connectors
+        .map((c) =>
+          c.status === 'planned'
+            ? c.name
+            : `${c.name} (${c.status}${c.io === 'source' ? ', read only' : ''})`
+        )
+        .join(', '),
       ''
     );
   }

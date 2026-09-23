@@ -1,6 +1,6 @@
 # Plan: site ↔ product sync
 
-**Status:** 📝 Draft for approval, 2026-09-23. No site changes until the user says "start".
+**Status:** ✅ Approved 2026-09-23 ("start"). P1: **(a)**. P2: **commit per phase, push once at the end**.
 **Inputs:** the audit and the user's answers in
 [QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md) (all 8 as recommended), and the
 engine at `ETL_Local_Tool` commit `9694099` (Phases 0–10c: 58 components).

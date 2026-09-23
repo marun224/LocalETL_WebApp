@@ -11,6 +11,12 @@ export interface Props {
 
 const { limit } = Astro.props;
 const categories = limit ? CONNECTOR_CATEGORIES.slice(0, limit) : CONNECTOR_CATEGORIES;
+
+const STATUS_TEXT = {
+  available: 'available',
+  working: 'working, not yet released',
+  planned: 'planned, not built yet',
+} as const;
 ---
 
 {
@@ -18,10 +24,12 @@ const categories = limit ? CONNECTOR_CATEGORIES.slice(0, limit) : CONNECTOR_CATE
     <div class="mb-8 flex items-start gap-3 rounded-card border border-line bg-subtle p-4">
       <Icon name="info" size={18} class="mt-0.5 shrink-0 text-muted" />
       <p class="text-sm leading-relaxed text-muted">
-        <strong class="font-medium text-ink">Planned coverage.</strong> {CONNECTOR_COUNTS.total}{' '}
-        connectors across {CONNECTOR_COUNTS.categories} categories are in scope for the first
-        release. None of them is shipping yet, and this page will mark each one as available only
-        when it genuinely is — not before.
+        <strong class="font-medium text-ink">Nothing is released yet.</strong>{' '}
+        {CONNECTOR_COUNTS.total} connectors across {CONNECTOR_COUNTS.categories} categories are in
+        scope for the first release. {CONNECTOR_COUNTS.working} of them already work in the engine
+        and are tested against real data; they are marked{' '}
+        <Icon name="check" size={13} class="inline -translate-y-px text-success" />. The rest are
+        planned. None can be downloaded until the first release.
       </p>
     </div>
   )
@@ -42,15 +50,17 @@ const categories = limit ? CONNECTOR_CATEGORIES.slice(0, limit) : CONNECTOR_CATE
         <ul class="mt-4 flex flex-wrap gap-1.5">
           {cat.connectors.map((c) => (
             <li
-              class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1 text-xs text-muted"
-              title={
-                c.status === 'available'
-                  ? `${c.name} — available`
-                  : `${c.name} — planned, not yet shipping`
-              }
+              class={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs ${
+                c.status === 'planned'
+                  ? 'border-line bg-surface text-muted'
+                  : 'border-success/30 bg-success/10 text-ink'
+              }`}
+              title={`${c.name}: ${STATUS_TEXT[c.status]}`}
             >
+              {c.status !== 'planned' && <Icon name="check" size={12} class="text-success" />}
               {c.icon && <Icon name={`simple:${c.icon}`} size={12} />}
               {c.name}
+              <span class="sr-only">({STATUS_TEXT[c.status]})</span>
             </li>
           ))}
         </ul>
