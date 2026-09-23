@@ -8,12 +8,15 @@ import Icon from '../components/ui/Icon.astro';
 import CodeBlock from '../components/ui/CodeBlock.astro';
 import InstallPaths from '../components/sections/InstallPaths.astro';
 import { BRAND } from '../config/brand';
+import Badge from '../components/ui/Badge.astro';
 import { SITE } from '../config/site.js';
 
+// `built`: the engine builds and its tests pass on this platform today. Nothing is
+// released on any of them yet.
 const platforms = [
-  { id: 'mac', icon: 'simple:apple', label: 'macOS', detail: 'Apple silicon & Intel · 12+' },
-  { id: 'win', icon: 'monitor', label: 'Windows', detail: 'x64 & ARM64 · Windows 10+' },
-  { id: 'linux', icon: 'simple:linux', label: 'Linux', detail: 'deb, rpm, AppImage · x64 & ARM64' },
+  { id: 'win', icon: 'monitor', label: 'Windows', detail: 'x64', built: true },
+  { id: 'linux', icon: 'simple:linux', label: 'Linux', detail: 'x64 · runs in a bare Debian container', built: true },
+  { id: 'mac', icon: 'simple:apple', label: 'macOS', detail: 'Apple silicon & Intel · not built yet', built: false },
 ];
 ---
 
@@ -63,7 +66,7 @@ const platforms = [
     <SectionHeading
       eyebrow="Desktop"
       title="Planned platform coverage"
-      lede="The same engine on every platform, so a pipeline built on a laptop runs unchanged on a server."
+      lede="The same engine on every platform, so a pipeline built on a laptop runs unchanged on a server. Windows and Linux builds work today; macOS is planned."
     />
 
     <div class="mt-10 grid gap-5 md:grid-cols-3">
@@ -71,7 +74,10 @@ const platforms = [
         platforms.map((p) => (
           <div class="flex flex-col rounded-card border border-line bg-raised p-6">
             <Icon name={p.icon} size={26} class="text-ink" />
-            <h3 class="mt-4 text-lg font-semibold text-ink">{p.label}</h3>
+            <h3 class="mt-4 flex items-center gap-2.5 text-lg font-semibold text-ink">
+              {p.label}
+              {p.built ? <Badge tone="success">Working</Badge> : <Badge>Planned</Badge>}
+            </h3>
             <p class="mt-1.5 flex-1 text-sm text-muted">{p.detail}</p>
             <Button
               variant="secondary"
@@ -111,7 +117,7 @@ const platforms = [
             [
               ['Memory', 'Works against data on disk rather than loading it all into RAM, so memory is a comfort rather than a ceiling. More helps; it is not the limit.'],
               ['Disk', 'Space for the application plus room for any intermediate results you choose to materialise.'],
-              ['CPU', 'Uses every core you have. More cores means more parallel branches, which is usually where the wall-clock time goes.'],
+              ['CPU', 'Uses every core you have: each query runs in parallel across them.'],
               ['Network', 'Only to reach the sources you configure. The application itself makes no outbound calls.'],
             ].map(([t, d]) => (
               <div class="border-l-2 border-line pl-5">
@@ -127,12 +133,13 @@ const platforms = [
         <SectionHeading eyebrow="Servers & CI" title="Headless deployment" />
         <p class="mt-6 leading-relaxed text-muted">
           The runner is the same engine without the interface. Build a pipeline on your laptop,
-          commit it, and run it wherever you already run things.
+          commit it, and run it wherever you already run things — or bake it into one standalone
+          binary for a machine with nothing installed.
         </p>
         <div class="mt-6 space-y-3">
-          <CodeBlock code={`${BRAND.slug} run pipeline.yaml`} label="Run once" />
-          <CodeBlock code={`${BRAND.slug} serve --schedule cron`} label="Run on a schedule" />
-          <CodeBlock code={`docker run --rm -v $PWD:/work ${BRAND.slug}/runner`} label="Container" />
+          <CodeBlock code="etl run pipeline.json" label="Run once" />
+          <CodeBlock code="etl schedule start" label="Run on a schedule" />
+          <CodeBlock code="etl build pipeline.json --target linux_amd64" label="Standalone binary" />
         </div>
         <p class="mt-5 text-sm text-faint">
           No agent to register, no control plane to reach. If the process can see your data, it

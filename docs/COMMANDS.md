@@ -568,3 +568,32 @@ npm run -s check:a11y                                    # 62 page-loads, 0 viol
 | `screenshot.mjs /integrations` navigated to `http://localhost:4321C:/Users/...` | Git Bash (MSYS) path conversion rewrote the argument | `MSYS_NO_PATHCONV=1` |
 | `shot-el.mjs / "#connectors"` crashed | No such id; the grid is in `#ingest` | Use `#ingest` |
 | "are marked✓" | JSX dropped the space before the icon | `{' '}` |
+
+## 2026-09-23 — Sync S2: feature claims, roadmap, and the same claims elsewhere
+
+```bash
+# Where each claim recurs (the sweep list)
+grep -rliE "macOS|lineage|fan out|audit trail|chart|on-device|CDC|schema drift|Python|SQL editor|pipeline\.yaml|secret store|keychain|serve --" src
+grep -rn "46" src --include=*.md --include=*.ts --include=*.astro     # stale connector counts
+
+# Engine facts checked before rewording (ETL_Local_Tool)
+./target/debug/etl.exe --help                      # run, serve, schedule, build, lineage, secret, ...
+./target/debug/etl.exe schedule --help             # list | check | start; .etl/schedules.json
+./target/debug/etl.exe build --help                # --target linux_amd64 | windows_amd64 | osx_arm64
+./target/debug/etl.exe secret --help               # ${SECRET:name}
+grep -n 'strip_prefix' crates/duckdb-engine/src/params.rs   # SECRET: and ENV: only; no Vault
+sed -n 1,20p crates/secrets/src/lib.rs             # AES-256-GCM in .etl/, key beside it, no keychain
+grep -n "two roles\|viewer\|operator" docs/task_tracker.md  # viewer reads; operator reads and runs
+
+# Edits: python scripts in the session scratchpad, each anchor asserted unique
+node -e "console.log('circle-dashed' in require('@iconify-json/lucide/icons.json').icons)"  # true
+npm run build && npm run -s check && npm run -s check:icons && npm run -s check:links
+npm run -s check:a11y                                        # 62 page-loads, 0 violations
+THEMES=light node scripts/screenshot.mjs /features /roadmap /download
+node scripts/shot-el.mjs / "#analyze" "#local-ai"
+```
+
+| Failure | Cause | Fix |
+| --- | --- | --- |
+| Bash: `unexpected EOF while looking for matching '` | A heredoc holding Python with mixed quotes | Write the script to a file, run it |
+| `AssertionError: config/pages.ts, 'On-device AI…'` | The text is lower-case "on-device" there. Files before it had already been written | Rerun from `config/pages.ts` on only |

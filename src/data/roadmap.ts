@@ -15,7 +15,7 @@
  *    is the section a competitor's roadmap never has.
  */
 
-export type Stage = 'building' | 'next' | 'later';
+export type Stage = 'built' | 'building' | 'next' | 'later';
 
 export interface RoadmapItem {
   title: string;
@@ -25,9 +25,14 @@ export interface RoadmapItem {
 
 export const STAGES: { id: Stage; label: string; blurb: string }[] = [
   {
+    id: 'built',
+    label: 'Built, not yet released',
+    blurb: 'Working in the engine and tested. Not downloadable until the first release.',
+  },
+  {
     id: 'building',
     label: 'Building now',
-    blurb: 'Active work. Nothing here is finished or usable yet.',
+    blurb: 'Active work. Not finished or usable yet.',
   },
   {
     id: 'next',
@@ -42,34 +47,51 @@ export const STAGES: { id: Stage; label: string; blurb: string }[] = [
 ];
 
 export const ROADMAP: RoadmapItem[] = [
+  // --- built ---------------------------------------------------------------
+  {
+    stage: 'built',
+    title: 'The execution engine',
+    body: 'Columnar, vectorised, in-process. Everything else depends on this, so it came first.',
+  },
+  {
+    stage: 'built',
+    title: 'Pipeline compilation to SQL',
+    body: 'The canvas-to-SQL layer, including the part that matters most: the compiled query being readable, and replaceable with your own SQL, rather than merely visible.',
+  },
+  {
+    stage: 'built',
+    title: 'The visual canvas',
+    body: 'Drag, wire, inspect, in a desktop app. Each node shows what it compiles to.',
+  },
+  {
+    stage: 'built',
+    title: 'Headless runner and standalone binaries',
+    body: 'The same engine without the interface, so a pipeline built on a laptop runs unchanged from cron, systemd or CI — or baked into one file that runs on a machine with no network.',
+  },
+  {
+    stage: 'built',
+    title: 'Scheduling and the web console',
+    body: 'Cron, interval and file-watch schedules, and a console for a server with token sign-in and two roles.',
+  },
+  {
+    stage: 'built',
+    title: 'Run history and per-node previews',
+    body: 'Row counts, timings, the compiled SQL and the data as it looked at each step. "Which step made the number wrong" is answerable by looking.',
+  },
+  {
+    stage: 'built',
+    title: 'The first connectors',
+    body: 'Thirteen, each tested against real data or a real server: PostgreSQL, MySQL, SQLite, Delta Lake, Iceberg, S3-compatible storage, local files in six formats, and REST APIs.',
+  },
+
   // --- building -----------------------------------------------------------
   {
     stage: 'building',
-    title: 'The execution engine',
-    body: 'Columnar, vectorised, in-process. Everything else depends on this, so it is first and it is taking the longest.',
-  },
-  {
-    stage: 'building',
-    title: 'Pipeline compilation to SQL',
-    body: 'The canvas-to-SQL layer, including the part that matters most: the compiled query being readable and editable rather than merely visible.',
-  },
-  {
-    stage: 'building',
-    title: 'The first connectors',
-    body: 'PostgreSQL, Parquet, CSV and S3. Enough to build a genuinely useful pipeline, which is the bar for the first release rather than connector count.',
+    title: 'More connectors',
+    body: 'One family at a time, each verified before it is marked working. GraphQL is first.',
   },
 
   // --- next ---------------------------------------------------------------
-  {
-    stage: 'next',
-    title: 'The visual canvas',
-    body: 'Drag, wire, inspect. Usable without reading documentation first, and honest about what each node compiles to.',
-  },
-  {
-    stage: 'next',
-    title: 'Headless runner',
-    body: 'The same engine without the interface, so a pipeline built on a laptop runs unchanged from cron, systemd or CI.',
-  },
   {
     stage: 'next',
     title: 'Query editor and results',
@@ -78,12 +100,12 @@ export const ROADMAP: RoadmapItem[] = [
   {
     stage: 'next',
     title: 'Remaining v1 connectors',
-    body: 'MySQL, SQL Server, Snowflake, BigQuery, GCS, Azure Blob, Excel, JSON and generic REST. The catalogue on the integrations page is the target, not a promise of the first release.',
+    body: 'SQL Server, Snowflake, BigQuery, GCS, Azure Blob and Amazon S3 verified against AWS itself. The catalogue on the integrations page is the target, not a promise of the first release.',
   },
   {
     stage: 'next',
-    title: 'Run history and per-node previews',
-    body: 'Row counts, timings, the compiled SQL and the data as it looked at each step. "Which step made the number wrong" should be answerable by looking.',
+    title: 'macOS',
+    body: 'The engine is written to build there; it has not been built or tested there yet.',
   },
 
   // --- later --------------------------------------------------------------
@@ -94,8 +116,8 @@ export const ROADMAP: RoadmapItem[] = [
   },
   {
     stage: 'later',
-    title: 'Pivots, charts and dashboards',
-    body: 'The analysis half of the story. Pipelines have to be trustworthy before anything is built on top of them.',
+    title: 'Charts and dashboards',
+    body: 'The rest of the analysis half of the story (pivots already work). Pipelines have to be trustworthy before anything is built on top of them.',
   },
   {
     stage: 'later',
@@ -110,7 +132,7 @@ export const ROADMAP: RoadmapItem[] = [
   {
     stage: 'later',
     title: 'Team features',
-    body: 'Shared connections, role-based access, audit log. The first thing that will be paid for, and therefore not the first thing built.',
+    body: 'Shared connections and an audit log, and roles beyond the console’s two. The first thing that will be paid for, and therefore not the first thing built.',
   },
   {
     stage: 'later',

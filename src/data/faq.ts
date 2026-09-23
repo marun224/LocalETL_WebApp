@@ -64,7 +64,7 @@ export const FAQ: FaqItem[] = [
   },
   {
     q: 'Is there an open-source alternative to Fivetran or Airbyte?',
-    a: `${BRAND.name} covers similar ground to hosted ELT platforms, with two differences: it runs on your own infrastructure rather than a vendor's, and it does not bill per row or per connector. It also continues past the load step into querying and dashboards, where extraction-only tools hand you off to something else.`,
+    a: `${BRAND.name} covers similar ground to hosted ELT platforms, with two differences: it runs on your own infrastructure rather than a vendor's, and it does not bill per row or per connector. It is also meant to continue past the load step into querying and dashboards, where extraction-only tools hand you off to something else. Pivots and aggregations work today; the query editor and dashboards are planned.`,
     home: true,
   },
   {
@@ -81,12 +81,12 @@ export const FAQ: FaqItem[] = [
   },
   {
     q: 'Does the AI assistant send my data anywhere?',
-    a: `The assistant is designed to run on-device, with no API key and no vendor cloud, so prompts and data stay on your machine. If you would rather use a hosted model, that is an explicit opt-in and the site will say exactly what gets transmitted. The default is local.`,
+    a: `The assistant is planned, not built yet. It is designed to run on-device, with no API key and no vendor cloud, so prompts and data stay on your machine. If you would rather use a hosted model, that is an explicit opt-in and the site will say exactly what gets transmitted. The default is local.`,
     home: true,
   },
   {
     q: 'Which operating systems are supported?',
-    a: `Windows, macOS and Linux, as a desktop application and as a headless runner for servers and CI. The same pipeline definition runs in both, so what you build on a laptop is what runs in production.`,
+    a: `Windows and Linux today, with macOS planned, as a desktop application and as a headless runner for servers and CI. The same pipeline definition runs in both, so what you build on a laptop is what runs in production.`,
   },
   {
     q: 'Can I schedule pipelines and run them unattended?',

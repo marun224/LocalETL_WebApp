@@ -85,11 +85,11 @@ export const SOLUTIONS: Solution[] = [
     answers: [
       {
         title: 'Join across systems yourself',
-        body: 'A database table, a file on your desktop and a SaaS API in one query — without loading any of them into a warehouse first, and without asking anyone.',
+        body: 'A database table, a file on your desktop and a REST API in one query — without loading any of them into a warehouse first, and without asking anyone.',
       },
       {
-        title: 'Ask in plain English, then check it',
-        body: 'Describe what you want, read the SQL it wrote, fix it if it misunderstood. You stay responsible for the number, which is the part that matters when someone asks where it came from.',
+        title: 'Ask in plain English, then check it (planned)',
+        body: 'Not built yet. The design: describe what you want, read the SQL it wrote, fix it if it misunderstood. You stay responsible for the number, which is the part that matters when someone asks where it came from.',
       },
       {
         title: 'Datasets a spreadsheet cannot open',
@@ -104,9 +104,9 @@ export const SOLUTIONS: Solution[] = [
       title: 'Month-end, without the ticket',
       steps: [
         'Connect the finance CSV, the orders database and the payments API.',
-        'Ask for revenue by region and channel; read the generated SQL.',
-        'Notice refunds are double-counted. Edit that node directly.',
-        'Pivot, chart, and export the reconciliation.',
+        'Join them and aggregate revenue by region and channel; read the compiled SQL.',
+        'Notice refunds are double-counted. Swap that step for a SQL node of your own.',
+        'Pivot and export the reconciliation. (Asking in plain English and charting it are planned.)',
         'Save it. Next month it reruns against fresh data.',
       ],
     },

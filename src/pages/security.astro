@@ -63,7 +63,7 @@ import { BRAND } from '../config/brand';
               ['Pipeline execution', 'no', 'Runs in-process. Rows are read, transformed and written entirely on your hardware.'],
               ['Schema browsing', 'no', 'Table and column metadata is read from your source and held locally.'],
               ['Query results', 'no', 'Materialised to your disk or memory. Never uploaded.'],
-              ['On-device AI assistant', 'no', 'The model runs in-process. Prompts, schema and data stay local.'],
+              ['On-device AI assistant (planned)', 'no', 'Not built yet. The design: the model runs in-process, and prompts, schema and data stay local.'],
               ['Hosted AI model (opt-in)', 'conditional', 'Only if you explicitly configure one. Then your prompt and the schema context you approve go to the provider you chose. Off by default.'],
               ['Crash reports', 'no', 'Written to a local file. Sending one is a deliberate act by you.'],
               ['Update check', 'conditional', 'Off by default. If enabled, requests a version number and sends nothing but the request itself.'],
@@ -136,8 +136,8 @@ import { BRAND } from '../config/brand';
         <ul class="mt-6 space-y-4">
           {
             [
-              ['Stored by your OS keychain', 'Credentials go to the platform secret store — Keychain, Credential Manager, or libsecret — not a config file in plain text.'],
-              ['Or your own secrets manager', 'Reference Vault, AWS Secrets Manager or environment variables instead, so nothing is stored by us at all.'],
+              ['Encrypted in your workspace', 'Secrets are stored AES-256-GCM encrypted in the workspace’s .etl folder and referenced from a pipeline by name, never written into it. The key sits beside them, so treat that folder like an SSH private key. There is deliberately no OS keychain: a workspace copied to a machine with no keychain and no network keeps working.'],
+              ['Or from the environment', 'Reference an environment variable instead, so nothing is stored at all. Vault and cloud secret managers are planned.'],
               ['Never brokered', 'Credentials are never sent to a third party, because no third party is in the connection path.'],
               ['Redacted in logs and errors', 'Connection strings are masked wherever a pipeline reports a failure.'],
             ].map(([t, d]) => (

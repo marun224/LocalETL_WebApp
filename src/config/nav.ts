@@ -15,7 +15,7 @@ export const MAIN_NAV: NavGroup[] = [
   {
     label: 'Product',
     items: [
-      { label: 'Features', href: '/features', description: 'Everything it does, end to end' },
+      { label: 'Features', href: '/features', description: 'What it does today, and what comes next' },
       { label: 'How it works', href: '/how-it-works', description: 'The architecture, in detail' },
       { label: 'Integrations', href: '/integrations', description: 'Sources it connects to' },
       { label: 'Security', href: '/security', description: 'Where your data goes — and doesn’t' },

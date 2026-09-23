@@ -32,7 +32,7 @@ export const PAGES: PageMeta[] = [
     path: '/',
     title: 'Local-first ETL and analytics',
     description:
-      'Connect databases, files and APIs, build pipelines that compile to readable SQL, and ask questions in plain English — all on hardware you already own.',
+      'Connect databases, files and APIs, build pipelines that compile to readable SQL, and run them on hardware you already own. Plain-English questions are on the roadmap.',
     summary:
       'Home page. Establishes the core claim: one engine covering ingest, transform and analyse, executing on the user’s own hardware with no data egress. Presents the trust boundary architecture, a connector overview, and three install paths. Contains no benchmark figures because the product is pre-launch and nothing has been measured.',
     group: 'Product',
@@ -43,7 +43,7 @@ export const PAGES: PageMeta[] = [
     description:
       'Ingest, transform, analyse and operate — the full capability set of a local-first ETL and analytics engine.',
     summary:
-      'Capability list across five groups: ingest (direct connections, read-in-place, incremental loads, CDC), transform (compiles to readable SQL, editable at any node, cross-system joins, validators with reject routing, column lineage), analyse (plain-English queries, SQL editor, pivots, dashboards, exports), run and operate (scheduling, headless runs, run history, per-node previews), and control (no egress, air-gapped operation, on-device AI, team governance).',
+      'Capability list across five groups, each feature marked built or planned: ingest (direct connections, read-in-place, incremental loads; CDC and schema-drift handling planned), transform (compiles to readable SQL, swap in your own SQL, cross-system joins, validators with reject routing, node-level lineage; Python escape hatch planned), analyse (pivots, exports; plain-English queries, SQL editor and dashboards planned), run and operate (scheduling, headless runs and standalone binaries, run history, per-node previews), and control (no egress, air-gapped operation, console roles; on-device AI and team governance planned).',
     group: 'Product',
   },
   {
@@ -59,7 +59,7 @@ export const PAGES: PageMeta[] = [
     path: '/integrations',
     title: 'Integrations',
     description:
-      'Databases, warehouses, object stores, files, streaming brokers and SaaS APIs — connected directly, with no data copied to a vendor cloud.',
+      'Databases, lakehouse tables, object stores, files and REST APIs — connected directly, with no data copied to a vendor cloud. Warehouses, streaming brokers and named SaaS apps are planned.',
     summary:
       'Connector catalogue: 49 connectors across 6 categories (databases, warehouses and lakehouses, files and formats, object storage, streaming, SaaS and APIs), filterable by search and category. 13 are marked working (built in the engine and tested against real data, not yet released) and 36 planned. States plainly that none is released, because the product is pre-launch.',
     group: 'Product',
@@ -70,7 +70,7 @@ export const PAGES: PageMeta[] = [
     description:
       'Exactly what data is transmitted, what is not, and how deployment works inside a restricted network. No certifications are claimed.',
     summary:
-      'Data-handling reference. A feature-by-feature table of what leaves the machine: pipeline execution, schema browsing, query results, on-device AI and telemetry transmit nothing; hosted AI models, update checks and paid-tier licence validation are marked conditional and off by default. Covers credential storage, four deployment topologies including air-gapped, and states explicitly that no certifications (SOC 2, ISO 27001, HIPAA) are held because no audit has been performed.',
+      'Data-handling reference. A feature-by-feature table of what leaves the machine: pipeline execution, schema browsing, query results, on-device AI (planned) and telemetry transmit nothing; hosted AI models, update checks and paid-tier licence validation are marked conditional and off by default. Covers credential storage (encrypted in the workspace), four deployment topologies including air-gapped, and states explicitly that no certifications (SOC 2, ISO 27001, HIPAA) are held because no audit has been performed.',
     group: 'Product',
   },
   {
@@ -79,7 +79,7 @@ export const PAGES: PageMeta[] = [
     description:
       'Desktop app, command-line runner, or let a coding agent set it up. No account, no licence key, no activation call.',
     summary:
-      'Download page. States up front that there is nothing to download yet because the first release has not shipped, and points at the repository instead of collecting an email address. Documents intended platform coverage (Windows, macOS, Linux), checksum verification, system requirements and headless deployment.',
+      'Download page. States up front that there is nothing to download yet because the first release has not shipped, and points at the repository instead of collecting an email address. Documents platform coverage (Windows and Linux built, macOS planned), checksum verification, system requirements and headless deployment.',
     group: 'Product',
   },
   {
@@ -95,9 +95,9 @@ export const PAGES: PageMeta[] = [
     path: '/solutions/analysts',
     title: 'For analysts',
     description:
-      'Join across systems yourself, ask in plain English, check the generated SQL, and work on datasets a spreadsheet cannot open.',
+      'Join across systems yourself, check the compiled SQL, and work on datasets a spreadsheet cannot open. Plain-English questions are planned.',
     summary:
-      'Audience page for analysts. Problem: cross-system joins require an engineer, exports exceed spreadsheet limits, and new questions need new dashboards. Answer: direct cross-system joins, plain-English questions with visible generated SQL, pivots over large datasets, and saving an analysis as a repeatable pipeline. Concedes that governed certified metrics belong in a semantic layer and a BI tool.',
+      'Audience page for analysts. Problem: cross-system joins require an engineer, exports exceed spreadsheet limits, and new questions need new dashboards. Answer: direct cross-system joins, pivots over large datasets, plain-English questions with visible generated SQL (planned), and saving an analysis as a repeatable pipeline. Concedes that governed certified metrics belong in a semantic layer and a BI tool.',
     group: 'Solutions',
   },
   {
@@ -160,7 +160,7 @@ export const PAGES: PageMeta[] = [
     description:
       'What is being built and in what order, with no dates — plus what will deliberately never be built.',
     summary:
-      'Roadmap in three stages: building now (execution engine, pipeline compilation to SQL, first connectors), before the first release (visual canvas, headless runner, query editor, remaining v1 connectors, run history), and after v1 (on-device AI, dashboards, CDC, column lineage, team features, enterprise deployment). Publishes no dates. Includes a "will not be built" section: no hosted cloud version, no usage-based pricing, no telemetry, no distributed cluster mode, no sub-second application serving, no proprietary pipeline format.',
+      'Roadmap in four stages: built but not yet released (execution engine, compilation to SQL, visual canvas, headless runner and standalone binaries, scheduling and web console, run history and previews, 13 working connectors), building now (more connectors, GraphQL first), before the first release (query editor, remaining v1 connectors, macOS), and after v1 (on-device AI, charts and dashboards, CDC, column lineage, team features, enterprise deployment). Publishes no dates. Includes a "will not be built" section: no hosted cloud version, no usage-based pricing, no telemetry, no distributed cluster mode, no sub-second application serving, no proprietary pipeline format.',
     group: 'Company',
   },
   {

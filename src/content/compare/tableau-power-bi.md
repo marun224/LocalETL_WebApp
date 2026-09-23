@@ -15,13 +15,13 @@ table:
     us: Full ETL in the same engine
   - dimension: Cross-source joins
     them: Via a prepared model or a live warehouse connection
-    us: Direct, across databases, files and APIs
+    us: Direct, across databases, files and REST APIs
   - dimension: Where queries run
     them: Your warehouse, or an extract on their service
     us: Your machine
   - dimension: Governance
     them: Mature — certified datasets, row-level security, lineage
-    us: Basic — RBAC and audit log on paid tiers
+    us: Basic — two roles in the web console; audit log planned
   - dimension: Ecosystem
     them: Enormous — consultants, training, templates
     us: None yet

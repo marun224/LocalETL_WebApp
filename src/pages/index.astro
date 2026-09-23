@@ -31,7 +31,7 @@ const softwareSchema = {
   '@type': 'SoftwareApplication',
   name: BRAND.name,
   applicationCategory: 'DeveloperApplication',
-  operatingSystem: 'Windows, macOS, Linux',
+  operatingSystem: 'Windows, Linux',
   description: BRAND.description,
 };
 
@@ -41,14 +41,14 @@ const solutions = [
     icon: 'git-branch',
     title: 'Data engineers',
     body: 'Pipelines that compile to SQL you can read, diff and review. Run them headless from the tooling you already have.',
-    points: ['Readable compiled SQL', 'Headless runner', 'Column-level lineage'],
+    points: ['Readable compiled SQL', 'Headless runner', 'Run history per node'],
   },
   {
     href: '/solutions/analysts',
     icon: 'bar-chart-3',
     title: 'Analysts',
-    body: 'Join across systems without filing a ticket. Ask in plain English, check the SQL, then pivot and chart the result.',
-    points: ['Cross-system joins', 'Plain-English queries', 'Pivots and dashboards'],
+    body: 'Join across systems without filing a ticket, then pivot and aggregate the result. Plain-English questions and charts are on the roadmap.',
+    points: ['Cross-system joins', 'Pivots and aggregations', 'SQL you can read at every step'],
   },
   {
     href: '/solutions/enterprise',
@@ -69,7 +69,7 @@ const solutions = [
       <SectionHeading
         eyebrow="Act one — ingest"
         title="Connect what you already have"
-        lede="Databases, warehouses, object stores, files and APIs. Read them where they live, in place, without a staging copy."
+        lede="Databases, lakehouse tables, object stores, files and APIs. Read them where they live, in place, without a staging copy."
       />
       <Badge tone="primary">
         <Icon name="plug" size={13} />
@@ -97,7 +97,7 @@ const solutions = [
             [
               {
                 t: 'Never a black box',
-                d: 'Every node shows its compiled SQL. If you disagree with it, edit it — the canvas is a convenience, not a cage.',
+                d: 'Every node shows its compiled SQL. If you disagree with it, swap in a SQL node of your own — the canvas is a convenience, not a cage.',
               },
               {
                 t: 'Reviewable like code',
@@ -141,7 +141,11 @@ const solutions = [
   <!-- ============ Act III — Analyze ============ -->
   <Section id="analyze">
     <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-      <ProductFrame label="ask" class="order-last lg:order-first">
+      <ProductFrame
+        label="ask"
+        class="order-last lg:order-first"
+        caption="Illustrative, not a screenshot. Plain-English questions and charts are planned, not built."
+      >
         <QueryToChart />
       </ProductFrame>
 
@@ -149,29 +153,42 @@ const solutions = [
         <SectionHeading
           eyebrow="Act three — analyse"
           title="Ask the question. Read the query. Keep the answer."
-          lede="This is where extraction-only tools hand you off to something else. Here the pipeline and the analysis are the same product."
+          lede="This is where extraction-only tools hand you off to something else. The aim is for the pipeline and the analysis to be the same product. Part of this is built; the rest is marked."
         />
 
         <ul class="mt-8 space-y-4">
           {
             [
               {
+                t: 'Joins across systems',
+                d: 'A Postgres table, a Parquet file and a REST API in one query, without loading any of it into a warehouse first.',
+              },
+              {
+                t: 'Pivots and aggregations',
+                d: 'The spreadsheet work analysts actually do, over datasets a spreadsheet cannot open.',
+              },
+              {
                 t: 'Plain English, with the receipts',
                 d: 'Ask in words, get SQL back, and see it before it runs. The generated query is the feature, not a hidden step.',
+                planned: true,
               },
               {
-                t: 'Joins across systems',
-                d: 'A Postgres table, a Parquet file and a SaaS API in one query, without loading any of it into a warehouse first.',
-              },
-              {
-                t: 'Pivots, charts, dashboards',
-                d: 'The spreadsheet work analysts actually do, over datasets a spreadsheet cannot open.',
+                t: 'Charts and dashboards',
+                d: 'Build a view on the result and refresh it with the pipeline.',
+                planned: true,
               },
             ].map((f) => (
               <li class="flex gap-3.5">
-                <Icon name="check" size={18} class="mt-0.5 shrink-0 text-primary" />
+                {f.planned ? (
+                  <Icon name="circle-dashed" size={18} class="mt-0.5 shrink-0 text-faint" />
+                ) : (
+                  <Icon name="check" size={18} class="mt-0.5 shrink-0 text-primary" />
+                )}
                 <div>
-                  <p class="font-medium text-ink">{f.t}</p>
+                  <p class="flex flex-wrap items-center gap-2 font-medium text-ink">
+                    {f.t}
+                    {f.planned && <Badge>Planned</Badge>}
+                  </p>
                   <p class="mt-1 text-sm leading-relaxed text-muted">{f.d}</p>
                 </div>
               </li>
@@ -265,9 +282,9 @@ const solutions = [
     <div class="grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
       <div>
         <SectionHeading
-          eyebrow="On-device AI"
+          eyebrow="On-device AI · planned"
           title="An assistant that does not need the internet"
-          lede="The model runs in-process on your machine. No API key, no vendor account, no prompt leaving the building."
+          lede="Planned, not built yet. The design: the model runs in-process on your machine. No API key, no vendor account, no prompt leaving the building."
         />
         <p class="mt-6 leading-relaxed text-muted">
           An assistant that reads your schema is an assistant that has seen your data. That is
@@ -275,8 +292,8 @@ const solutions = [
           otherwise the whole argument collapses at the last step.
         </p>
         <p class="mt-4 leading-relaxed text-muted">
-          If you would rather use a hosted model, that stays available as an explicit opt-in, and
-          the security page states precisely what would be transmitted.
+          If you would rather use a hosted model, that will be an explicit opt-in, and the
+          security page states precisely what would be transmitted.
         </p>
         <Button href="/security" variant="secondary" class="mt-7">
           Read the data-handling detail
@@ -284,7 +301,10 @@ const solutions = [
         </Button>
       </div>
 
-      <ProductFrame label="assistant · local">
+      <ProductFrame
+        label="assistant · local"
+        caption="Illustrative, not a screenshot. The assistant is planned, not built."
+      >
         <div class="space-y-3">
           <div class="flex justify-end">
             <p class="max-w-[85%] rounded-card rounded-br-sm bg-product-accent/15 px-3.5 py-2.5 text-sm text-product-fg">

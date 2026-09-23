@@ -15,13 +15,13 @@ table:
     us: A process you invoke
   - dimension: Connectors
     them: 550+, large community catalogue
-    us: 46 planned, none shipping yet
+    us: 49 in scope, 13 working, none released yet
   - dimension: Transformation
     them: EL only — pair with dbt
     us: Built in, compiles to readable SQL
   - dimension: Analysis
     them: Not included
-    us: Built in
+    us: Pivots and aggregations built in; query editor and dashboards planned
   - dimension: Warehouse required
     them: Effectively yes, as the destination
     us: No
@@ -80,7 +80,7 @@ three to get one.
 ## Connectors: the honest gap
 
 Airbyte has 550+ connectors and a connector development kit with real community
-adoption. We have 46 planned and zero shipping.
+adoption. We have 49 in scope, 13 of them working in the engine, and zero released.
 
 That is not a gap we can argue away, and if connector breadth is your binding
 constraint, the comparison ends there.

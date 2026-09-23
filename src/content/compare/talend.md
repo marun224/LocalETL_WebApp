@@ -9,7 +9,7 @@ table:
     us: Pre-launch, nothing shipped
   - dimension: Generated output
     them: Java code
-    us: Readable, editable SQL
+    us: Readable SQL, replaceable per node
   - dimension: Reviewability
     them: Regenerated packages do not diff usefully
     us: Pipelines are text files
