@@ -1,41 +1,33 @@
 # Resume here
 
-**Paused:** 2026-09-21
-**State:** All 8 phases complete. The site is build-complete and verified.
-Nothing is half-finished — work stopped at a clean boundary.
+**Paused:** 2026-09-22 (notes re-checked 2026-09-23)
+**State:** All 8 phases complete, plus a round of deploy-prep fixes on
+2026-09-22. Nothing is half-finished — work stopped at a clean boundary.
 
 ---
 
 ## ⚠️ Read this first
 
 **Everything is pushed.** Local `main` and `origin/main` are in sync on
-`https://github.com/marun224/LocalETL_WebApp.git`.
-
-An earlier version of this section warned that two commits were unpushed. That
-was accurate when written and is now stale — they went up. Verify any time
-with:
+`https://github.com/marun224/LocalETL_WebApp.git` (checked 2026-09-23 after a
+fetch). Verify any time with:
 
 ```bash
 git log --oneline origin/main..main    # empty output = nothing to push
 ```
 
+> **Folder vs. repo name.** The local folder is
+> `E:\workspace_09212026\ETL_Local_WebApp`. The GitHub repo is still named
+> `LocalETL_WebApp`. They are not the same string — don't "fix" one to match
+> the other by accident.
+
 ---
 
 ## Restarting the environment
 
-Node was installed during this work but **Windows PowerShell does not pick it
-up automatically** in a fresh shell spawned by tooling. Every command below
-assumes this prefix:
-
 ```powershell
-$env:Path += ";$env:ProgramFiles\nodejs"
+cd E:\workspace_09212026\ETL_Local_WebApp
 $env:ASTRO_TELEMETRY_DISABLED = "1"
-```
-
-Then:
-
-```powershell
-cd E:\workspace_09212026\LocalETL_WebApp
 npm install        # node_modules is present, but re-run after any gap
 npm run dev        # http://localhost:4321
 ```
@@ -43,8 +35,11 @@ npm run dev        # http://localhost:4321
 Installed: Node 24.19.0, npm 11.17.0, git 2.55.0. `node_modules`, `dist`,
 `.astro` and `.screenshots` are all present locally and all git-ignored.
 
-> **The Bash tool is broken in this environment** — no coreutils on PATH
-> (`mkdir`, `curl`, `head`, `wc` all missing). Use the PowerShell tool.
+As of 2026-09-23, `node` and `npm` resolve on PATH in both PowerShell and
+Git Bash, and the Bash tool works (coreutils included). Earlier in this work
+neither was true. If `node` is not found in a fresh shell again, add
+`$env:Path += ";$env:ProgramFiles\nodejs"` first. If Bash loses its
+coreutils again, use the PowerShell tool.
 
 ---
 
@@ -53,7 +48,8 @@ Installed: Node 24.19.0, npm 11.17.0, git 2.55.0. `node_modules`, `dist`,
 | | |
 | --- | --- |
 | Phases | **8 of 8 complete** (Phase 8 partial — see below) |
-| Commits | 9, on `main` |
+| Commits | 16, on `main` (last: `c469d59`, 2026-09-22) |
+| Hosting | **Cloudflare Pages** chosen; a first deploy went live 2026-09-22 (URL not recorded here) |
 | Routes | **45** — 32 HTML + 10 Markdown mirrors + RSS + 2 sitemaps (plus `llms.txt`, `llms-full.txt`, `robots.txt`) |
 | Lighthouse | **100 / 100 / 100 / 100** |
 | WCAG 2.2 AA | **0 violations** across 58 page-loads |
@@ -79,7 +75,32 @@ npm run check:perf
 npm run check:browsers
 ```
 
-All eight passed at the moment of pausing.
+All eight passed on 2026-09-21. The 2026-09-22 commits (build-time
+`SITE_URL`/`NOINDEX` switches, `_headers` location fix) do not record a full
+re-run of all eight — do one before the next deploy.
+
+---
+
+## What changed on 2026-09-22
+
+| Commit | Change |
+| --- | --- |
+| `09ea337` | Q1 direction settled: **staying Headrace**. Clearance still open, so the site keeps its provisional hedging |
+| `c78aef7` | `SITE_URL` env var overrides the canonical origin; `NOINDEX=1` suppresses indexing site-wide. Defaults unchanged |
+| `e6fa69a` | GitHub Pages deploy job is opt-in (repo variable `ENABLE_GITHUB_PAGES`). Turning it on also needs an Astro `base` and a link refactor |
+| `c469d59` | `gen-headers.mjs` writes `_headers` into the directory the host actually serves (`dist/client` under the Cloudflare adapter) |
+
+### ⚠️ Open from the Cloudflare deploy
+
+- The first deploy went live with **no security headers** (no CSP, HSTS or
+  X-Frame-Options). `c469d59` fixes the cause, but the live site needs a
+  **rebuild and redeploy** before the fix takes effect. Nothing here records
+  that this has happened. Check the response headers on the live URL.
+- `npx wrangler deploy` ran `astro add cloudflare` on the build machine, which
+  installed a server adapter that isn't declared in the repo. Either declare
+  it in the repo or stop the deploy command from adding it.
+- For a preview deploy, set `SITE_URL` to the preview's own address and
+  `NOINDEX=1` in the Cloudflare build environment.
 
 ---
 
@@ -107,7 +128,7 @@ None of these are engineering. They are yours to make.
 
 | | Question | Current state | How to apply |
 | --- | --- | --- | --- |
-| **Q1** | **Brand name** | Built as **Headrace** / `headrace.ai` | `npm run rebrand -- --name X --domain x.ai --dry` then without `--dry` |
+| **Q1** | **Brand name** | **Direction settled 2026-09-22: staying Headrace.** Still blocked on a registrar check + trademark clearance | To change anyway: `npm run rebrand -- --name X --domain x.ai --dry`, then without `--dry` |
 | **Q2** | Pricing for Pro & Team | Renders "Not set" | Edit `src/data/pricing.ts`: set `price`, drop `priceUnset` |
 | **Q3** | GitHub org/repo URL | `github.com/headrace/headrace` placeholder | `src/config/site.js` |
 | **Q4** | Contact email domain | `hello@ / sales@ / security@ headrace.ai` | `src/config/site.js` |
@@ -116,9 +137,11 @@ None of these are engineering. They are yours to make.
 ### ⚠️ Before buying the domain
 
 `headrace.ai` was verified available on **2026-09-21** by RDAP. Also available:
-`quernstone.ai`, `tidemill.ai`. Before purchase:
+`quernstone.ai`, `tidemill.ai`. A re-check on 2026-09-22 was **inconclusive**:
+every RDAP query returned 403, controls included (see
+[RESEARCH_COMPETITIVE.md](RESEARCH_COMPETITIVE.md)). Before purchase:
 
-1. **Re-verify at a registrar** — that check is point-in-time and is now stale.
+1. **Re-verify at a registrar** — the only good check is two days old, and RDAP is now blocked.
 2. **Check `.ai` premium pricing** — not visible over RDAP.
 3. **Trademark clearance by counsel — none has been done.** "Headrace" has
    existing unrelated commercial use in recruiting.
@@ -130,15 +153,20 @@ None of these are engineering. They are yours to make.
 
 In rough order of value:
 
-1. **Answer Q1** and run `npm run rebrand`. Everything else gets cheaper after
-   the name is settled, and more content accumulates against the wrong name
-   every day it is not.
-2. **Push Phases 7–8** once you are happy with them.
-3. **Answer Q2–Q5**, then `npm run check:claims` should report 2 placeholders
-   instead of 3 (the third lives in `/styleguide`, which is `noindex`).
-4. **Pick a deploy target** and do a real deploy. Configs exist for Netlify,
-   Vercel, Cloudflare Pages, GitHub Pages and Docker/nginx. Note: **GitHub
-   Pages cannot serve custom headers**, so the CSP will not apply there.
+1. **Fix the live Cloudflare deploy.** Rebuild, redeploy, and confirm the CSP
+   and other security headers are actually served. Settle the build-time adapter
+   (see *Open from the Cloudflare deploy* above).
+2. **Close out Q1.** The direction is settled (Headrace), so what's left is a
+   registrar check and trademark clearance. Only run `npm run rebrand` if that
+   clearance fails.
+3. **Answer Q2–Q5**, then `npm run check:claims` should report 1 placeholder
+   instead of 3 (the one left lives in `/styleguide`, which is `noindex`).
+4. **Bring the site in line with the product.** The engine in
+   `E:\workspace_09212026\ETL_Local_Tool` has moved on since the copy was
+   written (engine, CLI, scheduler, web console). Connectors are all still
+   `planned` and the quickstart says "Commands here do not work yet". Audit
+   what really ships before flipping anything to `available`, and log each
+   change in [CLAIMS.md](CLAIMS.md) first.
 5. **Set `SITE.preLaunch = false`** on launch day. One boolean in
    `src/config/site.js` removes every "not shipped yet" disclosure sitewide.
 
