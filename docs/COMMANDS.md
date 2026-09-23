@@ -474,3 +474,48 @@ node scripts/check-browsers.mjs  # chromium + firefox + webkit
 | Lighthouse on Windows | Exits non-zero after a successful run | Parse the JSON report; ignore the exit code |
 | Contrast maths against white | The token may actually sit on a tinted wash | Compute against the real rendered backdrop |
 | Long here-strings in PowerShell | Safety hooks may match text inside them | Write the content to a file, append with node |
+
+---
+
+## 2026-09-23 — Site ↔ product audit (read-only; nothing in either repo changed)
+
+Findings and open questions: [QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md).
+
+```powershell
+# What the engine registers (54 components)
+E:\workspace_09212026\ETL_Local_Tool\target\debug\etl.exe components
+E:\workspace_09212026\ETL_Local_Tool\target\debug\etl.exe --help
+E:\workspace_09212026\ETL_Local_Tool\target\debug\etl.exe run --help
+
+# Sandbox proof for JSONL (both ways) and the Parquet source: pipelines and data in
+# Claude's scratchpad, --workspace pointed there so no run history lands in the repo.
+#   a: csv -> jsonl   b: jsonl -> parquet   c: parquet -> csv   => 12/12 rows, 0 differing
+$etl = "E:\workspace_09212026\ETL_Local_Tool\target\debug\etl.exe"
+$db  = "E:\workspace_09212026\ETL_Local_Tool\tools\duckdb\duckdb.exe"
+& $etl run "$S\a_csv_to_jsonl.json"     --workspace $S --duckdb $db
+& $etl run "$S\b_jsonl_to_parquet.json" --workspace $S --duckdb $db
+& $etl run "$S\c_parquet_to_csv.json"   --workspace $S --duckdb $db
+
+# Placeholder count (3: pricing.pro, pricing.team, demo.placeholder)
+npm run -s check:claims
+```
+
+Code and test coverage were read with `grep`/`sed` over `crates/`, `apps/desktop/src`,
+`frontend/src` and `crates/duckdb-engine/tests/end_to_end.rs`.
+
+## 2026-09-23 — Site/product sync: re-audit after the Tool's Phase 10a–10c
+
+Read-only, plus one doc rewritten. No site source changed.
+
+```powershell
+git status -sb
+Get-ChildItem src -Recurse -File -Include *.ts,*.js,*.json,*.mjs   # where claims live
+Get-Content src\data\connectors.ts                                 # 46 entries, all planned
+Get-Content docs\CLAIMS.md
+Select-String src\pages\features.astro, src\pages\how-it-works.astro -Pattern ...   # feature claims
+```
+
+Edited: `docs/QUESTIONS_site_product_sync.md` -- re-audited against 58 components and Phase 10c's
+verification (12 site entries now verified, 1 with a caveat, 33 not built); question 2 of the
+first audit dropped as answered by 10c; four new questions (S3 vs AWS, XML and REST/GraphQL,
+docs pages, TSV/MariaDB). Eight questions in all, awaiting answers.

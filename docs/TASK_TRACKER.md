@@ -1,9 +1,16 @@
 # Task Tracker
 
 **Project:** Local-first ETL & analytics marketing site (working brand: **Headrace**)
-**Last updated:** 2026-09-21
+**Last updated:** 2026-09-23
 **Status:** ⏸️ **PAUSED at a clean boundary.** All 8 phases complete; v1 is
 build-complete and verified. Resume instructions: **[RESUME_HERE.md](RESUME_HERE.md)**
+
+> ⏸️ **Paused 2026-09-23 by the user, at the start of the site ↔ product sync.** The site was
+> audited against the engine that morning, then **re-audited the same afternoon** after the
+> engine's Phases 10a–10c. **8 questions await answers** in
+> **[QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md)**, each with options and a
+> recommendation. No plan and no site changes yet. On resume: answers, then
+> `PLAN_site_product_sync.md` for approval, then build.
 
 > ✅ **Everything is pushed.** Local `main` and `origin/main` are in sync.
 > (An earlier note here warned of two unpushed commits; that was true when
