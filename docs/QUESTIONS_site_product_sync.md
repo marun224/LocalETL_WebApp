@@ -1,10 +1,10 @@
 # Site ↔ product sync: audit and open questions
 
-**Status:** ❓ Waiting on answers. No site changes made yet.
+**Status:** ✅ Answered 2026-09-23, all as recommended. Plan: [PLAN_site_product_sync.md](PLAN_site_product_sync.md), awaiting approval. No site changes made yet.
 **Audited:** 2026-09-23, first against `E:\workspace_09212026\ETL_Local_Tool` at `ad7fc51`
 (Phase 9), then **re-audited the same day after Phases 10a–10c** (uncommitted there at the
 time): 58 components, and Phase 4's connectors run against real systems.
-**Next step:** answer the questions below, then write `PLAN_site_product_sync.md`.
+**Next step:** approve the plan, then build.
 
 ---
 
@@ -19,11 +19,11 @@ The site's `available` tells a reader they can use it today. Nobody can yet.
 - (c) Mark the verified connectors `available` now.
 
 Recommended: **(b)**. Honest, and it doubles as a progress bar.
-Answer:
+Answer (2026-09-23): **(b) a third status, "working, not yet released"**. As recommended.
 
 **Q2. Change Delta Lake and Iceberg from read + write to read only on the site?**
 The engine only reads them. Recommended: **yes**.
-Answer:
+Answer (2026-09-23): **yes, read only**. As recommended.
 
 **Q3. Amazon S3 was verified against MinIO, an S3-compatible server, not against AWS itself.**
 - (a) Give Amazon S3 the same status as "MinIO / S3-compatible".
@@ -31,7 +31,7 @@ Answer:
   against a real AWS bucket, which needs AWS credentials only you have.
 
 Recommended: **(b)**. Same protocol, but the site's rule is no claim without a check.
-Answer:
+Answer (2026-09-23): **(b) MinIO / S3-compatible only; Amazon S3 stays planned until run against AWS**. As recommended.
 
 **Q4. Add what the engine has and the site does not list?**
 XML (read and write) is built and tested, and not on the site. "REST / GraphQL" is half built:
@@ -40,7 +40,7 @@ REST is, GraphQL is not.
 - (b) Leave the catalogue's entries as they are.
 
 Recommended: **(a)**.
-Answer:
+Answer (2026-09-23): **(a) add XML; split into "REST APIs" (built) and "GraphQL" (planned)**. As recommended.
 
 **Q5. The feature claims that are partly true or not built: fix them in the same phase as the
 connectors?**
@@ -49,7 +49,7 @@ connectors?**
 - (c) A separate phase.
 
 Recommended: **(a)**. Otherwise the connector list is accurate and the features page isn't.
-Answer:
+Answer (2026-09-23): **(a) same phase: reword the partly true, mark the unbuilt as planned**. As recommended.
 
 **Q6. The docs pages contradict the engine (see the last table). What should happen to them?**
 - (a) Rewrite them to match the engine as it is: JSON pipelines, `etl` commands, secrets in
@@ -57,7 +57,7 @@ Answer:
 - (b) Mark them "draft, will change before release" and rewrite at launch.
 
 Recommended: **(a)**. The engine's own docs and samples are there to copy from.
-Answer:
+Answer (2026-09-23): **(a) rewrite to match the engine as it is**. As recommended.
 
 **Q7. Two catalogue entries are one cheap test away: TSV (the CSV reader with a tab
 delimiter) and MariaDB (DuckDB's MySQL extension claims it).**
@@ -66,12 +66,12 @@ delimiter) and MariaDB (DuckDB's MySQL extension claims it).**
   beside the MySQL one.
 
 Recommended: **(a)**, with (b) as a follow-up. Neither blocks the rest.
-Answer:
+Answer (2026-09-23): **(a) leave both planned; verifying them is a later follow-up**. As recommended.
 
 **Q8. Where do the plan and audit live?**
 Plan in `docs/PLAN_site_product_sync.md` (this repo), audit recorded in `docs/CLAIMS.md`.
 Recommended: **yes**.
-Answer:
+Answer (2026-09-23): **yes**. As recommended.
 
 *Dropped from the first audit:* "verify the five unverified connectors first?" The Tool repo's
 Phase 10c did exactly that on 2026-09-23. See below.

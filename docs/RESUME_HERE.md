@@ -8,11 +8,12 @@
 
 ## ⚠️ Read this first
 
-**Next work is waiting on answers.** On 2026-09-23 the site's claims were audited against
-the engine, and re-audited the same afternoon after the engine's Phases 10a–10c verified
-Phase 4's connectors against real systems. Answer the **8 questions** in
-[QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md), then write
-`PLAN_site_product_sync.md` for approval, then build. Paused there by the user.
+**Next work is waiting on plan approval.** On 2026-09-23 the site's claims were audited
+against the engine, and re-audited the same afternoon after the engine's Phases 10a–10c
+verified Phase 4's connectors against real systems. The user answered all **8 questions** in
+[QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md) as recommended, and
+[PLAN_site_product_sync.md](PLAN_site_product_sync.md) (phases S1–S4, two small questions at
+the end) awaits approval. Nothing in `src/` has changed yet.
 
 **The audit's headline, so it can be read without the file:** of the 46 connectors the site
 lists (all `planned`), **12 are now built and verified**, Amazon S3 works but was checked only
@@ -20,9 +21,9 @@ against MinIO, and 33 are not built. XML is built and not on the site at all. Se
 claims are only partly true, six features are not built, and three docs pages contradict the
 engine (`pipeline.yaml`, the OS secret store, `serve --schedule`).
 
-**One dependency on the other repo:** the engine work the audit counts (Phases 10a–10c in
-`E:\workspace_09212026\ETL_Local_Tool`) was **uncommitted** when this paused. Check it has
-been committed before the site says anything is available.
+**The engine work the audit counts** (Phases 10a–10c in `E:\workspace_09212026\ETL_Local_Tool`)
+was committed and pushed on 2026-09-23 as `3237f6c`, with a CI fix in `9694099`. Check that
+repo's CI is green before the site calls anything working.
 
 **Everything is pushed.** Local `main` and `origin/main` are in sync on
 `https://github.com/marun224/LocalETL_WebApp.git` (checked 2026-09-23 after a

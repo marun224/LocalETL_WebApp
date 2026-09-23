@@ -5,12 +5,12 @@
 **Status:** ⏸️ **PAUSED at a clean boundary.** All 8 phases complete; v1 is
 build-complete and verified. Resume instructions: **[RESUME_HERE.md](RESUME_HERE.md)**
 
-> ⏸️ **Paused 2026-09-23 by the user, at the start of the site ↔ product sync.** The site was
-> audited against the engine that morning, then **re-audited the same afternoon** after the
-> engine's Phases 10a–10c. **8 questions await answers** in
-> **[QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md)**, each with options and a
-> recommendation. No plan and no site changes yet. On resume: answers, then
-> `PLAN_site_product_sync.md` for approval, then build.
+> ⏸️ **Site ↔ product sync: plan awaiting approval (2026-09-23).** The site was audited
+> against the engine, then re-audited after the engine's Phases 10a–10c. The user answered all
+> 8 questions in [QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md) as
+> recommended. **[PLAN_site_product_sync.md](PLAN_site_product_sync.md)** (S1 connectors, S2
+> feature claims and roadmap, S3 docs, S4 register and checks) is written and waits for
+> "start". No site changes yet.
 
 > ✅ **Everything is pushed.** Local `main` and `origin/main` are in sync.
 > (An earlier note here warned of two unpushed commits; that was true when

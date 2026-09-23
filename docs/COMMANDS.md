@@ -519,3 +519,27 @@ Edited: `docs/QUESTIONS_site_product_sync.md` -- re-audited against 58 component
 verification (12 site entries now verified, 1 with a caveat, 33 not built); question 2 of the
 first audit dropped as answered by 10c; four new questions (S3 vs AWS, XML and REST/GraphQL,
 docs pages, TSV/MariaDB). Eight questions in all, awaiting answers.
+
+## 2026-09-23 — Answers recorded; sync plan written
+
+Read-only in `src/`. Docs written: the answers in `QUESTIONS_site_product_sync.md`, and
+`PLAN_site_product_sync.md`.
+
+```bash
+# Where status and claims live
+sed -n 1,200p src/data/connectors.ts
+grep -n "status\|available\|planned" src/components/sections/ConnectorGrid.astro src/pages/integrations.astro src/pages/llms*.ts
+sed -n 1,138p src/pages/features.astro
+sed -n 1,40p src/data/roadmap.ts
+
+# Where each audited claim recurs across the site (feeds the plan's S2 table)
+for p in "macOS" "lineage" "fan out" "audit trail" "chart" "on-device" "CDC" "schema drift" \
+         "Python" "SQL editor" "pipeline\.yaml" "secret store|keychain" "serve --"; do
+  grep -rliE "$p" src; done
+
+# The eight answers, written under each "Answer:" line
+awk '/^Answer:$/{...}' docs/QUESTIONS_site_product_sync.md
+
+# What a push runs (verify + audit; GitHub Pages deploy is opt-in)
+grep -nE "^on:|push|ENABLE_GITHUB_PAGES|if:" .github/workflows/deploy.yml
+```
