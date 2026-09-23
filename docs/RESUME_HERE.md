@@ -1,6 +1,6 @@
 # Resume here
 
-**Paused:** 2026-09-22 (notes re-checked 2026-09-23)
+**Paused:** 2026-09-23, after the site ↔ product sync
 **State:** All 8 phases complete, plus a round of deploy-prep fixes on
 2026-09-22. Nothing is half-finished — work stopped at a clean boundary.
 
@@ -8,22 +8,29 @@
 
 ## ⚠️ Read this first
 
-**Next work is waiting on plan approval.** On 2026-09-23 the site's claims were audited
-against the engine, and re-audited the same afternoon after the engine's Phases 10a–10c
-verified Phase 4's connectors against real systems. The user answered all **8 questions** in
-[QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md) as recommended, and
-[PLAN_site_product_sync.md](PLAN_site_product_sync.md) (phases S1–S4, two small questions at
-the end) awaits approval. Nothing in `src/` has changed yet.
+**The site ↔ product sync is done (2026-09-23).** Every product claim on the site was
+checked against the engine and either holds, was reworded, or is marked Planned. Four
+commits, S1–S4, per [PLAN_site_product_sync.md](PLAN_site_product_sync.md); what changed and
+why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engine*.
 
-**The audit's headline, so it can be read without the file:** of the 46 connectors the site
-lists (all `planned`), **12 are now built and verified**, Amazon S3 works but was checked only
-against MinIO, and 33 are not built. XML is built and not on the site at all. Several feature
-claims are only partly true, six features are not built, and three docs pages contradict the
-engine (`pipeline.yaml`, the OS secret store, `serve --schedule`).
+- **Connectors:** a third status, "Working, not yet released". 13 of 49 are working; the
+  rest are planned. Amazon S3, TSV and MariaDB stay planned until tested.
+- **Features:** each is built or marked Planned. Reworded where the site overstated the
+  engine (lineage, parallelism, governance, secrets, run timings).
+- **Docs:** all six rewritten; every command on them was run against the engine first.
+- **The rule going forward:** nothing is marked working without a named engine test.
 
-**The engine work the audit counts** (Phases 10a–10c in `E:\workspace_09212026\ETL_Local_Tool`)
-was committed and pushed on 2026-09-23 as `3237f6c`, with a CI fix in `9694099`. Check that
-repo's CI is green before the site calls anything working.
+**Next, in order:**
+
+1. **Redeploy the live site.** The Cloudflare deploy predates the sync *and* the
+   security-headers fix (`c469d59`). Check the response headers after.
+2. The deploy-prep items below (the undeclared Cloudflare adapter; a full check run is
+   done as of 2026-09-23 except Lighthouse).
+3. When the engine adds a connector or feature: mark it `working` only with its test named in
+   `CLAIMS.md`. TSV and MariaDB are an hour's work in the engine repo.
+
+**The engine the site describes** is `E:\workspace_09212026\ETL_Local_Tool` at `e07dc6f`
+(Phases 0–10c), green in CI on run 35862990581.
 
 **Everything is pushed.** Local `main` and `origin/main` are in sync on
 `https://github.com/marun224/LocalETL_WebApp.git` (checked 2026-09-23 after a
@@ -65,14 +72,14 @@ coreutils again, use the PowerShell tool.
 | | |
 | --- | --- |
 | Phases | **8 of 8 complete** (Phase 8 partial — see below) |
-| Commits | 16, on `main` (last: `c469d59`, 2026-09-22) |
+| Commits | on `main`; the latest are the sync's S1–S4 (2026-09-23) |
 | Hosting | **Cloudflare Pages** chosen; a first deploy went live 2026-09-22 (URL not recorded here) |
 | Routes | **45** — 32 HTML + 10 Markdown mirrors + RSS + 2 sitemaps (plus `llms.txt`, `llms-full.txt`, `robots.txt`) |
-| Lighthouse | **100 / 100 / 100 / 100** |
-| WCAG 2.2 AA | **0 violations** across 58 page-loads |
+| Lighthouse | **100 / 100 / 100 / 100** (2026-09-21; not re-run since) |
+| WCAG 2.2 AA | **0 violations** across 62 page-loads (2026-09-23) |
 | Cross-browser | Chromium, Firefox, WebKit ✅ |
 | Internal links | 1505 checked, **0 broken** |
-| Shipped weight | 41.7 kB CSS, 2.4 kB JS |
+| Shipped weight | 42.9 kB CSS, 2.4 kB JS (2026-09-23) |
 | Third-party requests | **0**, enforced at build |
 | Fabricated metrics | **0** |
 | Outstanding placeholders | **3** (2 real: `pricing.pro`, `pricing.team`) |
@@ -92,9 +99,9 @@ npm run check:perf
 npm run check:browsers
 ```
 
-All eight passed on 2026-09-21. The 2026-09-22 commits (build-time
-`SITE_URL`/`NOINDEX` switches, `_headers` location fix) do not record a full
-re-run of all eight — do one before the next deploy.
+All of these passed again on 2026-09-23, after the site ↔ product sync, along
+with `npm run -s check` (0 errors) and `check:icons`. Lighthouse was last run on
+2026-09-21.
 
 ---
 

@@ -1,6 +1,7 @@
 # Plan: site ↔ product sync
 
-**Status:** ✅ Approved 2026-09-23 ("start"). P1: **(a)**. P2: **commit per phase, push once at the end**.
+**Status:** ✅ Done 2026-09-23. Approved with P1 **(a)** and P2 **commit per phase, push once at the end**.
+Commits: S1 `7145190`, S2 `50531a5`, S3 `cabd151`, S4 the commit that adds this line.
 **Inputs:** the audit and the user's answers in
 [QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md) (all 8 as recommended), and the
 engine at `ETL_Local_Tool` commit `9694099` (Phases 0–10c: 58 components).
@@ -99,7 +100,7 @@ The pages' "pre-launch" framing stays: it's still true that nobody can download 
    connector becomes `working` only with a named engine test behind it.
 3. **All eight checks:** build, links, claims, CSP, a11y, perf, browsers (with preview
    running). None of these has had a full re-run since 2026-09-21.
-4. **Tracker, resume notes and command log** updated. Commit and push per phase.
+4. **Tracker, resume notes and command log** updated. Commit per phase; push once at the end (P2).
 
 ---
 

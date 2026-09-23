@@ -631,3 +631,14 @@ etl validate a.json b.json                      # error: takes one file -> docs 
 | Run history keeps rows, rejected, skipped, outcome and total time; per-stage time only where a stage does its own work; no SQL | "Timings per node" and "compiled SQL in history" corrected on features, FAQ, roadmap, installation, deployment |
 | The console's routes: pipelines, lineage, runs, schedules, run (operator) | Deployment describes exactly those |
 | `pip install` on the install card | Replaced with `etl run pipeline.json`; there is no Python package |
+
+## 2026-09-23 — Sync S4: register, checks, hand-off
+
+```bash
+export MSYS_NO_PATHCONV=1                  # preview server already running on :4321
+npm run -s check:claims                    # 3 placeholders (pricing.pro, pricing.team, demo), 0 forbidden phrases
+npm run -s check:csp                       # 6 routes under full headers, no 'unsafe-inline'
+npm run -s check:perf                      # all within budget; CSS 42.9 kB, JS 2.4 kB, LCP 108-204 ms
+npm run -s check:browsers                  # chromium, firefox, webkit
+# CLAIMS.md, TASK_TRACKER.md, RESUME_HERE.md, PLAN_site_product_sync.md edited by script
+```

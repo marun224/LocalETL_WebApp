@@ -5,12 +5,25 @@
 **Status:** ⏸️ **PAUSED at a clean boundary.** All 8 phases complete; v1 is
 build-complete and verified. Resume instructions: **[RESUME_HERE.md](RESUME_HERE.md)**
 
-> ⏸️ **Site ↔ product sync: plan awaiting approval (2026-09-23).** The site was audited
-> against the engine, then re-audited after the engine's Phases 10a–10c. The user answered all
-> 8 questions in [QUESTIONS_site_product_sync.md](QUESTIONS_site_product_sync.md) as
-> recommended. **[PLAN_site_product_sync.md](PLAN_site_product_sync.md)** (S1 connectors, S2
-> feature claims and roadmap, S3 docs, S4 register and checks) is written and waits for
-> "start". No site changes yet.
+> ✅ **Site ↔ product sync done (2026-09-23)**, per
+> [PLAN_site_product_sync.md](PLAN_site_product_sync.md), approved with P1 (a) and "commit per
+> phase, push once at the end":
+>
+> | Phase | Commit | What |
+> | --- | --- | --- |
+> | S1 | `7145190` | Connectors gain a `working` status: 13 working, 36 planned, 49 in all |
+> | S2 | `50531a5` | Unbuilt features marked Planned, partly true ones reworded, roadmap gains "Built, not yet released" |
+> | S3 | `cabd151` | The six docs pages rewritten; every command run against the engine first |
+> | S4 | this commit | `CLAIMS.md` records the audit and the rule; the full check suite re-run |
+>
+> Checks on 2026-09-23: build, `astro check` (0 errors), icons, links, claims (the same 3
+> known placeholders), CSP, a11y (62 page-loads, 0 violations), perf (all within budget),
+> browsers (Chromium, Firefox, WebKit). Lighthouse was not re-run.
+>
+> **Still open, not part of the sync:** the live Cloudflare site predates all of this and
+> still lacks security headers (redeploy needed); the "let an agent do it" install card
+> (`uvx … quickstart`) describes the engine's unstarted Phase 11; verifying TSV and MariaDB
+> (engine repo) and Amazon S3 against real AWS (needs your credentials).
 
 > ✅ **Everything is pushed.** Local `main` and `origin/main` are in sync.
 > (An earlier note here warned of two unpushed commits; that was true when
