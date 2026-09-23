@@ -597,3 +597,37 @@ node scripts/shot-el.mjs / "#analyze" "#local-ai"
 | --- | --- | --- |
 | Bash: `unexpected EOF while looking for matching '` | A heredoc holding Python with mixed quotes | Write the script to a file, run it |
 | `AssertionError: config/pages.ts, 'On-device AI…'` | The text is lower-case "on-device" there. Files before it had already been written | Rerun from `config/pages.ts` on only |
+
+## 2026-09-23 — Sync S3: docs rewritten against the engine
+
+Every command and every output block on the six docs pages was run first, in a throwaway
+workspace in the session scratchpad (`ws/`), against `ETL_Local_Tool` at `e07dc6f`.
+
+```bash
+cd ETL_Local_Tool && cargo build --bin etl      # target/debug/etl.exe was stale (14:19, before 10c):
+                                                # its manifest lacked S3's key_id/endpoint
+etl components --manifest > manifest.json       # property names and help, read with python
+export ETL_DUCKDB_BIN=.../ETL_Local_Tool/tools/duckdb/duckdb.exe
+cd ws
+etl validate pipelines/revenue_by_segment.json  # valid: 7 stage(s), 2 sink(s)
+etl plan     pipelines/revenue_by_segment.json  # the SQL quoted in quickstart and building-a-pipeline
+etl run      pipelines/revenue_by_segment.json  # 12 / 5 / 11 +1 rejected / 1 / 10 / 3 / 3
+etl runs list; etl runs show <id>; etl lineage pipelines/revenue_by_segment.json
+etl secret init; printf '...' | etl secret set pg_password --stdin; etl secret list
+etl plan pipelines/pg_orders.json               # ${SECRET:pg_password} = ********
+PG_PASSWORD=from-env etl plan pipelines/pg_env.json   # ${ENV:...} is NOT masked -> documented
+etl schedule check; etl schedule list           # cron in UTC; watch "when data changes"
+etl build pipelines/revenue_by_segment.json     # 43.7 MB, DuckDB v1.5.5 (windows_amd64)
+./revenue_by_segment.exe                        # runs with ETL_DUCKDB_BIN unset
+etl run pipelines/sql_and_incremental.json      # twice: 12 rows, then 0 ("had nothing new")
+etl state list
+etl run pipelines/unwired.json                  # rejected unwired: counted and dropped, exit 0
+etl validate a.json b.json                      # error: takes one file -> docs loop over files
+```
+
+| Finding | Consequence |
+| --- | --- |
+| `${ENV:NAME}` values print in plans; `${SECRET:name}` values are masked | Said on connecting-a-source and security |
+| Run history keeps rows, rejected, skipped, outcome and total time; per-stage time only where a stage does its own work; no SQL | "Timings per node" and "compiled SQL in history" corrected on features, FAQ, roadmap, installation, deployment |
+| The console's routes: pipelines, lineage, runs, schedules, run (operator) | Deployment describes exactly those |
+| `pip install` on the install card | Replaced with `etl run pipeline.json`; there is no Python package |

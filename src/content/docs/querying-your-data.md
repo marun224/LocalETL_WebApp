@@ -1,19 +1,34 @@
 ---
 title: Querying your data
-description: SQL, plain-English questions, cross-system joins, pivots and dashboards.
+description: Planned — the query editor, plain-English questions and dashboards. What works for analysis today, and where the rest is going.
 section: Analysis
 order: 10
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 
-> **Pre-launch.** Describes intended behaviour.
+> **Planned: this page describes where the product is going.** The query
+> editor, plain-English questions and dashboards below are not built yet. What
+> already works for analysis is listed first, and is covered in
+> [Building a pipeline](/docs/building-a-pipeline).
 
-Most ETL tools stop once the data lands. This is the part that does not.
+Most ETL tools stop once the data lands. The aim is for this one not to.
 
-## SQL
+## What works today
 
-A normal SQL editor with schema autocomplete across every connected source.
-Results stream as they arrive rather than making you wait for the full set.
+- **Cross-system joins.** A Postgres table, a Parquet file and a REST API
+  joined in one pipeline, without loading any of them into a warehouse first.
+- **Your own SQL.** An `xf.sql` node takes any `SELECT`, with upstream nodes in
+  scope by id.
+- **Pivots and aggregations.** `xf.pivot`, `xf.unpivot`, `xf.aggregate` and
+  `xf.window`, over datasets a spreadsheet cannot open.
+- **Per-node previews** in the desktop app, and **exports** to Parquet, CSV,
+  JSON, Excel or XML, a bucket, or back into Postgres, MySQL or SQLite.
+
+## Planned: a SQL editor
+
+A SQL editor with schema autocomplete across every connected source, and
+results that stream as they arrive rather than making you wait for the full
+set:
 
 ```sql
 SELECT region, SUM(revenue) AS revenue
@@ -23,68 +38,37 @@ GROUP BY region
 ORDER BY revenue DESC;
 ```
 
-## Cross-system joins
+Sources would be addressable by name, whatever they physically are — the
+query that would otherwise have been a ticket.
 
-The useful part. Sources are addressable by name, whatever they physically are:
-
-```sql
-SELECT o.order_id, c.region, f.budget
-FROM   postgres.orders o
-JOIN   s3.customers c   USING (customer_id)
-JOIN   csv.finance  f   USING (region)
-```
-
-A database table, a Parquet file in object storage and a spreadsheet from
-finance, in one query, without loading any of them into a warehouse first.
-This is usually the query that would otherwise have been a ticket.
-
-## Asking in plain English
+## Planned: asking in plain English
 
 ```
 Which regions grew revenue most this quarter, and how many orders was that?
 ```
 
-You get SQL back **before anything runs**:
-
-```sql
-SELECT region,
-       SUM(revenue) AS revenue,
-       COUNT(*)      AS orders
-FROM   orders_by_region
-WHERE  quarter = '2026-Q3'
-GROUP BY region ORDER BY revenue DESC;
-```
-
-Read it. Run it, or fix it first.
+The design: you get SQL back **before anything runs**. Read it. Run it, or fix
+it first.
 
 The generated query is deliberately not hidden. If someone asks where a number
 came from — and for anything that matters, someone will — "the AI said so" is
 not an answer. The SQL is.
 
-The assistant runs on your device. Your schema and your prompts do not leave
-the machine. See [Security](/security).
+The assistant is designed to run on your device, so your schema and your
+prompts would not leave the machine. See [Security](/security).
 
-## Pivots
+## Planned: charts and dashboards
 
-Group, aggregate and cross-tabulate over datasets far past what a spreadsheet
-will open, on the whole dataset rather than a sample of it.
+Build a view on a result, pin it to a dashboard, and refresh it with the
+pipeline. Sharing dashboards with a team is planned for the paid tiers.
 
-## Charts and dashboards
+## Order
 
-Build a view, pin it to a dashboard, refresh it on a schedule. Dashboards can
-be shared with your team on the paid tiers; on the free tier they are local to
-your machine.
-
-## Exports
-
-| Format | Use |
-| --- | --- |
-| Parquet | Handing off to another system |
-| CSV | Handing off to a person |
-| Excel | Handing off to finance |
-| Back to a table | Writing results into a warehouse or database |
+These come after the engine and the connectors on the [roadmap](/roadmap), on
+purpose: an assistant or a dashboard on top of an unreliable pipeline is worse
+than none.
 
 ## Next
 
+- [Building a pipeline](/docs/building-a-pipeline) — what works today
 - [Deployment](/docs/deployment)
-- [Building a pipeline](/docs/building-a-pipeline)

@@ -64,7 +64,7 @@ const groups: { id: string; icon: string; label: string; lede: string; features:
     lede: 'What happens after the pipeline is built and you stop watching it.',
     features: [
       ['Scheduled and headless runs', 'Cron, interval or file-watch schedules, and any pipeline built into one standalone binary that fits into systemd, CI or whatever you already operate.'],
-      ['Run history with row counts', 'Every run records per-node status, rows in and out, and timings. "What actually happened" has an answer.'],
+      ['Run history with row counts', 'Every run records its outcome, how long it took, and the rows each stage produced or rejected. "What actually happened" has an answer.'],
       ['Failures report the real error', 'A failed stage shows the compiled SQL it was running and the engine’s own message, not an opaque internal code.'],
       ['Per-node previews', 'See the data as it looked at each step, which is usually where the bug is.'],
       ['Uses every core', 'Each query runs in parallel across your cores without being told to.'],

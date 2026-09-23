@@ -1,16 +1,19 @@
 ---
 title: Connecting a source
-description: How connections work, where credentials are stored, and what is read from your systems.
+description: Databases, lakehouse tables, buckets, files and REST APIs — how each is read, and where credentials live.
 section: Getting started
 order: 30
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 
-> **Pre-launch.** Describes intended behaviour.
+> **Pre-launch.** Not downloadable yet. The sources on this page work in the
+> engine today and are tested against real data or a real server; the
+> [integrations page](/integrations) marks which. Anything not built is said to
+> be.
 
-A source is anything you can read rows from: a database, an object store, a
-file, or an API. They behave the same once connected, which is what makes
-joining across them possible.
+A source is anything you can read rows from: a database, a lakehouse table, a
+bucket, a file, or an API. They behave the same once in a pipeline, which is
+what makes joining across them possible.
 
 ## The connection is yours
 
@@ -24,87 +27,131 @@ ourselves.
 
 ## Where credentials live
 
-In order of preference:
+Never in the pipeline file. Reference them instead:
 
-1. **Your OS secret store** — Keychain, Credential Manager, or libsecret.
-2. **Your own secrets manager** — reference Vault, AWS Secrets Manager or
-   similar, so nothing is stored locally at all.
-3. **Environment variables** — useful for CI, where the secret comes from
-   whatever already manages CI secrets.
+1. **Workspace secrets** — encrypted in the workspace's `.etl/` folder and
+   referenced as `${SECRET:name}`. The right default.
+2. **Environment variables** — referenced as `${ENV:NAME}`. Useful in CI,
+   where something else already manages the secret.
 
-```yaml
-sources:
-  orders:
-    type: postgres
-    host: replica.internal
-    database: shop
-    user: analyst
-    password: ${env:PG_PASSWORD}   # never inline the secret
+```bash
+etl secret init                                  # once per workspace
+etl secret set pg_password --stdin               # the value is read from stdin, not your shell history
+etl secret list                                  # names only, never values
 ```
 
-Credentials are redacted from logs, error messages and compiled SQL previews.
-A failing pipeline should be debuggable without pasting a password into a
-support thread.
+```json
+"connection": "host=replica.internal dbname=shop user=analyst password=${SECRET:pg_password}"
+```
 
-## What is actually read
+A secret reaches the database and nowhere else. `etl plan` shows it as
+`********`, and so do run reports and error messages:
 
-When you connect, Headrace reads **metadata**: table names, column names,
-types. It does not scan your data, sample your rows, or build a profile in the
-background.
+```
+Resolved:
+  ${SECRET:pg_password} = ********
+1. Orders table [src.db.postgres] Source
+     ATTACH 'host=replica.internal dbname=shop user=analyst password=********' AS "orders_db" (TYPE postgres, READ_ONLY);
+```
 
-Data is read when a pipeline runs, and only the columns that pipeline asks for.
+Environment values are **not** masked that way, so keep passwords in secrets.
+Vault and cloud secret managers are planned, not built.
+
+## What is read, and when
+
+Data is read when a pipeline runs or you preview a node. There is no background
+scan, no sampling and no profile built of your data. A database used as a
+source is attached read-only.
 
 ## Databases
 
-Standard connection details. Read replicas are usually the right target for
-analytical work.
+PostgreSQL, MySQL and SQLite, as sources and as sinks. The connection is a
+connection string:
 
-```yaml
-type: postgres          # mysql, sqlserver, oracle, sqlite, ...
-host: replica.internal
-port: 5432
+| Component | `connection` looks like |
+| --- | --- |
+| `src.db.postgres` | `host=replica.internal dbname=shop user=analyst password=${SECRET:pg_password}` |
+| `src.db.mysql` | `host=localhost user=analyst database=shop password=${SECRET:mysql_password}` |
+| `src.db.sqlite` | `data/analytics.db` |
+
+Each also takes `table`, and optionally `schema`. Read replicas are usually the
+right target for analytical work. SQL Server, Oracle and the rest of the
+[catalogue](/integrations) are planned.
+
+## Lakehouse tables
+
+Delta Lake and Iceberg tables are read in place; writing to them is not
+supported.
+
+```json
+{ "componentId": "src.lake.delta",   "properties": { "path": "lake/orders_delta" } }
+{ "componentId": "src.lake.iceberg", "properties": { "path": "lake/orders_iceberg",
+                                                     "version": "00002-4bd88499-6d18-4b24-97e7-54a794ce8675" } }
 ```
+
+For Iceberg, `version` is a metadata file's name without `.metadata.json`, and
+it also reads an earlier snapshot. For a table that was copied or moved from
+where it was written, add `"allow_moved_paths": true`.
 
 ## Object storage
 
-Point at a prefix rather than a file, and partitioned layouts are read as
-partitions:
+S3 and S3-compatible stores, read and written in place. Globs are allowed.
 
-```yaml
-type: s3
-path: s3://warehouse/events/year=*/month=*/*.parquet
+```json
+{ "componentId": "src.cloud.s3",
+  "properties": { "path": "s3://landing/events/*.parquet",
+                  "key_id": "${SECRET:s3_key_id}", "secret": "${SECRET:s3_secret}",
+                  "region": "eu-west-1" } }
 ```
 
-Credentials come from your existing AWS profile, instance role or environment
-by default. There is no separate credential to create.
+For MinIO or another S3-compatible store, add `endpoint` (for example
+`http://localhost:9000`) and `"url_style": "path"`. With no credentials set,
+only public buckets are reachable. This has been tested against MinIO; testing
+against AWS itself is still to do, and Google Cloud Storage and Azure Blob are
+planned.
 
 ## Files
 
-Local files are sources. A CSV on your desktop can be joined to a production
-database table without either of them moving.
+CSV, Parquet, JSON, JSON Lines, Excel and XML, read and written. A file on your
+desktop can be joined to a production database table without either of them
+moving.
 
-```yaml
-type: csv
-path: ~/Desktop/finance-2026-09.csv
+```json
+{ "componentId": "src.file.csv", "properties": { "path": "data/finance-*.csv" } }
+{ "componentId": "src.file.xml", "properties": { "path": "data/orders.xml", "record": "order" } }
 ```
 
-## APIs
+Relative paths resolve from the workspace. CSV detects its delimiter unless
+you set one; XML needs `record`, the element that is one row.
 
-REST and GraphQL endpoints are normalised into rows:
+## REST APIs
 
-```yaml
-type: rest
-url: https://api.example.com/v2/orders
-auth: bearer ${env:API_TOKEN}
-paginate: cursor
+Any JSON API, read and written, with pagination, auth and retries configured
+rather than coded:
+
+```json
+{ "componentId": "src.saas.rest",
+  "properties": {
+    "url": "https://api.example.com/v2/orders",
+    "auth": "bearer", "token": "${SECRET:api_token}",
+    "records": "/data",
+    "pagination": "cursor", "cursor_path": "/next",
+    "columns": { "order_id": "INTEGER", "amount": "DECIMAL(10,2)" }
+  } }
 ```
+
+`pagination` is one of `page`, `offset`, `cursor` or `link`; `auth` one of
+`bearer`, `basic` or `header`. Rate limits (`429`) and server errors are
+retried, honouring `Retry-After`. `max_pages` is a safety cap, and reaching it
+fails the run rather than quietly loading part of the data.
+
+GraphQL, and named connectors for SaaS apps such as Salesforce or Stripe, are
+planned. Until then, the REST source can reach any of them that has a REST API.
 
 ## Schema drift
 
-When a column appears, disappears or changes type upstream, the run surfaces it
-as a decision rather than failing with a type error at 3am. You choose whether
-to add it, ignore it, or fail loudly — and the choice is recorded in the
-pipeline file, so the next person can see what was decided.
+Planned, not built: a column appearing, disappearing or changing type upstream
+surfacing as a decision rather than a failure.
 
 ## Next
 

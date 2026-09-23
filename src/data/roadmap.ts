@@ -76,7 +76,7 @@ export const ROADMAP: RoadmapItem[] = [
   {
     stage: 'built',
     title: 'Run history and per-node previews',
-    body: 'Row counts, timings, the compiled SQL and the data as it looked at each step. "Which step made the number wrong" is answerable by looking.',
+    body: 'Row counts per stage, the compiled SQL for each node, and the data as it looked at each step. "Which step made the number wrong" is answerable by looking.',
   },
   {
     stage: 'built',

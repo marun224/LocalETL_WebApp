@@ -1,81 +1,74 @@
 ---
 title: Installation
-description: Install the desktop application or the headless runner on Windows, macOS or Linux.
+description: What the first release will contain, which platforms it builds on today, and what it writes to your machine.
 section: Getting started
 order: 10
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 
-> **Pre-launch.** Nothing described here is downloadable yet. This page documents
-> the intended install paths so the shape is clear before the first release.
+> **Pre-launch.** Nothing on this page is downloadable yet. It describes what
+> the engine is today, so the shape of the first release is clear before it
+> exists. Packaging and installers are not settled, and are not described here.
 
-Headrace ships in two forms that share one engine:
+Headrace comes in forms that share one engine:
 
-- **The desktop application** — canvas, query editor and dashboards.
-- **The runner** — the same engine with no interface, for servers and CI.
+- **The desktop application** — the canvas, run history and per-node previews.
+  The query editor and dashboards are planned.
+- **The `etl` command** — the same engine with no interface, for servers, CI
+  and scripts.
+- **Standalone binaries** — any pipeline, baked by `etl build` into one
+  executable that runs on a machine with nothing else installed.
 
-A pipeline built in one runs unchanged in the other. That is the point of shipping
-them together rather than as separate products.
+A pipeline built in one runs unchanged in the others. That is the point of
+shipping them together rather than as separate products.
 
-## Desktop
+## Platforms
 
-| Platform | Package | Notes |
-| --- | --- | --- |
-| macOS | `.dmg` | Apple silicon and Intel, macOS 12+ |
-| Windows | `.msi` | x64 and ARM64, Windows 10+ |
-| Linux | `.deb`, `.rpm`, `.AppImage` | x64 and ARM64 |
+| Platform | Today |
+| --- | --- |
+| Windows x64 | Builds, and the full test suite passes |
+| Linux x64 | Builds, and the test suite passes; a built pipeline runs in a bare Debian container with no network |
+| macOS | Planned. Not built or tested yet |
 
-No account is required, and no licence key is needed for the free core. The
-application does not check in with anything on first run.
+No account is required, and no licence key is needed for the free core. Nothing
+checks in with anything on first run.
 
-### Verifying a download
+## Checking it works
 
-Every release publishes SHA-256 checksums alongside the binaries.
-
-```bash
-sha256sum -c headrace-1.0.0-SHA256SUMS
-```
-
-Verifying a download should not require trusting the page that served it, so
-checksums are published to the repository rather than only to this site.
-
-## Command line
+Once there is a release:
 
 ```bash
-pip install headrace
+etl --version
+etl components        # every source, transform, check and sink it knows
 ```
 
-This installs the engine and the CLI. It does not require the desktop
-application, and it does not require Python knowledge to use — `pip` is simply
-a convenient distribution channel.
-
-Check it worked:
-
-```bash
-headrace --version
-```
-
-## Container
-
-```bash
-docker run --rm -v $PWD:/work headrace/runner run pipeline.yaml
-```
-
-The container needs no outbound network access unless your pipeline reaches a
-remote source. There is no control plane to register with.
+The first release will publish SHA-256 checksums to the repository alongside
+the binaries, so verifying a download does not depend on trusting the page that
+served it.
 
 ## What gets written to your machine
 
+Everything lives inside the **workspace** — the folder your pipelines are in —
+under `.etl/`:
+
 | Path | Contents |
 | --- | --- |
-| Application directory | The binary and bundled engine |
-| `~/.headrace/` | Local configuration and run history |
-| OS secret store | Connection credentials, if you let it manage them |
+| `.etl/runs/` | Run history: outcome, total time, and rows per stage |
+| `.etl/state/` | Watermarks for incremental sources |
+| `.etl/secrets.json` | Connection secrets, encrypted (AES-256-GCM) |
+| `.etl/keys/workspace.key` | The key those secrets are encrypted with |
+| `.etl/contexts.json`, `.etl/schedules.json` | Environments and schedules, if you use them |
 
-Nothing is written outside these locations, and nothing is transmitted. See
-[Security](/security) for the full data-handling detail.
+Treat `.etl/keys/` the way you would an SSH private key: keep it out of version
+control and back it up. `secrets.json` on its own is useless without it.
+
+There is deliberately no OS keychain involved. A workspace is a folder you can
+copy to a server or an air-gapped machine, and it keeps working there.
+
+Nothing is transmitted. See [Security](/security) for the full data-handling
+detail.
 
 ## Next
 
-- [Quickstart](/docs/quickstart) — a working pipeline in about five minutes
+- [Quickstart](/docs/quickstart) — a working pipeline, with the real output
 - [Connecting a source](/docs/connecting-a-source)

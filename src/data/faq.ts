@@ -94,7 +94,7 @@ export const FAQ: FaqItem[] = [
   },
   {
     q: 'What happens when a pipeline fails?',
-    a: `A failed stage reports the compiled SQL it was running and the engine's own error message, rather than an opaque internal code. Row counts, timings and per-node previews are recorded for every run, so the question "what actually happened" has an answer you can read.`,
+    a: `A failed stage reports the compiled SQL it was running and the engine's own error message, rather than an opaque internal code. Every run records its outcome and the rows each stage produced or rejected, and the desktop app previews the data at each node, so the question "what actually happened" has an answer you can read.`,
   },
 ];
 
