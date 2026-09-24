@@ -26,6 +26,7 @@ why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engi
   message queues. **The live site needs a redeploy to show this.**
 - **2026-09-24, later:** RabbitMQ marked working (**17 of 50**, 33 planned), its engine test
   named in CLAIMS.md; the roadmap's "building now" moved to databases and warehouses.
+- **2026-09-24, later still:** MongoDB marked working, both ways (**18 of 50**, 32 planned).
 
 **Next, in order:**
 

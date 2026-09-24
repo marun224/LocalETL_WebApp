@@ -49,7 +49,7 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
       { name: 'SQL Server', icon: 'microsoftsqlserver', status: 'planned', io: 'both' },
       { name: 'Oracle', icon: 'oracle', status: 'planned', io: 'source' },
       { name: 'SQLite', icon: 'sqlite', status: 'working', io: 'both' },
-      { name: 'MongoDB', icon: 'mongodb', status: 'planned', io: 'source' },
+      { name: 'MongoDB', icon: 'mongodb', status: 'working', io: 'both' },
       { name: 'Redis', icon: 'redis', status: 'planned', io: 'both' },
       { name: 'Cassandra', status: 'planned', io: 'source' },
       { name: 'Neo4j', icon: 'neo4j', status: 'planned', io: 'source' },

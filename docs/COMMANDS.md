@@ -663,3 +663,11 @@ python site_rabbitmq.py                    # scratchpad: connectors.ts, pages.ts
 npm run build                              # clean
 npm run check:claims                       # the 3 known placeholders
 ```
+
+## 2026-09-24 — MongoDB marked working
+
+```bash
+python site_mongodb.py <run>               # scratchpad: connectors.ts, pages.ts, roadmap.ts, compare/*, CLAIMS.md, RESUME_HERE.md
+npm run build                              # clean
+npm run check:claims                       # the 3 known placeholders
+```
