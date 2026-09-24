@@ -75,7 +75,8 @@ connection string:
 | `src.db.sqlite` | `data/analytics.db` |
 
 Each also takes `table`, and optionally `schema`. Read replicas are usually the
-right target for analytical work. SQL Server, Oracle and the rest of the
+right target for analytical work. SQL Server is built and waits for a check
+against a real server before it is marked working; Oracle and the rest of the
 [catalogue](/integrations) are planned.
 
 ## Lakehouse tables

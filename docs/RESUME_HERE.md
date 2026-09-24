@@ -34,6 +34,10 @@ why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engi
   82, 86 and 88). The roadmap names only SQL Server as next; the Airbyte and Fivetran
   comparisons and the catalogue's page description say 46 (the description's stale "30
   planned" is now 26).
+- **2026-09-24, later that night:** the engine built SQL Server (Phase 10u, `cf740ff`),
+  tested against a local TDS fixture only. It stays `planned` in the catalogue, like BigQuery
+  and Snowflake, until checked against a real server; the roadmap and
+  `connecting-a-source.md` say it is built and waiting for that check.
 
 **Next, in order:**
 

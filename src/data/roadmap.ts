@@ -88,7 +88,7 @@ export const ROADMAP: RoadmapItem[] = [
   {
     stage: 'building',
     title: 'More connectors',
-    body: 'One family at a time, each verified before it is marked working. Next: SQL Server. BigQuery and Snowflake are built and wait for a check against the real services before they are marked working.',
+    body: 'One family at a time, each verified before it is marked working. BigQuery, Snowflake and SQL Server are built and wait for a check against the real services before they are marked working.',
   },
 
   // --- next ---------------------------------------------------------------
