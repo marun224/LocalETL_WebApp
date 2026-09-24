@@ -6,7 +6,7 @@ Every factual or numeric assertion on the site, with its status. Required by
 **Last audited:** 2026-09-23 (site ↔ product sync: every product claim checked against the
 engine in `ETL_Local_Tool` at `e07dc6f`; see [PLAN_site_product_sync.md](PLAN_site_product_sync.md).
 Connector statuses updated 2026-09-24 against `a659edc`: GraphQL, Kafka and NATS JetStream marked working;
-and against `44d1aaa`: RabbitMQ; and against `d1fff00`: MongoDB)
+and against `44d1aaa`: RabbitMQ; and against `d1fff00`: MongoDB; and against `ad7b5ee`: MariaDB and ClickHouse)
 
 | Status | Meaning | May ship? |
 | --- | --- | --- |
@@ -74,7 +74,7 @@ Figures about **this website**, not the product. Reproduce with
 | Claim | Where |
 | --- | --- |
 | "Not yet. Pre-launch and in active development." | FAQ, second question — placed high deliberately |
-| "Nothing is released yet… 18 of them already work in the engine" | Connector grid, integrations notice |
+| "Nothing is released yet… 20 of them already work in the engine" | Connector grid, integrations notice |
 | "Nothing here is released yet… anything not built is marked Planned" | Features, how-it-works and solutions page heroes |
 | "Built, not yet released" | Roadmap's first stage |
 | "Illustrative diagram, not a screenshot" | Every ProductFrame caption |
@@ -83,7 +83,7 @@ Figures about **this website**, not the product. Reproduce with
 ### Forward-looking — `ASPIRATIONAL`
 | Claim | Where | Why it is acceptable |
 | --- | --- | --- |
-| 50 connectors across 6 categories | Connector grid, integrations | Stated as scope. 32 of them are marked Planned, entry by entry |
+| 50 connectors across 6 categories | Connector grid, integrations | Stated as scope. 30 of them are marked Planned, entry by entry |
 | Flat team pricing, no per-seat billing | Home pricing teaser | A commitment about our own pricing, which we control |
 | On-device AI assistant | Home, Local AI, features, FAQ, security | Marked Planned everywhere it appears, and phrased as design |
 
@@ -109,7 +109,7 @@ Phase 4 connectors (S3 writes on Windows, MySQL reads, moved Iceberg tables)
 were broken until Phase 10c ran them against real systems. The same rule is
 written into `src/data/connectors.ts` and at the top of `features.astro`.
 
-### Connectors marked `working` (18)
+### Connectors marked `working` (20)
 
 "Working" = built and tested, not released. Evidence is in the engine repo.
 
@@ -131,6 +131,8 @@ written into `src/data/connectors.ts` and at the top of `features.astro`.
 | GraphQL | `src/snk.saas.graphql` | Phase 10d, `tests/native.rs`: `the_graphql_sample_reads_two_relay_pages_filters_and_mutates_in_batches` |
 | Kafka | `src/snk.stream.kafka` | Phases 10e–10f, `tests/verified.rs` against a Kafka broker: `the_kafka_sample_carries_on_between_runs_on_the_one_script_path` |
 | NATS JetStream | `src/snk.stream.nats` | Phase 10g, `tests/verified.rs` against NATS servers: `the_nats_sample_carries_on_between_runs_on_the_one_script_path` |
+| MariaDB | `src/snk.db.mysql` | Phase 10q, `tests/verified.rs` against MariaDB 11.8: `mariadb_is_written_and_read_back_through_the_mysql_components`, and its own types and sub-second timestamps |
+| ClickHouse | `src/snk.db.clickhouse` | Phase 10r, `tests/verified.rs` against ClickHouse 25.8: `the_clickhouse_sample_carries_on_between_runs_on_the_one_script_path` |
 | MongoDB | `src/snk.db.mongodb` | Phase 10m, `tests/verified.rs` against MongoDB 8.0: `the_mongodb_sample_carries_on_between_runs_on_the_one_script_path`; plain and TLS in `mongo/tests.rs` |
 | RabbitMQ | `src/snk.queue.rabbitmq` | Phase 10l, `tests/verified.rs` against RabbitMQ 4.3: `the_rabbitmq_sample_takes_what_it_read_on_the_one_script_path`; plain and TLS in `rabbitmq/tests.rs` |
 
@@ -143,7 +145,9 @@ Kept `planned` on purpose: **Amazon S3** (not yet run against AWS itself),
 
 RabbitMQ was added 2026-09-24; its test passed in the engine's CI on run 35964870851
 (`44d1aaa`). MongoDB was added the same day, now read and written both ways (it was listed
-as a source only); its test passed on run 35972853098 (`d1fff00`).
+as a source only); its test passed on run 35972853098 (`d1fff00`). MariaDB and ClickHouse were added the same
+day (`ad7b5ee`): their tests passed against the real servers, twice, on the engine's
+development machine; **the engine's CI did not run on them**, at its owner's request.
 
 Built in the engine but **not listed** on the site: **Amazon Kinesis** (Phases 10h–10i),
 **Amazon SQS** (Phase 10j) and **Google Pub/Sub** (Phase 10k). They have only been tested

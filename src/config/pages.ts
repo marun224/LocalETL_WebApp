@@ -61,7 +61,7 @@ export const PAGES: PageMeta[] = [
     description:
       'Databases, lakehouse tables, object stores, files and REST APIs — connected directly, with no data copied to a vendor cloud. Warehouses, streaming brokers and named SaaS apps are planned.',
     summary:
-      'Connector catalogue: 50 connectors across 6 categories (databases, warehouses and lakehouses, files and formats, object storage, streaming, SaaS and APIs), filterable by search and category. 18 are marked working (built in the engine and tested against real data, not yet released) and 32 planned. States plainly that none is released, because the product is pre-launch.',
+      'Connector catalogue: 50 connectors across 6 categories (databases, warehouses and lakehouses, files and formats, object storage, streaming, SaaS and APIs), filterable by search and category. 20 are marked working (built in the engine and tested against real data, not yet released) and 30 planned. States plainly that none is released, because the product is pre-launch.',
     group: 'Product',
   },
   {
@@ -160,7 +160,7 @@ export const PAGES: PageMeta[] = [
     description:
       'What is being built and in what order, with no dates — plus what will deliberately never be built.',
     summary:
-      'Roadmap in four stages: built but not yet released (execution engine, compilation to SQL, visual canvas, headless runner and standalone binaries, scheduling and web console, run history and previews, 18 working connectors), building now (more connectors: databases and warehouses next), before the first release (query editor, remaining v1 connectors, macOS), and after v1 (on-device AI, charts and dashboards, CDC, column lineage, team features, enterprise deployment). Publishes no dates. Includes a "will not be built" section: no hosted cloud version, no usage-based pricing, no telemetry, no distributed cluster mode, no sub-second application serving, no proprietary pipeline format.',
+      'Roadmap in four stages: built but not yet released (execution engine, compilation to SQL, visual canvas, headless runner and standalone binaries, scheduling and web console, run history and previews, 20 working connectors), building now (more connectors: databases and warehouses next), before the first release (query editor, remaining v1 connectors, macOS), and after v1 (on-device AI, charts and dashboards, CDC, column lineage, team features, enterprise deployment). Publishes no dates. Includes a "will not be built" section: no hosted cloud version, no usage-based pricing, no telemetry, no distributed cluster mode, no sub-second application serving, no proprietary pipeline format.',
     group: 'Company',
   },
   {

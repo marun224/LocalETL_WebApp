@@ -12,7 +12,7 @@ table:
     us: Free core; flat team tier; no metering
   - dimension: Connectors
     them: 500+, managed and maintained for you
-    us: 50 in scope for the first release, 18 working, none released yet
+    us: 50 in scope for the first release, 20 working, none released yet
   - dimension: Connector maintenance
     them: Fivetran handles API changes
     us: You or the community
@@ -94,7 +94,7 @@ a CSV without loading anything into a warehouse first.
 
 **Connector breadth and upkeep.** 500+ connectors that someone else keeps
 working is a real thing to buy, and our 50 are not a counter-argument —
-they are a smaller number, 18 of them working and none released yet.
+they are a smaller number, 20 of them working and none released yet.
 
 **Reliability you do not have to think about.** Retries, schema migrations and
 monitoring are handled. Self-hosting means those become yours.

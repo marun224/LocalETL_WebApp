@@ -671,3 +671,11 @@ python site_mongodb.py <run>               # scratchpad: connectors.ts, pages.ts
 npm run build                              # clean
 npm run check:claims                       # the 3 known placeholders
 ```
+
+## 2026-09-24 — MariaDB and ClickHouse marked working
+
+```bash
+python site_mariadb_clickhouse.py          # scratchpad: connectors.ts, pages.ts, roadmap.ts, compare/*, CLAIMS.md, RESUME_HERE.md
+npm run build                              # clean
+npm run check:claims                       # the 3 known placeholders
+```

@@ -45,7 +45,7 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
     connectors: [
       { name: 'PostgreSQL', icon: 'postgresql', status: 'working', io: 'both' },
       { name: 'MySQL', icon: 'mysql', status: 'working', io: 'both' },
-      { name: 'MariaDB', icon: 'mariadb', status: 'planned', io: 'both' },
+      { name: 'MariaDB', icon: 'mariadb', status: 'working', io: 'both' },
       { name: 'SQL Server', icon: 'microsoftsqlserver', status: 'planned', io: 'both' },
       { name: 'Oracle', icon: 'oracle', status: 'planned', io: 'source' },
       { name: 'SQLite', icon: 'sqlite', status: 'working', io: 'both' },
@@ -54,7 +54,7 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
       { name: 'Cassandra', status: 'planned', io: 'source' },
       { name: 'Neo4j', icon: 'neo4j', status: 'planned', io: 'source' },
       { name: 'Elasticsearch', icon: 'elasticsearch', status: 'planned', io: 'both' },
-      { name: 'ClickHouse', icon: 'clickhouse', status: 'planned', io: 'both' },
+      { name: 'ClickHouse', icon: 'clickhouse', status: 'working', io: 'both' },
     ],
   },
   {

@@ -27,6 +27,8 @@ why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engi
 - **2026-09-24, later:** RabbitMQ marked working (**17 of 50**, 33 planned), its engine test
   named in CLAIMS.md; the roadmap's "building now" moved to databases and warehouses.
 - **2026-09-24, later still:** MongoDB marked working, both ways (**18 of 50**, 32 planned).
+- **2026-09-24, evening:** MariaDB and ClickHouse marked working (**20 of 50**, 30 planned);
+  verified locally against the real servers, CI not run for them (the owner's choice).
 
 **Next, in order:**
 
