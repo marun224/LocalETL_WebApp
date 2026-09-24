@@ -88,7 +88,7 @@ export const ROADMAP: RoadmapItem[] = [
   {
     stage: 'building',
     title: 'More connectors',
-    body: 'One family at a time, each verified before it is marked working. Databases and warehouses are next: MongoDB, Redis, Elasticsearch, BigQuery and Snowflake.',
+    body: 'One family at a time, each verified before it is marked working. Databases and warehouses are next: MongoDB, Redis, BigQuery and Snowflake.',
   },
 
   // --- next ---------------------------------------------------------------
