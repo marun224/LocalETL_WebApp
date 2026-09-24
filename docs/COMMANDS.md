@@ -642,3 +642,15 @@ npm run -s check:perf                      # all within budget; CSS 42.9 kB, JS 
 npm run -s check:browsers                  # chromium, firefox, webkit
 # CLAIMS.md, TASK_TRACKER.md, RESUME_HERE.md, PLAN_site_product_sync.md edited by script
 ```
+
+## 2026-09-24 — GraphQL, Kafka and NATS JetStream marked working
+
+```bash
+grep -rn "the_graphql_sample…|the_kafka_sample…|the_nats_sample…" ../ETL_Local_Tool/crates   # all three tests exist
+node -e "…simple-icons…"                   # 'graphql' and 'natsdotio' icons exist
+# connectors.ts, pages.ts, roadmap.ts, integrations.astro, compare/{airbyte,fivetran}.md,
+#   docs/connecting-a-source.md, CLAIMS.md, RESUME_HERE.md edited by script: 16 of 50 working
+npm run build                              # clean, 32 pages
+npm run check:claims                       # 3 placeholders (pricing.pro, pricing.team, demo), as before
+git stash; npm run build; npm run check:claims; git stash pop   # the same 3 without these edits
+```

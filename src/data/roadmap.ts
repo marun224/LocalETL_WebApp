@@ -81,14 +81,14 @@ export const ROADMAP: RoadmapItem[] = [
   {
     stage: 'built',
     title: 'The first connectors',
-    body: 'Thirteen, each tested against real data or a real server: PostgreSQL, MySQL, SQLite, Delta Lake, Iceberg, S3-compatible storage, local files in six formats, and REST APIs.',
+    body: 'Sixteen, each tested against real data or a real server: PostgreSQL, MySQL, SQLite, Delta Lake, Iceberg, S3-compatible storage, local files in six formats, REST and GraphQL APIs, Kafka and NATS JetStream.',
   },
 
   // --- building -----------------------------------------------------------
   {
     stage: 'building',
     title: 'More connectors',
-    body: 'One family at a time, each verified before it is marked working. GraphQL is first.',
+    body: 'One family at a time, each verified before it is marked working. Message queues are next: Amazon SQS, Google Pub/Sub and RabbitMQ.',
   },
 
   // --- next ---------------------------------------------------------------

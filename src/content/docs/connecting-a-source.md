@@ -145,8 +145,9 @@ rather than coded:
 retried, honouring `Retry-After`. `max_pages` is a safety cap, and reaching it
 fails the run rather than quietly loading part of the data.
 
-GraphQL, and named connectors for SaaS apps such as Salesforce or Stripe, are
-planned. Until then, the REST source can reach any of them that has a REST API.
+GraphQL APIs have a source and sink of their own (`src.saas.graphql`,
+`snk.saas.graphql`). Named connectors for SaaS apps such as Salesforce or Stripe
+are planned. Until then, the REST source can reach any of them that has a REST API.
 
 ## Schema drift
 

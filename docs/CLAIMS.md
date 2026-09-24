@@ -4,7 +4,8 @@ Every factual or numeric assertion on the site, with its status. Required by
 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) §6.
 
 **Last audited:** 2026-09-23 (site ↔ product sync: every product claim checked against the
-engine in `ETL_Local_Tool` at `e07dc6f`; see [PLAN_site_product_sync.md](PLAN_site_product_sync.md))
+engine in `ETL_Local_Tool` at `e07dc6f`; see [PLAN_site_product_sync.md](PLAN_site_product_sync.md).
+Connector statuses updated 2026-09-24 against `a659edc`: GraphQL, Kafka and NATS JetStream marked working)
 
 | Status | Meaning | May ship? |
 | --- | --- | --- |
@@ -72,7 +73,7 @@ Figures about **this website**, not the product. Reproduce with
 | Claim | Where |
 | --- | --- |
 | "Not yet. Pre-launch and in active development." | FAQ, second question — placed high deliberately |
-| "Nothing is released yet… 13 of them already work in the engine" | Connector grid, integrations notice |
+| "Nothing is released yet… 16 of them already work in the engine" | Connector grid, integrations notice |
 | "Nothing here is released yet… anything not built is marked Planned" | Features, how-it-works and solutions page heroes |
 | "Built, not yet released" | Roadmap's first stage |
 | "Illustrative diagram, not a screenshot" | Every ProductFrame caption |
@@ -81,7 +82,7 @@ Figures about **this website**, not the product. Reproduce with
 ### Forward-looking — `ASPIRATIONAL`
 | Claim | Where | Why it is acceptable |
 | --- | --- | --- |
-| 49 connectors across 6 categories | Connector grid, integrations | Stated as scope. 36 of them are marked Planned, entry by entry |
+| 50 connectors across 6 categories | Connector grid, integrations | Stated as scope. 34 of them are marked Planned, entry by entry |
 | Flat team pricing, no per-seat billing | Home pricing teaser | A commitment about our own pricing, which we control |
 | On-device AI assistant | Home, Local AI, features, FAQ, security | Marked Planned everywhere it appears, and phrased as design |
 
@@ -107,7 +108,7 @@ Phase 4 connectors (S3 writes on Windows, MySQL reads, moved Iceberg tables)
 were broken until Phase 10c ran them against real systems. The same rule is
 written into `src/data/connectors.ts` and at the top of `features.astro`.
 
-### Connectors marked `working` (13)
+### Connectors marked `working` (16)
 
 "Working" = built and tested, not released. Evidence is in the engine repo.
 
@@ -126,9 +127,21 @@ written into `src/data/connectors.ts` and at the top of `features.astro`.
 | Iceberg (read) | `src.lake.iceberg` | Phase 10c, a `pyiceberg`-written, moved fixture (fixed) |
 | MinIO / S3-compatible | `src/snk.cloud.s3` | Phase 10c, against MinIO (Windows writes fixed) |
 | REST APIs | `src/snk.saas.rest` | Phase 10b fixture suite; one real HTTPS read of GitHub's API |
+| GraphQL | `src/snk.saas.graphql` | Phase 10d, `tests/native.rs`: `the_graphql_sample_reads_two_relay_pages_filters_and_mutates_in_batches` |
+| Kafka | `src/snk.stream.kafka` | Phases 10e–10f, `tests/verified.rs` against a Kafka broker: `the_kafka_sample_carries_on_between_runs_on_the_one_script_path` |
+| NATS JetStream | `src/snk.stream.nats` | Phase 10g, `tests/verified.rs` against NATS servers: `the_nats_sample_carries_on_between_runs_on_the_one_script_path` |
+
+GraphQL, Kafka and NATS JetStream were added 2026-09-24. All three tests passed in the
+engine's CI on run 35904782091 (`a659edc`). NATS JetStream was not in the catalogue before;
+adding it took the scope from 49 to 50.
 
 Kept `planned` on purpose: **Amazon S3** (not yet run against AWS itself),
-**TSV** and **MariaDB** (one cheap test away each, not yet run), **GraphQL**.
+**TSV** and **MariaDB** (one cheap test away each, not yet run).
+
+Built in the engine but **not listed** on the site: **Amazon Kinesis** (Phases 10h–10i) and
+**Amazon SQS** (Phase 10j). Both have only been tested against local stand-ins
+(`kinesis-mock`, ElasticMQ), never against real AWS. They go in, as `working`, only after
+that check.
 
 ### Features reworded (they overstated the engine)
 

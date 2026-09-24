@@ -108,7 +108,8 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
     blurb: 'Consume topics into batches you can join against.',
     icon: 'radio',
     connectors: [
-      { name: 'Kafka', icon: 'apachekafka', status: 'planned', io: 'both' },
+      { name: 'Kafka', icon: 'apachekafka', status: 'working', io: 'both' },
+      { name: 'NATS JetStream', icon: 'natsdotio', status: 'working', io: 'both' },
       { name: 'RabbitMQ', icon: 'rabbitmq', status: 'planned', io: 'both' },
       { name: 'Webhooks', status: 'planned', io: 'source' },
     ],
@@ -131,7 +132,7 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
       { name: 'Airtable', icon: 'airtable', status: 'planned', io: 'both' },
       { name: 'Zendesk', icon: 'zendesk', status: 'planned', io: 'source' },
       { name: 'REST APIs', status: 'working', io: 'both' },
-      { name: 'GraphQL', status: 'planned', io: 'both' },
+      { name: 'GraphQL', icon: 'graphql', status: 'working', io: 'both' },
     ],
   },
 ];

@@ -13,12 +13,17 @@ checked against the engine and either holds, was reworded, or is marked Planned.
 commits, S1–S4, per [PLAN_site_product_sync.md](PLAN_site_product_sync.md); what changed and
 why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engine*.
 
-- **Connectors:** a third status, "Working, not yet released". 13 of 49 are working; the
+- **Connectors:** a third status, "Working, not yet released". 13 of 49 were working at the sync; the
   rest are planned. Amazon S3, TSV and MariaDB stay planned until tested.
 - **Features:** each is built or marked Planned. Reworded where the site overstated the
   engine (lineage, parallelism, governance, secrets, run timings).
 - **Docs:** all six rewritten; every command on them was run against the engine first.
 - **The rule going forward:** nothing is marked working without a named engine test.
+- **2026-09-24 (uncommitted):** GraphQL, Kafka and NATS JetStream marked working, NATS added
+  to the catalogue: **16 of 50** working, 34 planned. Their tests are named in
+  [CLAIMS.md](CLAIMS.md). Kinesis and SQS are built in the engine but stay off the site until
+  checked against real AWS. The roadmap's "building now" moved from GraphQL to the
+  message queues. **The live site needs a redeploy to show this.**
 
 **Next, in order:**
 
