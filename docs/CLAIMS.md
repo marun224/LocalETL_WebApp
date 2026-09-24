@@ -83,7 +83,7 @@ Figures about **this website**, not the product. Reproduce with
 ### Forward-looking — `ASPIRATIONAL`
 | Claim | Where | Why it is acceptable |
 | --- | --- | --- |
-| 50 connectors across 6 categories | Connector grid, integrations | Stated as scope. 30 of them are marked Planned, entry by entry |
+| 46 connectors across 6 categories | Connector grid, integrations | Stated as scope. 26 of them are marked Planned, entry by entry |
 | Flat team pricing, no per-seat billing | Home pricing teaser | A commitment about our own pricing, which we control |
 | On-device AI assistant | Home, Local AI, features, FAQ, security | Marked Planned everywhere it appears, and phrased as design |
 

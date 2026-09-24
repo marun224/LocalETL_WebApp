@@ -29,6 +29,11 @@ why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engi
 - **2026-09-24, later still:** MongoDB marked working, both ways (**18 of 50**, 32 planned).
 - **2026-09-24, evening:** MariaDB and ClickHouse marked working (**20 of 50**, 30 planned);
   verified locally against the real servers, CI not run for them (the owner's choice).
+- **2026-09-24, night:** Cassandra, Neo4j, Redis and Elasticsearch removed from the
+  catalogue (**20 of 46**, 26 planned): the engine will not build them (engine decisions 76,
+  82, 86 and 88). The roadmap names only SQL Server as next; the Airbyte and Fivetran
+  comparisons and the catalogue's page description say 46 (the description's stale "30
+  planned" is now 26).
 
 **Next, in order:**
 

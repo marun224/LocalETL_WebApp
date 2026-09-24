@@ -61,7 +61,7 @@ export const PAGES: PageMeta[] = [
     description:
       'Databases, lakehouse tables, object stores, files and REST APIs — connected directly, with no data copied to a vendor cloud. Warehouses, streaming brokers and named SaaS apps are planned.',
     summary:
-      'Connector catalogue: 50 connectors across 6 categories (databases, warehouses and lakehouses, files and formats, object storage, streaming, SaaS and APIs), filterable by search and category. 20 are marked working (built in the engine and tested against real data, not yet released) and 30 planned. States plainly that none is released, because the product is pre-launch.',
+      'Connector catalogue: 46 connectors across 6 categories (databases, warehouses and lakehouses, files and formats, object storage, streaming, SaaS and APIs), filterable by search and category. 20 are marked working (built in the engine and tested against real data, not yet released) and 26 planned. States plainly that none is released, because the product is pre-launch.',
     group: 'Product',
   },
   {
