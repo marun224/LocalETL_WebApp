@@ -110,7 +110,7 @@ export const CONNECTOR_CATEGORIES: ConnectorCategory[] = [
     connectors: [
       { name: 'Kafka', icon: 'apachekafka', status: 'working', io: 'both' },
       { name: 'NATS JetStream', icon: 'natsdotio', status: 'working', io: 'both' },
-      { name: 'RabbitMQ', icon: 'rabbitmq', status: 'planned', io: 'both' },
+      { name: 'RabbitMQ', icon: 'rabbitmq', status: 'working', io: 'both' },
       { name: 'Webhooks', status: 'planned', io: 'source' },
     ],
   },

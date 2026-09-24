@@ -654,3 +654,12 @@ npm run build                              # clean, 32 pages
 npm run check:claims                       # 3 placeholders (pricing.pro, pricing.team, demo), as before
 git stash; npm run build; npm run check:claims; git stash pop   # the same 3 without these edits
 ```
+
+## 2026-09-24 — RabbitMQ marked working
+
+```bash
+git pull --ff-only
+python site_rabbitmq.py                    # scratchpad: connectors.ts, pages.ts, roadmap.ts, compare/*, CLAIMS.md, RESUME_HERE.md
+npm run build                              # clean
+npm run check:claims                       # the 3 known placeholders
+```

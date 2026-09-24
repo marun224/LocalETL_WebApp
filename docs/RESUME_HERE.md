@@ -24,6 +24,8 @@ why is in [CLAIMS.md](CLAIMS.md) under *Product claims, checked against the engi
   [CLAIMS.md](CLAIMS.md). Kinesis and SQS are built in the engine but stay off the site until
   checked against real AWS. The roadmap's "building now" moved from GraphQL to the
   message queues. **The live site needs a redeploy to show this.**
+- **2026-09-24, later:** RabbitMQ marked working (**17 of 50**, 33 planned), its engine test
+  named in CLAIMS.md; the roadmap's "building now" moved to databases and warehouses.
 
 **Next, in order:**
 
@@ -239,3 +241,4 @@ Full detail in [COMMANDS.md](COMMANDS.md).
    that ever changes.
 
 Both are enforced by scripts, not by memory. That is the point.
+
