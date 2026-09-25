@@ -43,8 +43,11 @@ export const SITE = {
    */
   preLaunch: true,
 
-  /** TODO: repo does not exist yet. Open question Q3. */
-  github: 'https://github.com/headrace/headrace',
+  /**
+   * The public releases repository: installers only, while the source stays
+   * private (see config/release.ts). Links say "releases", not "source".
+   */
+  github: 'https://github.com/marun224/headrace-releases',
 
   /** TODO: single contact domain to be confirmed. Open question Q4. */
   email: {

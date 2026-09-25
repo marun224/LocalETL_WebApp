@@ -1,6 +1,7 @@
 ---
 import { BRAND } from '../../config/brand';
 import { SITE } from '../../config/site.js';
+import { WINDOWS } from '../../config/release';
 import CodeBlock from '../ui/CodeBlock.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
@@ -47,7 +48,9 @@ import Icon from '../ui/Icon.astro';
 <p class="mt-6 text-sm text-faint">
   {
     SITE.preLaunch
-      ? 'These are the intended install paths. None of them works yet — the first release has not shipped.'
+      ? WINDOWS?.published
+        ? 'A Windows preview of the desktop app is available. The command line and the agent quickstart are not released yet.'
+        : 'These are the intended install paths. None of them works yet — the first release has not shipped.'
       : 'Free and open source. No account, no telemetry.'
   }
 </p>
